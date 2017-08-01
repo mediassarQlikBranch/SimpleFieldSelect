@@ -19,3 +19,5 @@ And the plugin is supposed to be very light weight. It has no big libraries atta
 ## Will be done later:
 - source code will be cleaned
 - more visualization parameters added, maybe
+
+For date picker jQuery UI component is used. CSS is parsed for only required parts.
