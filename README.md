@@ -1,6 +1,6 @@
 # Qlik Sense extension for field and variable selections.
 
-This extension is an "all in one" selection component with many customization properties.
+This extension is an "all in one" selection component with several customization options.
 ## Features
 - selector for fields and variables
 - supports select only one and default value selection - so when you enter to a document or a sheet, you can have default values selected
