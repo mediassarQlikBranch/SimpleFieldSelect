@@ -1,7 +1,7 @@
-Qlik Sense extension for field and variable selections.
+# Qlik Sense extension for field and variable selections.
 
-This extension is an "all in one" selection component.
-# Features
+This extension is an "all in one" selection component with many customization properties.
+## Features
 - selector for fields and variables
 - supports select only one and default value selection - so when you enter to a document or a sheet, you can have default values selected
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
@@ -16,6 +16,6 @@ This extension is an "all in one" selection component.
 
 And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
-# Will be done later:
+## Will be done later:
 - source code will be cleaned
 - more visualization parameters added, maybe
