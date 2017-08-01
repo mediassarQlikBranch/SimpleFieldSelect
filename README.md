@@ -13,7 +13,7 @@ This extension is an "all in one" selection component.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency
 
-And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay fast.
+And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
 Will be done later:
 - source code will be cleaned
