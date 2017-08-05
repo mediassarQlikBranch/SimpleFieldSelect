@@ -5,7 +5,7 @@ This extension is an "all in one" selection component with several customization
 - selector for fields and variables
 - supports select only one and default value selection - so when you enter to a document or a sheet, you can have default values selected
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
-- renders as a list, button row, checkbox or drop down selector
+- renders as a list, button row, checkbox or drop down selector. Also standard HTML button (beta).
 - can set variable value from predefined list or via date picker
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to max date via variable
@@ -21,3 +21,5 @@ And the plugin is supposed to be very light weight. It has no big libraries atta
 - more visualization parameters added, maybe
 
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
+
+[ChangeLog](ChangeLog)
