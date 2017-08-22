@@ -1,5 +1,7 @@
 # Qlik Sense extension for field and variable selections.
 
+![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples")
+
 This extension is an "all in one" selection component with several customization options.
 ## Features
 - selector for fields and variables
