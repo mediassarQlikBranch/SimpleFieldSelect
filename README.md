@@ -11,6 +11,7 @@ This extension is an "all in one" selection component with several customization
 - supports **select only one** and **default value** selection - so when you enter to a document or a sheet, you can have default value selected
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox or drop down selector. Also standard HTML button (beta).
+- custom text fields: label text, tooltip for mouse hovering and help text below the element
 - can set variable value from predefined list or via date picker
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to max date via variable
