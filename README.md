@@ -19,6 +19,8 @@ This extension is an "all in one" selection component with several customization
 - several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency
+- *NEW* global parameters for a sheet. You can set background color and border style for all objects on the sheet. No need for another extension.
+- *NEW* background color for the object itself
 
 And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
