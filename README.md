@@ -1,4 +1,4 @@
-# Qlik Sense extension for field and variable selections with missing features
+# Qlik Sense extension for field and variable selections with "missing features"
 
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
 
