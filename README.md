@@ -1,8 +1,8 @@
-# Qlik Sense extension for field and variable selections.
+# Qlik Sense extension for field and variable selections with missing features
 
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
 
-This extension is an "all in one" selection component with several customization options.
+This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
 ![Settings](/docs/img/SFSselections.JPG "Settings examples" ) ![Settings](/docs/img/SFSselections2.JPG "Settings examples")
 
