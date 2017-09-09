@@ -4,7 +4,7 @@
 
 This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
-![Settings](/docs/img/SFSselections3.PNG "Visual example" ) ![Settings](/docs/img/SFSselections.JPG "Settings examples" )
+![Settings](/docs/img/SFSselections3.PNG "Visual example" )
 
 ## Features
 - selector for fields and variables
@@ -31,3 +31,5 @@ And the plugin is supposed to be very light weight. It has no big libraries atta
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
 
 [ChangeLog](ChangeLog)
+
+![Settings](/docs/img/SFSselections.JPG "Settings examples" )
