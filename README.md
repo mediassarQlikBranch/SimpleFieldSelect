@@ -10,15 +10,16 @@ This extension is an "all in one" selection component with several customization
 - selector for fields and variables
 - supports **select only one** and **default value** selection - so when you enter to a document or a sheet, you can have default value selected
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
-- renders as a list, button row, checkbox or drop down selector. Also standard HTML button (beta).
+- renders as a list, button row, checkbox, standard radio button or drop down selector. Also standard HTML button (beta).
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
 - can set variable value from predefined list or via date picker
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to max date via variable
 - mobile zoom effect can be disabled. No need for three clicks if you want to select something. **Only one click is enough!!**
-- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering
+- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use 
+  - for example CSS classes from other libraries to render checkboxes.
 - supports hiding a field from Qlik Sense's selection row
-- supports transparency
+- supports transparency of the object
 - *NEW* global parameters for a sheet. You can set background color and border style for all objects on the sheet. No need for another extension.
 - *NEW* background color for the object itself
 
