@@ -4,7 +4,7 @@
 
 This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
-![Settings](/docs/img/SFSselections.JPG "Settings examples" ) ![Settings](/docs/img/SFSselections2.JPG "Settings examples")
+![Settings](/docs/img/SFSselections3.PNG "Visual example" ) ![Settings](/docs/img/SFSselections.JPG "Settings examples" )
 
 ## Features
 - selector for fields and variables
