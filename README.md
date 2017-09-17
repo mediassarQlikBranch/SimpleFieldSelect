@@ -4,9 +4,9 @@
 
 This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
-
-![Context menu](/docs/img/contextmenu.PNG "Context menu" )
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
+And context menu for the "missing features":
+![Context menu](/docs/img/contextmenu.PNG "Context menu" )
 
 ## Features
 - selector for fields and variables
