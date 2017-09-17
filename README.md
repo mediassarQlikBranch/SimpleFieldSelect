@@ -4,11 +4,14 @@
 
 This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
+
+![Context menu](/docs/img/contextmenu.PNG "Context menu" )
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
 
 ## Features
 - selector for fields and variables
-- supports **select only one** and **default value** selection - so when you enter to a document or a sheet, you can have default value selected
+- supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
+- Has a context menu (right click menu) for _select all_,_clear selections_,_reverse selection_,_select possible_,_select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox, standard radio button or drop down selector. Also standard HTML button (beta).
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
