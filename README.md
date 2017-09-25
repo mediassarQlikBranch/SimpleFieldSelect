@@ -7,7 +7,10 @@ This extension is an "all in one" selection component with several customization
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
 
 And context menu for the "missing features":
+
 ![Context menu](/docs/img/contextmenu.PNG "Context menu" )
+
+![HTML5](/docs/img/html5examples.PNG "HTML5 standard inputs" ) ![HTML5](/docs/img/html5examples2.PNG "HTML5 standard inputs" ) ![HTML5](/docs/img/html5Example3.PNG "HTML5 standard inputs" )
 
 ## To install
 Download a ZIP file from the dist directory. Do not clone whole branch. :) Install the zip as any Qlik Sense extension.
