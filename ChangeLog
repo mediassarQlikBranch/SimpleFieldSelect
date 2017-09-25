@@ -1,3 +1,6 @@
+1.4.0
+ - Standard HTML5 inputs can be now used to control variables. There is text, number, range slider, color picker, date, time, week, month and password inputs.
+ - Improved some visualizations like setting internal background of input fields and select.
 1.3.8
  - Part of the settings are reorganized. The visualization type selection is now with the dimensions selection and the sortings are moved to own section
  - Supports now multiple default value selections.
