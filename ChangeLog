@@ -2,6 +2,7 @@
  - Bug fixes to default selections in case of variable
  - New global features to modify Sheet title bar, change height and font size.
  - Possibility to hide selections bar and also main menu bar. Be carefull with hiding the main menu!
+ - You can now hide several other fields from the selection bar.
 1.4.0
  - Standard HTML5 inputs can be now used to control variables. There is text, number, range slider, color picker, date, time, week, month and password inputs.
  - Improved some visualizations like setting internal background of input fields and select.
