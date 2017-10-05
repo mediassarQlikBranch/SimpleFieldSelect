@@ -28,7 +28,7 @@ Download a ZIP file from the dist directory. **Do not clone whole branch**. :) F
   - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
 - background color for the object itself
 
-And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
+And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
 ## Screenshots
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
