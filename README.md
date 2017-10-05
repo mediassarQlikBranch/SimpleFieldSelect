@@ -1,7 +1,9 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
+This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
+
 ## To install
-Download a ZIP file from the dist directory. Do not clone whole branch. :) Install the zip as any Qlik Sense extension.
+Download a ZIP file from the dist directory. **Do not clone whole branch**. :) First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
 
 ## Features
 - selector for fields and variables
@@ -19,15 +21,17 @@ Download a ZIP file from the dist directory. Do not clone whole branch. :) Insta
   - for example CSS classes from other libraries to render checkboxes.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency of the object
-- *NEW* global parameters for a sheet. You can set background color and border style for all objects on the sheet. No need for another extension.
-- *NEW* background color for the object itself
+- Global parameters for a sheet:
+  - Modify background color and border style for all objects on the sheet. No need for another extension.
+  - Hide any field(s) from the selection bar.
+  - Hide sheet title or modify it's size and font-size
+  - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
+- background color for the object itself
 
 And the plugin is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
 ## Screenshots
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
-
-This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
 
