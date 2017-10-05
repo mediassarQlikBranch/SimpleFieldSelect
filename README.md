@@ -52,4 +52,3 @@ For date picker jQuery UI component is used. CSS is parsed for only required par
 
 [ChangeLog](ChangeLog)
 
-![Settings](/docs/img/SFSselections.JPG "Settings examples" )
