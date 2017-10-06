@@ -1,3 +1,5 @@
+1.4.2
+ - Minor bug fix to variable handling
 1.4.1
  - Bug fixes to default selections in case of variable
  - New global features to modify Sheet title bar, change height and font size.
