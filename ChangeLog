@@ -1,3 +1,6 @@
+1.4.3
+ - Better way to set max (and now also min date) for date picker. There are now two function fields for min/max setting. The old variable version will be depricated.
+ - bug fixes for settings panel, some unwanted options cleared.
 1.4.2
  - Minor bug fix to variable handling
 1.4.1
