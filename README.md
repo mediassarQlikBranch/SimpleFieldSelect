@@ -3,7 +3,8 @@
 This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
 
 ## To install
-Download a ZIP file from the dist directory. **Do not clone whole branch**. :) First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
+Download a ZIP file from the dist directory. First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
+Now you can also clone the whole branch.
 
 ## Features
 - selector for fields and variables
