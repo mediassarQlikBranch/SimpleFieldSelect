@@ -1,3 +1,6 @@
+1.4.4
+ - Text align inside elements, horizontal and vertical
+ - With horizontal list there is a option to fill the whole area with the buttons. Use Show as Table option with Use maximum height.
 1.4.3
  - Better way to set max (and now also min date) for date picker. There are now two function fields for min/max setting. The old variable version will be depricated.
  - bug fixes for settings panel, some unwanted options cleared.
