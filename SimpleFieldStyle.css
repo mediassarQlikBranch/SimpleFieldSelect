@@ -1,0 +1,190 @@
+/* CSS */
+
+.qv-object-SimpleFieldSelect .dropdownsel {
+	width:100%;
+}
+.qv-object-SimpleFieldSelect .ui-datepicker-trigger {
+	cursor:pointer;
+}
+
+.qv-object-SimpleFieldSelect div.qv-object-content-container {
+	overflow-y: auto;
+	text-overflow:ellipsis;
+	overflow-x: hidden;
+}
+.qv-object-SimpleFieldSelect input :checked{
+	font-weight:bold;
+}
+.qv-object-SimpleFieldSelect .checkboxgroup label{
+	padding-right:5px;
+	text-overflow: ellipsis;
+	display: inline-block;
+	padding-left:2px;
+	padding-top:2px;
+}
+.qv-object-SimpleFieldSelect .checkboxgroup {
+	height:100%;
+}
+.qv-object-SimpleFieldSelect .sfsbtn {
+	display: inline-block;
+	padding:4px;
+}
+.qv-object-SimpleFieldSelect .chkcont {
+	display:inline;
+}
+.qv-object-SimpleFieldSelect label,.qv-object-SimpleFieldSelect input,.qv-object-SimpleFieldSelect li {
+	cursor:pointer;
+}
+
+.qv-object-SimpleFieldSelect ul {
+	list-style: none;
+	width:100%;
+}
+.qv-object-SimpleFieldSelect .ulastable{
+	display:table;
+}
+
+.qv-object-SimpleFieldSelect li.data {
+	padding: 3px;
+	border-bottom: 1px solid #e5e5e5;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.qv-object-SimpleFieldSelect ul.horizontal li {
+	display:inline-block;
+	border: 1px solid #ddd;
+	margin-right:1px;
+	padding-left:5px; padding-right:5px;
+}
+.qv-object-SimpleFieldSelect ul.ulastable li{
+	display:table-cell;
+}
+.qv-object-SimpleFieldSelect ul.rcorners li {
+	border-radius:3px;
+}
+.qv-object-SimpleFieldSelect ul.rmargin0 li {margin-right:0px; border-left:0px;}
+.qv-object-SimpleFieldSelect ul.rmargin0 li:first-child {border-left:1px solid #ddd;}
+.qv-object-SimpleFieldSelect ul.rmargin1 li {margin-right:1px;}
+.qv-object-SimpleFieldSelect ul.rmargin2 li {margin-right:2px;}
+.qv-object-SimpleFieldSelect ul.rmargin3 li {margin-right:3px;}
+.qv-object-SimpleFieldSelect ul.rmargin4 li {margin-right:4px;}
+.qv-object-SimpleFieldSelect ul.rmargin5 li {margin-right:5px;}
+.qv-object-SimpleFieldSelect ul.rmargin6 li {margin-right:6px;}
+.qv-object-SimpleFieldSelect ul.rmargin7 li {margin-right:7px;}
+.qv-object-SimpleFieldSelect ul.rmargin8 li {margin-right:8px;}
+.qv-object-SimpleFieldSelect li.stateO {
+	background-color:#fff;
+}
+
+.qv-object-SimpleFieldSelect li.stateS, .qv-object-SimpleFieldSelect li.stateL, .qv-object-SimpleFieldSelect input.stateS, .qv-object-SimpleFieldSelect input.stateL {
+	background-image: linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
+	color: #fff;
+}
+
+.qv-object-SimpleFieldSelect li.stateX, .qv-object-SimpleFieldSelect li.stateXL, .qv-object-SimpleFieldSelect li.stateXS {
+	background-color: #A9A9A9;
+	color: #fff;
+}
+
+.qv-object-SimpleFieldSelect li.stateA {
+	background-image: none;
+	background-color: #ddd;
+	color: #000;
+}
+/
+.qv-object-SimpleFieldSelect.qv-selections-active li {
+	background-image: none;
+	background-color: #ddd;
+	color: #000;
+}
+
+.qv-object-SimpleFieldSelect.qv-selections-active li.selected,.qv-object-SimpleFieldSelect.qv-selections-active li.selected {
+	background-image: linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
+	color: #fff;
+}
+.qv-object-SimpleFieldSelect .disableBGimage {
+	background-image: none !important;
+}
+.qv-object-SimpleFieldSelect .sfs_helptxt {
+	padding-left:5px;
+	font-style:italic;
+	font-size:90%;
+	border-radius:3px;
+	background-color:#fcfcfc;
+	text-overflow: ellipsis;
+	color:#808080;
+	margin-top:2px;
+}
+.qv-object-SimpleFieldSelect .inlinelabeldiv {
+	margin-right:5px;
+	text-overflow: ellipsis;
+	color:#808080;
+	font-weight:bold;
+	white-space:nowrap;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+.qv-object-SimpleFieldSelect .inlinelabeldivInline {
+	float:left;
+	padding-right:5px;
+	padding-top:3px;
+}
+.qv-object-SimpleFieldSelect .inlinelabel {
+	text-overflow: ellipsis;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	overflow-y:scroll;
+}
+.qv-object-SimpleFieldSelect .qv-object-nav {
+  display: none;
+}
+.qv-object-SimpleFieldSelect ul.sfsrmenu {
+	width:130px;
+	z-index: 1001;
+}
+.qv-object-SimpleFieldSelect.sfsrmenu {
+	display: none;
+	z-index: 1000;
+	position: fixed;
+	overflow: hidden;
+	border: 1px solid #CCC;
+	white-space: nowrap;
+	background: #FFF;
+	color: #333;
+	border-radius: 5px;
+}
+
+.qv-object-SimpleFieldSelect.sfsrmenu li {
+	padding: 6px 8px;
+	cursor: pointer;
+
+}
+
+.qv-object-SimpleFieldSelect.sfsrmenu li:hover {
+	background-color: #4dc04d; /*#DEE;*/
+	color:#fafafa;
+}
+.qv-object-SimpleFieldSelect .htmlin {
+	padding:3px;
+}
+.qv-object-SimpleFieldSelect  input.htmlin{
+	width:80%;
+}
+.qv-object-SimpleFieldSelect  input[type=number].htmlin {
+	
+}
+.qv-object-SimpleFieldSelect  input[type=range].htmlin {
+	float:left;
+}
+.qv-object-SimpleFieldSelect .rangval {
+	margin-left:3px;
+}

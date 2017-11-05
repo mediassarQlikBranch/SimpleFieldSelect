@@ -1,0 +1,16 @@
+{
+	"name": "SimpleFieldSelect",
+	"description": "Simple field and variable selector",
+	"type": "visualization",
+	"version": "1.4.4",
+	"icon": "list",
+	"author": "Matti Punkeri / Mediassar Oy",
+	"homepage": "",
+	"keywords": "qlik-sense, visualization",
+	"license": "",
+	"preview" : "RlogoSFS.png",
+	"repository": "",
+	"dependencies": {
+		"qlik-sense": ">=3.0.x"
+	}
+}
