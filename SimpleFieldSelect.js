@@ -1,5 +1,5 @@
 define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","./jquery-ui.min"], 
-	function ( qlik, $, cssContent, cssDatepick, propertiesdef ) {
+	function ( qlik, $, cssContent, cssDatepick, propertiesdef) {
 	'use strict';
 	$( "<style>" ).html( cssContent ).appendTo( "head" );
 	$( "<style>" ).html( cssDatepick ).appendTo( "head" );
@@ -263,6 +263,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 				if(layout.props.hideGuiToolbar && $(".qv-mode-edit").length == 0){
 					$(".qui-toolbar").hide();
+				}
+				
+				if(layout.props.removeHeaderFromTextImageObjects){
+					$(".qv-object-text-image header").hide();
 				}
 				//$( "<style>" ).html( cssContent ).appendTo( "head" );
 			}
@@ -906,6 +910,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				//as default:
 				checkDefaultValueSelection($element,countselected,layout,self,app);
 			}
+			
 			return qlik.Promise.resolve();
 		}
 	};

@@ -1035,6 +1035,17 @@ define( [], function () {
 								show: function ( data ) {
 									return data.qListObjectDef && data.props && data.props.enableGlobals && data.props.hideGuiToolbar;
 							  }
+							},
+							removeHeaderFromTextImageObjects: {
+							  ref: "props.removeHeaderFromTextImageObjects",
+							  component: "switch",
+							  type: "boolean",
+							  label: "Text & Image objects: remove header",
+							  defaultValue: false,
+							  options: [{value: true,label: "Remove header"}, {value: false,label: "Default header"}],
+							  show: function ( data ) {
+									return data.qListObjectDef && data.props && data.props.enableGlobals;
+							  }
 							}
 						}
 					}
