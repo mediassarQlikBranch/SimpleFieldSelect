@@ -1,3 +1,5 @@
+1.4.5
+ - New global parameter, get rid of the header in the Text & Image objects. You can have more space for the text itself.
 1.4.4
  - Text align inside elements, horizontal and vertical
  - With horizontal list there is a option to fill the whole area with the buttons. Use Show as Table option with Use maximum height.
