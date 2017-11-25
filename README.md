@@ -27,6 +27,7 @@ Now you can also clone the whole branch.
   - Hide any field(s) from the selection bar.
   - Hide sheet title or modify it's size and font-size
   - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
+  - Hide header from the Text & Image objects. You will get much more space for the text itself! Many times users cannot see the text because of the size of the header in the text object so now you can get rid of it!
 - background color for the object itself
 
 And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
