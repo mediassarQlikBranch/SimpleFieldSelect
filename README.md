@@ -10,17 +10,18 @@ Now you can also clone the whole branch.
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
 - Has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
-- renders as a list, button row, checkbox, standard radio button or drop down selector. Also standard HTML button (beta).
+- renders as a list, button row, checkbox, standard radio button or drop down selector.
 - For variable control there is now almost every HTML5 standard input
+  - For example slider
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
 - can set variable value from predefined list or via date picker
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
-  - date picker can limit to max date via variable
+  - date picker can limit to min and max date
 - mobile zoom effect can be disabled. No need for three clicks if you want to select something. **Only one click is enough!!**
-- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use 
-  - for example CSS classes from other libraries to render checkboxes.
+- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use for example CSS classes from other libraries to render checkboxes.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency of the object
+- Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 
 - Global parameters for a sheet:
   - Modify background color and border style for all objects on the sheet. No need for another extension.
