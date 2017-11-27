@@ -1,5 +1,7 @@
 1.50
- - Bug fixes: Date picker now shows month change icons correctly, visual fixes.
+ - Bug fixes: Date picker now shows month change icons correctly. 
+ - Visual/UI fixes.
+ - Fix for context menu actions
  - New features: Slider has now tooltip for current value.
  - Qlik Sense's own Leonard UI visual styles can be enabled for part of the visualizations.
  - Improved fitting to the object container.
