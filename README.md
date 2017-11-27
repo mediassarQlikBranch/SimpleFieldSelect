@@ -7,7 +7,6 @@ Download a ZIP file from the dist directory. First click the zip file in dist di
 Now you can also clone the whole branch.
 
 ## Features
-- selector for fields and variables
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
 - Has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
@@ -22,12 +21,14 @@ Now you can also clone the whole branch.
   - for example CSS classes from other libraries to render checkboxes.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency of the object
+
 - Global parameters for a sheet:
   - Modify background color and border style for all objects on the sheet. No need for another extension.
   - Hide any field(s) from the selection bar.
   - Hide sheet title or modify it's size and font-size
   - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
   - Hide header from the Text & Image objects. You will get much more space for the text itself! Many times users cannot see the text because of the size of the header in the text object so now you can get rid of it!
+  - Reduce header padding in all objects while using Focus theme
 - background color for the object itself
 
 And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
