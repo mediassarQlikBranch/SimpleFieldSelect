@@ -279,6 +279,12 @@ define( [], function () {
 						type: "items",
 						label: "Visualization",
 						items: {
+							addLeonardoUIclass:{
+								ref: "props.addLUIclasses",
+								type: "boolean",
+								label: "Add Qlik default Leonardo UI class (works on part of the objects)",
+								defaultValue: false
+							},
 							fontsize: {
 								type: "string",
 								component: "dropdown",
@@ -310,8 +316,42 @@ define( [], function () {
 							leftpadding: {
 								type: "string",
 								component: "dropdown",
-								label: "Padding for the qlik default left margin",
+								label: "Left padding, default margin",
 								ref: "props.leftpadding",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "4",label: "4px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"},
+									{value: "12",label: "12px"},
+									{value: "16",label: "16px"}],
+								defaultValue: "-"
+							},
+							bottompadding: {
+								type: "string",
+								component: "dropdown",
+								label: "Bottom padding, default margin",
+								ref: "props.bottompadding",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "4",label: "4px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"},
+									{value: "12",label: "12px"},
+									{value: "16",label: "16px"}],
+								defaultValue: "-"
+							},
+							rightpadding: {
+								type: "string",
+								component: "dropdown",
+								label: "Right padding, default margin",
+								ref: "props.rightpadding",
 								options: [
 									{value: "-",label: "default"},
 									{value: "0",label: "0px"},
@@ -327,7 +367,7 @@ define( [], function () {
 							elementpadding: {
 								type: "string",
 								component: "dropdown",
-								label: "Padding for the element",
+								label: "Padding for the element (inside)",
 								ref: "props.elementpadding",
 								options: [
 									{value: "-",label: "default"},
@@ -385,6 +425,25 @@ define( [], function () {
 									{value: "18",label: "18px"},
 									{value: "22",label: "22px"},
 									{value: "26",label: "26px"}],
+								defaultValue: "-",
+								show: function ( data ) {
+									return data.qListObjectDef && data.props &&  data.props.showHeader;
+								}
+							},
+							headertoppadding: {
+								type: "string",
+								component: "dropdown",
+								label: "Header H1 top padding",
+								ref: "props.headerTpadding",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"},
+									{value: "14",label: "14px"},
+									{value: "18",label: "18px"}],
 								defaultValue: "-",
 								show: function ( data ) {
 									return data.qListObjectDef && data.props &&  data.props.showHeader;
@@ -1046,7 +1105,26 @@ define( [], function () {
 							  show: function ( data ) {
 									return data.qListObjectDef && data.props && data.props.enableGlobals;
 							  }
-							}
+							},
+							headertoppadding_global: {
+								type: "string",
+								component: "dropdown",
+								label: "Header top padding (Focus Theme)",
+								ref: "props.headerTpadding_global",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"},
+									{value: "14",label: "14px"},
+									{value: "18",label: "18px"}],
+								defaultValue: "-",
+								show: function ( data ) {
+									return data.qListObjectDef && data.props && data.props.enableGlobals;
+								}
+							},
 						}
 					}
 				}

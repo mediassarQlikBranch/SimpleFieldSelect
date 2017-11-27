@@ -188,3 +188,9 @@
 .qv-object-SimpleFieldSelect .rangval {
 	margin-left:3px;
 }
+.qv-object-SimpleFieldSelect .rangvaltooltip {
+	padding:3px;
+	border-radius: 3px;
+	background-color: #eee;
+	border:1px solid #ddd;
+}
