@@ -23,6 +23,8 @@ Now you can also clone the whole branch.
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 
+All ssettings are sheet specific. You can use for example master items if you wan't to have same settings on same elemnt on every sheet.
+
 - Global parameters for a sheet:
   - Modify background color and border style for all objects on the sheet. No need for another extension.
   - Hide any field(s) from the selection bar.
@@ -33,6 +35,9 @@ Now you can also clone the whole branch.
 - background color for the object itself
 
 And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
+
+### Changelog
+[ChangeLog](ChangeLog)
 
 ## Screenshots
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
@@ -53,5 +58,3 @@ HTML inputs:
 - more visualization parameters added, maybe
 
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
-
-[ChangeLog](ChangeLog)
