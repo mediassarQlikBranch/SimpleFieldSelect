@@ -1,3 +1,6 @@
+1.5.1
+ - Bug fix for Sheet header title height setting, 12px and 16px works now.
+ - New parameter for hiding vertical scroll bar in any case, even if content overflows.
 1.50
  - Bug fixes: Date picker now shows month change icons correctly. 
  - Visual/UI fixes.
