@@ -1,6 +1,7 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
-This extension is an "all in one" selection component with several customization options. Now supports also global options for the current sheet, for example you can set background color of the sheet.
+This extension is an "all in one" selection component with several customization options.
+Extension has global options for the current sheet, for example you can set background color of the sheet, hide title bar, modify all borders etc.
 
 ## To install
 Download a ZIP file from the dist directory. First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
@@ -23,7 +24,7 @@ Now you can also clone the whole branch.
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 
-All ssettings are sheet specific. You can use for example master items if you wan't to have same settings on same elemnt on every sheet.
+All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
 
 - Global parameters for a sheet:
   - Modify background color and border style for all objects on the sheet. No need for another extension.
