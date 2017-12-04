@@ -170,6 +170,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (layout.props.noBorders){
 				articleElement.css('border-width','0');
 			}
+			if (layout.props.removeYscroll){
+				articleInnerElement.find('.qv-object-content-container').css('overflow-y','hidden');
+			}
 			/*if (layout.props.specialFontcolor){
 				articleElement.css('color',layout.props.specialFontcolor);
 			} else {

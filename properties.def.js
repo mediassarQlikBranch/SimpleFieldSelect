@@ -560,6 +560,15 @@ define( [], function () {
 									return data.qListObjectDef && data.props;
 								}
 							},
+							removeYscroll: {
+							  ref: "props.removeYscroll",
+							  type: "boolean",
+							  label: "Disable vertical scroll in anycase?",
+							  defaultValue: false,
+							  show: function ( data ) {
+								return data.qListObjectDef && data.props;
+							  }
+							},
 							customFontCSS: {
 							  ref: "props.customFontCSS",
 							  type: "string",
@@ -1024,8 +1033,8 @@ define( [], function () {
 							  type: "number",
 							  options: [
 									{value: -1,label: "default"},
-									{value: 20,label: "12px"},
-									{value: 20,label: "16px"},
+									{value: 12,label: "12px"},
+									{value: 16,label: "16px"},
 									{value: 20,label: "20px"},
 									{value: 24,label: "24px"},
 									{value: 28,label: "28px"},
