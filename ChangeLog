@@ -1,3 +1,5 @@
+Suomi Finland 100 years -edition
+ - First version of the search functionality. Enable search from settings. Use enter to select all found. Only one item can be selected from the search result.
 1.5.1
  - Bug fix for Sheet header title height setting, 12px and 16px works now.
  - New parameter for hiding vertical scroll bar in any case, even if content overflows.

@@ -208,6 +208,20 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				html += '</label>';
 				
 			}
+			if(layout.props.enablesearch){
+				var searchId = 'se'+layout.qInfo.qId;
+				/*html += '<div id="sfssearchdiv">';
+				html += '<label for="'+searchId+'"><span class="lui-icon  lui-icon--search"></span></label>'
+				html += '<input class="sfssearchinput lui-input" type=text id="'+searchId+'" placeholder="search" />';
+				html += '</div>';*/
+				html += '<div class="sfssearchdiv">';
+				html += '<div class="lui-search">';
+				html += '<span class="lui-icon lui-search__search-icon"></span>';
+				html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" maxlength="255" spellcheck="false" type="text" placeholder="Search"/>';
+				html += '<span id="cl'+searchId+'" class="lui-icon lui-search__clear-icon sfssearchinput_clear" title="clear search"></span>';
+				html += '</div></div>';
+				html += '<div class="sfssearchIcon"><span class="lui-icon  lui-icon--search"></span></div>';
+			}
 			//content heigth
 			if(layout.props.contentpadding && layout.props.contentpadding != '-'){
 				containerDivHeight_reduce += (parseInt(layout.props.contentpadding)*2); //add padding to height reduce x 2
@@ -713,7 +727,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						elementstyle += '"';
 						//list
 						if (layout.props.visualizationType=='hlist' || layout.props.visualizationType=='vlist'){
-							html += '<li class="data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(layout.props.addLUIclasses,layout.props.visualizationType,layout.props.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+'' +elementExtraAttribute+ '>' + row[0].qText;
+							html += '<li class="data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(layout.props.addLUIclasses,layout.props.visualizationType,layout.props.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
 							html += '</li>';
 						//checkbox
 						} else if (layout.props.visualizationType=='checkbox'){
@@ -988,8 +1002,73 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					});
 
 				} //if
+				//sea
 				//as default:
 				checkDefaultValueSelection($element,countselected,layout,self,app);
+			}
+
+			//search action:
+			if(layout.props.enablesearch){
+				var searchField = $element.find('#'+searchId);
+				var searchIcon = $element.find('.sfssearchIcon');
+				searchField.on('keyup',function(){
+					var filter = $(this).val().toLowerCase();
+					if (filter == ''){
+						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
+					}
+					var targets = $element.find(".data");
+					//console.log(targets.length);
+					if (layout.props.visualizationType=='checkbox' || layout.props.visualizationType=='radio'){
+						targets.each(function(){
+							var parent = $(this).parent();
+							//console.log(parent.text());
+							if (parent.text().toLowerCase().indexOf(filter) > -1){
+								parent.removeClass('searchHide').addClass('searchSel');
+							} else {
+								parent.addClass('searchHide').removeClass('searchSel');
+							}
+						});
+					} else {
+						targets.each(function(){
+							
+							if ($(this).html().toLowerCase().indexOf(filter) > -1){
+								$(this).removeClass('searchHide').addClass('searchSel');
+							} else {
+								$(this).addClass('searchHide').removeClass('searchSel');
+							}
+						});
+					}
+				});
+				//for enter press
+				searchField.keypress(function(e){
+					if(e.which == 13){ //enter key pressed
+						var valuesToSelect = [];
+						if (layout.props.visualizationType=='checkbox' || layout.props.visualizationType=='radio'){
+							var targets = $element.find(".searchSel input");
+						} else {
+							var targets = $element.find(".searchSel");
+						}
+						targets.each(function(){
+							valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+						});
+						selectValuesInQlik(self, valuesToSelect ,layout,app,false);
+					}
+				});
+				//clear
+				$element.find('#cl'+searchId).click(function(){
+					if(searchField.val()==''){ //on second press
+						searchField.parent().parent().hide('slow');
+						searchIcon.show();
+					} else {
+						searchField.val('');
+						searchField.trigger('keyup');
+					}
+				});
+				searchIcon.click(function(){
+					$(this).hide();
+					searchField.parent().parent().show('fast');
+					searchField.focus();
+				});
 			}
 			/*var storedObject = null;
 			$('.qv-gridcell').on('click',function(e){

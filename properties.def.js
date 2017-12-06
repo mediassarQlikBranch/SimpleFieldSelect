@@ -755,6 +755,18 @@ define( [], function () {
 									rightclikcmenu_random:{ref: "props.rightclikcmenu_random", type: "boolean",label: "Select randomly (why? well...)",defaultValue: true},
 									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true}
 								}
+							},
+							enablesearch:{
+								ref: "props.enablesearch",
+								type: "boolean",
+								label: "Enable search",
+								defaultValue: false,
+								show: function ( data ) {
+									return data.qListObjectDef && data.props && 
+									((data.props.dimensionIsVariable && variableOptionsForValues) ||
+									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio')
+									);
+							  	}
 							}
 						}
 					},

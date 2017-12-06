@@ -1,8 +1,8 @@
 {
 	"name": "SimpleFieldSelect",
-	"description": "Simple field and variable selector",
+	"description": "Simple field and variable selector for Qlik Sense",
 	"type": "visualization",
-	"version": "1.5.1",
+	"version": "Suomi Finland 100v",
 	"icon": "list",
 	"author": "Matti Punkeri / Mediassar Oy",
 	"homepage": "",

@@ -194,3 +194,23 @@
 	background-color: #eee;
 	border:1px solid #ddd;
 }
+.qv-object-SimpleFieldSelect .sfssearchdiv {
+	display:none;
+}
+.qv-object-SimpleFieldSelect .sfssearchIcon {
+	position:absolute;
+	top:0px;
+	right:5px;
+	border-radius:3px;
+	padding:3px;
+}
+.qv-object-SimpleFieldSelect .sfssearchIcon:hover, .qv-object-SimpleFieldSelect .sfssearchinput_clear:hover{
+	cursor:pointer;
+	background-color:#eee;
+}
+.qv-object-SimpleFieldSelect .sfssearchinput {
+
+}
+.qv-object-SimpleFieldSelect .searchHide {
+	display: none!important;
+}
