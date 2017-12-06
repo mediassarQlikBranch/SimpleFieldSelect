@@ -23,6 +23,7 @@ Now you can also clone the whole branch.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
+- search can be enabled for some of the visualizations
 
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
 
