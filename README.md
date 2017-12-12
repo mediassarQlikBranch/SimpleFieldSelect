@@ -12,6 +12,7 @@ Now you can also clone the whole branch.
 - Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 - Now you can select horizontal or vertical list by dragging with mouse. Like in the Qlik Sense selection.
 - Search can be enabled for most of the visualizations
+- slider has a tooltip
 
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
