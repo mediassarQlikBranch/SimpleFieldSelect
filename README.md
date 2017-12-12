@@ -67,3 +67,4 @@ HTML inputs:
 - more visualization parameters added, maybe
 
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
+Select2 (select2.org) plugin is used for select2 dropdown visualization.
