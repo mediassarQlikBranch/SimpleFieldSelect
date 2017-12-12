@@ -7,6 +7,12 @@ Extension has global options for the current sheet, for example you can set back
 Download a ZIP file from the dist directory. First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
 Now you can also clone the whole branch.
 
+## Latest features
+- Dropdown can be now used as multiselect. Naturally doesn't work with variables
+- Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
+- Now you can select horizontal or vertical list by dragging with mouse. Like in the Qlik Sense selection.
+- Search can be enabled for most of the visualizations
+
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
 - Has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
