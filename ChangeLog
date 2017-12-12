@@ -1,3 +1,7 @@
+1.6.0
+ - Dropdown can be now used as a multiselect. It will works as standard HTML. All color settings cannot be applied.
+ - Select2 (https://select2.org) plugin has been implemented as one possible visualization option. Select2 is a Dropdown menu plugin which has for example search and advanced multiselect posibility.
+ - Selecting many items from the horizontal or vertical list by "painting" or dragging. Press left mouse and move mouse inside object, Qlik sense style. Doesn't work on mobile.
 Suomi Finland 100 years -edition
  - First version of the search functionality. Enable search from settings. Use enter to select all found. Only one item can be selected from the search result.
 1.5.1

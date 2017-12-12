@@ -1,10 +1,16 @@
 //Properties definitions
 define( [], function () {
 	'use strict';
-	var debug = false;
+	var debug = true;
 	//calc variable name IF this is variable selection
 	function findVariableName(listobject,props){
-		if(debug){ console.log(listobject); console.log(props); }
+		props.variableName = listobject.qDef.qFieldDefs[0];
+		if (typeof props.variableName !== 'undefined' && props.variableName){
+			props.variableName = props.variableName.replace("=",'');
+		} else {
+			props.variableName = '';
+		}
+		if(debug){ console.log(listobject); console.log(props); console.log(listobject.qDef.qFieldDefs[0]);}
 		if (props.hideFromSelectionRealField && props.hideFromSelectionRealField != ''){
 			props.variableName = props.hideFromSelectionRealField;
 		}
@@ -47,11 +53,10 @@ define( [], function () {
 						},
 						change: function(data) {
 							if (data.props.dimensionIsVariable){
-								if(debug) console.log('variable name is '+data.qListObjectDef.variableName);
-								if(debug) console.log(data);
+								findVariableName(data.qListObjectDef,data.props);
 								data.variableValue = data.variableValue || {};
 								data.variableValue.qStringExpression = '=' + data.props.variableName;
-								if(debug) console.log('variable expression: '+data.variableValue.qStringExpression);
+								if(debug){ console.log('variable name is '+data.qListObjectDef.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); }
 							}
                         }
 					},
@@ -62,7 +67,6 @@ define( [], function () {
 					  defaultValue: false,
 					  change: function(data) {
 						if (data.props.dimensionIsVariable){
-							if(debug) console.log(data);
 							findVariableName(data.qListObjectDef,data.props);
 							//data.props.variableName = data.props.variableName.replace("=",''); //remove mark if exists.
 							data.variableValue = data.variableValue || {};
@@ -91,7 +95,8 @@ define( [], function () {
 							value: "dropdown",label: "Dropdown"}, {
 							value: "btn",label: "Standard HTML button"}, {
 							value: "radio",label: "Standard HTML radio button"}, {
-							value: "input",label: "Standard HTML5 input (numbers, text, sliders)"}
+							value: "input",label: "Standard HTML5 input (numbers, text, sliders)"}, {
+							value: "select2",label: "Select2 dropdown"}
 						],
 						defaultValue: "hlist",
 						show: function ( data ) {
@@ -140,7 +145,8 @@ define( [], function () {
 						defaultValue: '',
 						expression:"optional",
 						show: function ( data ) {
-							return data.props && data.props.dimensionIsVariable && (data.props.visualizationType=='input' || data.props.variableIsDate) && !data.props.visInputFieldType=='range';
+							return (data.props && data.props.dimensionIsVariable && (data.props.visualizationType=='input' || data.props.variableIsDate) && !data.props.visInputFieldType=='range')
+								|| (data.props && data.props.visualizationType=='select2');
 						}
 					},
 					htmlinputoptions:{
@@ -190,7 +196,46 @@ define( [], function () {
 						defaultValue: 'Select',
 						expression:"optional",
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.visualizationType=='dropdown' ;
+							return data.qListObjectDef && data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !data.props.selectmultiselect;
+						}
+					},
+					selectmultiselect: {
+						ref: "props.selectmultiselect",
+						type: "boolean",
+						label: "Allow multiple selects?",
+						show: function ( data ) {
+							return data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !data.props.dimensionIsVariable;
+						}
+					},
+					select2options:{
+						type: "items",
+						label: "Select2 options",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props && data.props.visualizationType=='select2';
+						},
+						items:{
+							aboutselect2:{
+								component: "text",
+								label: "Select2 jQuery plugin (https://select2.org) allows for example multiselect (for non-variable selections) and search"
+							},
+							select2allowClear: {
+								ref: "props.select2allowClear",
+								type: "boolean",
+								label: "Show clear button?",
+								defaultValue: false,
+								show: function ( data ) {
+									return !data.props.dimensionIsVariable;
+								}
+							},
+							select2enableSerach: {
+								ref: "props.select2enableSerach",
+								type: "boolean",
+								label: "Enable search?",
+								defaultValue: true,
+								show: function ( data ) {
+									return !data.props.dimensionIsVariable && !data.props.selectmultiselect;
+								}
+							}
 						}
 					}
 				}
@@ -433,7 +478,7 @@ define( [], function () {
 							headertoppadding: {
 								type: "string",
 								component: "dropdown",
-								label: "Header H1 top padding",
+								label: "Header H1 top padding (global will overwrite this)",
 								ref: "props.headerTpadding",
 								options: [
 									{value: "-",label: "default"},
@@ -728,7 +773,9 @@ define( [], function () {
 								label: "Show contextmenu (right click menu)",
 								defaultValue: true,
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) && (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' );
+									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) 
+									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' 
+										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) ); //if multi select
 							  	}
 							},
 							
@@ -736,7 +783,9 @@ define( [], function () {
 								type: "items",
 								label: "Menu options",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.rightclikcmenu && !(data.props.dimensionIsVariable) && (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' );
+									return data.qListObjectDef && data.props && data.props.rightclikcmenu && !(data.props.dimensionIsVariable) 
+									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' 
+										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) );
 								},
 								items:{
 									rightclickmenuinfo:{
@@ -763,7 +812,7 @@ define( [], function () {
 								defaultValue: false,
 								show: function ( data ) {
 									return data.qListObjectDef && data.props && 
-									((data.props.dimensionIsVariable && variableOptionsForValues) ||
+									((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
 									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio')
 									);
 							  	}
