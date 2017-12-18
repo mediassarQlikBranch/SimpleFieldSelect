@@ -1,7 +1,7 @@
 //Properties definitions
 define( [], function () {
 	'use strict';
-	var debug = true;
+	var debug = false;
 	//calc variable name IF this is variable selection
 	function findVariableName(listobject,props){
 		props.variableName = listobject.qDef.qFieldDefs[0];
