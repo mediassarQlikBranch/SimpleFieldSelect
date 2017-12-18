@@ -2,7 +2,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	$( "<style>" ).html( cssContent ).appendTo( "head" );
-	var debug = true;
+	var debug = false;
 	
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
