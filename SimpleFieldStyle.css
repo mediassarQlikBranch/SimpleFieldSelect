@@ -224,3 +224,7 @@
 .qv-object-SimpleFieldSelect .select2-container--default {
 	width:98%;
 }
+.qv-object-SimpleFieldSelect .select2-selection__choice__remove{}
+.qv-object-SimpleFieldSelect .select2-selection__clear {
+	font-size:120%;
+}

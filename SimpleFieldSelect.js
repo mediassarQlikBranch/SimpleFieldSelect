@@ -138,6 +138,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			
 			var self = this, html = "";
 			var app = qlik.currApp();
+			var visType = layout.props.visualizationType;
 			//change header size
 			var headerelement = $element.parent().parent().prev();
 			if (layout.props && layout.props.showHeader){
@@ -208,7 +209,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				html += '</label>';
 				
 			}
-			if(layout.props.enablesearch){
+			if(layout.props.enablesearch && (visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio')){
 				var searchId = 'se'+layout.qInfo.qId;
 				/*html += '<div id="sfssearchdiv">';
 				html += '<label for="'+searchId+'"><span class="lui-icon  lui-icon--search"></span></label>'
@@ -333,7 +334,6 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}*/
 			}
 			//get variable value
-			var visType = layout.props.visualizationType;
 			var varvalue = '';
 			if (layout.props.dimensionIsVariable){
 				varvalue = layout.variableValue;
@@ -549,10 +549,13 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 			//not date or html input:
 			} else {
-				
-				html += '<div class="checkboxgroup"';
+				var titletext = '';
 				if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
-					html += ' title="'+layout.props.hovertitletext.replace(/\"/g,'&quot;')+'"'; //escape quotas!!
+					titletext += layout.props.hovertitletext.replace(/\"/g,'&quot;');
+				}
+				html += '<div class="checkboxgroup"';
+				if (titletext){
+					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
 				html += '>';
 				var countselected = 0;
@@ -584,7 +587,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else if (visType=='dropdown'){
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(layout.props.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+multiselect+ '>';
 				} else if (visType=='select2'){
-					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(layout.props.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+multiselect+ '>';
+					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(layout.props.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding
 				} else if (visType=='btn'){
 					html += '<div '+stylechanges+'>';
 				} else {
@@ -957,7 +960,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else
 				//dropdown change
 				if (visType=='dropdown' || visType=='select2'){
-					$element.find( '.dropdownsel' ).on('change',function(){
+					var dropdownelem = $element.find( '.dropdownsel' );
+					dropdownelem.attr('title', countselected + ' selected'  );
+					dropdownelem.on('change',function(){
 						if (debug) console.log('select change action');
 						if (!layout.props.selectmultiselect){ //not multi
 							var clicktarget = $(this).find(":selected");
@@ -1075,12 +1080,33 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					minimumSearchResults = 0;
 				}
 				$("#sfsselect2c").html(""); //clear area, select2 may not
-				$element.find( '.dropdownsel' ).select2({
+				var selectElement = $element.find( '.dropdownsel' );
+				selectElement.select2({
 					'dropdownParent': $("#sfsselect2c"),
 					'allowClear': layout.props.select2allowClear,
 					'placeholder': layout.props.visInputPlaceholdertxt,
-					'minimumResultsForSearch': minimumSearchResults
+					'minimumResultsForSearch': minimumSearchResults,
+					'templateResult': function (data, container) {
+					    if (data.element) {
+					      //$(container).addClass($(data.element).attr("class"));
+					      $(container).attr('style',$(data.element).attr("style"));
+					    }
+					    return data.text;
+					},
+					'templateSelection': function (data, container) {
+					    if (data.element) {
+					      //$(container).addClass($(data.element).attr("class"));
+					      $(container).attr('style',$(data.element).attr("style"));
+					      if($(data.element).hasClass("disableBGimage")){
+					      	$(container).addClass('disableBGimage'); //for def bgcolor change
+					      }
+					    }
+					    return data.text;
+					}
 				});
+				var select2container = $element.find( '.select2-container' );
+				select2container.attr('style', select2container.attr('style') +' '+ selectElement.attr('style')); //copy style
+
 			}
 			//search action:
 			if(layout.props.enablesearch){

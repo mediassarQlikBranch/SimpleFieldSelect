@@ -1,5 +1,7 @@
+1.6.2
+ - improve color handling on Select2 visualization
 1.6.1
- - disable debugging messages which were accidentally left on
+- disable debugging messages which were accidentally left on
 1.6.0
  - Dropdown can be now used as a multiselect. It will works as standard HTML. All color settings cannot be applied.
  - Select2 (https://select2.org) plugin has been implemented as one possible visualization option. Select2 is a Dropdown menu plugin which has for example search and advanced multiselect posibility.

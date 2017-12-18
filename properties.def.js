@@ -585,10 +585,8 @@ define( [], function () {
 									{value: "left",label: "left"},
 									{value: "center",label: "center"},
 									{value: "right",label: "right"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.qListObjectDef && data.props;
-								}
+								defaultValue: "-"
+								
 							},
 							textVAlign: {
 								type: "string",
@@ -600,19 +598,15 @@ define( [], function () {
 									{value: "top",label: "left"},
 									{value: "middle",label: "middle"},
 									{value: "bottom",label: "bottom"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.qListObjectDef && data.props;
-								}
+								defaultValue: "-"
+								
 							},
 							removeYscroll: {
 							  ref: "props.removeYscroll",
 							  type: "boolean",
 							  label: "Disable vertical scroll in anycase?",
-							  defaultValue: false,
-							  show: function ( data ) {
-								return data.qListObjectDef && data.props;
-							  }
+							  defaultValue: false
+							  
 							},
 							customFontCSS: {
 							  ref: "props.customFontCSS",
@@ -624,13 +618,19 @@ define( [], function () {
 							  ref: "props.customElementAttribute",
 							  type: "string",
 							  label: "Custom HTML attribute for every element",
-							  defaultValue: ''
+							  defaultValue: '',
+							  show: function ( data ) {
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  }
 							},
 							customElementClass: {
 							  ref: "props.customElementClass",
 							  type: "string",
 							  label: "Custom HTML class for every element",
-							  defaultValue: ''
+							  defaultValue: '',
+							  show: function ( data ) {
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  }
 							},
 							customStyleCSS: {
 							  ref: "props.customStyleCSS",
@@ -735,7 +735,7 @@ define( [], function () {
 								ref: "props.selectAlsoThese",
 								defaultValue: "",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.variableIsDate || data.props.dimensionIsVariable) && !data.props.selectOnlyOne;
+									return data.qListObjectDef && data.props && !(data.props.variableIsDate || data.props.dimensionIsVariable) && !data.props.selectOnlyOne && ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect);
 								},
 								expression:"optional"
 							},
@@ -745,7 +745,7 @@ define( [], function () {
 							  label: "Select only one?",
 							  defaultValue: false,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown';
+									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
 							  }
 							},
 							/*ForceSelections: {

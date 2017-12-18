@@ -49,6 +49,8 @@ And the extension is supposed to be very light weight. It has no big libraries a
 [ChangeLog](ChangeLog)
 
 ## Screenshots
+![Examples](/docs/img/select2demo.PNG?raw=true "Header and Select2 demo" )
+
 ![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
 
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
