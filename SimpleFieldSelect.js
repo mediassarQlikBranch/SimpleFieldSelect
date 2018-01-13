@@ -43,6 +43,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			});
 		}
 		if (valuesToSelect.length>0){
+			if(debug){ console.log('select many'); console.log(valuesToSelect);}
 			selectValuesInQlik(self, valuesToSelect ,layout,app,false);
 		}
 	  }
@@ -58,9 +59,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 		}
 	}
 	function selectValueInQlik(self,value,layout,app,selectvalueMethod){ //selectvalueMethod true or false
-		if(debug) console.log('set value to index '+value);
 		//Variable
 		if (layout.props.dimensionIsVariable){
+			if(debug) console.log('set variable value to '+value);
 			var valueTxt = layout.props.variableOptionsForValuesArray[ value ];
 			//if value is not defined, forexample nothing is selected for variable.
 			if (typeof valueTxt == 'undefined' ){
@@ -77,13 +78,17 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 		//set field
 		} else {
+			if(debug) console.log('set value to index '+value);
 			self.backendApi.selectValues( 0, [value], selectvalueMethod );
 		}
 	}
 	function selectValuesInQlik(self,values,layout,app,selectvalueMethod){ //select manyvalues at the same time
-		if(debug) console.log('set values to indexes ');
-		if(debug) console.log(values);
-		self.backendApi.selectValues( 0, values, selectvalueMethod );
+		if(debug) { console.log('set values to indexes '); console.log(values); }
+		if (layout.props.dimensionIsVariable){
+			selectValueInQlik(self,values[0],layout,app,selectvalueMethod);
+		} else {
+			self.backendApi.selectValues( 0, values, selectvalueMethod );
+		}
 	}
 	function createLUIclass(addLUIclasses,inputtype,visInputFieldType){
 		if(addLUIclasses){

@@ -1,3 +1,5 @@
+1.6.3
+ - fix for variable default value and search result selection
 1.6.2
  - improve color handling on Select2 visualization
 1.6.1
