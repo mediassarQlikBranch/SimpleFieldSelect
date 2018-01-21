@@ -32,15 +32,18 @@ Now you can also clone the whole branch.
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 - search can be enabled for some of the visualizations
 
+## Global sheet level settings
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
 
 - Global parameters for a sheet:
-  - Modify background color and border style for all objects on the sheet. No need for another extension.
+  - Modify background color of the sheet and all objects.
+  - Change border style for all objects on the sheet.
   - Hide any field(s) from the selection bar.
   - Hide sheet title or modify it's size and font-size
   - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
   - Hide header from the Text & Image objects. You will get much more space for the text itself! Many times users cannot see the text because of the size of the header in the text object so now you can get rid of it!
   - Reduce header padding in all objects while using Focus theme
+  - Font-family and font color can be set for all elements
 - background color for the object itself
 
 And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
@@ -59,14 +62,12 @@ And context menu for the "missing features":
 
 ![Context menu](/docs/img/contextmenu.PNG "Context menu" )
 
+![Context menu](/docs/img/luidemo.png "Switch and checkbox Qlik style" )
+
 HTML inputs:
 
 ![HTML5](/docs/img/html5examples.PNG "HTML5 standard inputs" ) ![HTML5](/docs/img/html5examples2.PNG "HTML5 standard inputs" ) ![HTML5](/docs/img/html5Example3.PNG "HTML5 standard inputs" )
 
 
-## Will be done later:
-- source code will be cleaned
-- more visualization parameters added, maybe
-
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
-Select2 (select2.org) plugin is used for select2 dropdown visualization.
+Select2 (select2.org) plugin is used for Select2 dropdown visualization.

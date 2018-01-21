@@ -1,3 +1,11 @@
+1.6.4
+ - font-family css parameter added for current object and in the Global modifications -section. Global version will change every 
+ - New visualizations: Qlik switch and Qlik checkbox (Qlik's own Leonardo UI components)
+ - global background color for every element on a sheet
+ - fix for dropdown and Select2 color handling
+ - another parameter for global settings which allows to adjust Qlik's default header padding. Gives more room for the data.
+ - Remove labels - feature
+ - Rearrange some parameters
 1.6.3
  - fix for variable default value and search result selection
 1.6.2

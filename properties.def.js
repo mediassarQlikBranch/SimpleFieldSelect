@@ -96,7 +96,10 @@ define( [], function () {
 							value: "btn",label: "Standard HTML button"}, {
 							value: "radio",label: "Standard HTML radio button"}, {
 							value: "input",label: "Standard HTML5 input (numbers, text, sliders)"}, {
-							value: "select2",label: "Select2 dropdown"}
+							value: "select2",label: "Select2 dropdown"}, {
+							value: "luiswitch",label: "Qlik Switch"}, {
+							value: "luicheckbox",label: "Qlik Checkbox"
+							}
 						],
 						defaultValue: "hlist",
 						show: function ( data ) {
@@ -494,22 +497,6 @@ define( [], function () {
 									return data.qListObjectDef && data.props &&  data.props.showHeader;
 								}
 							},
-							transparentBackground: {
-							  ref: "props.transparentBackground",
-							  type: "boolean",
-							  label: "Transparent background?",
-							  defaultValue: false
-							},
-							specialBackgroundColor: {
-							  ref: "props.specialBackgroundColor",
-							  type: "string",
-							  label: "Whole object background color (CSS color code, like #123 or red)",
-							  defaultValue: '',
-							  expression:"optional",
-							  show: function ( data ) {
-								return data.qListObjectDef && data.props && !data.props.transparentBackground;
-							  }
-							},
 							noBorders: {
 							  ref: "props.noBorders",
 							  type: "boolean",
@@ -595,7 +582,7 @@ define( [], function () {
 								ref: "props.textVAlign",
 								options: [
 									{value: "-",label: "default"},
-									{value: "top",label: "left"},
+									{value: "top",label: "top"},
 									{value: "middle",label: "middle"},
 									{value: "bottom",label: "bottom"}],
 								defaultValue: "-"
@@ -604,39 +591,15 @@ define( [], function () {
 							removeYscroll: {
 							  ref: "props.removeYscroll",
 							  type: "boolean",
-							  label: "Disable vertical scroll in anycase?",
+							  label: "Disable vertical scroll in anycase",
 							  defaultValue: false
 							  
 							},
-							customFontCSS: {
-							  ref: "props.customFontCSS",
-							  type: "string",
-							  label: "Custom font css string",
-							  defaultValue: ''
-							},
-							customElementAttribute: {
-							  ref: "props.customElementAttribute",
-							  type: "string",
-							  label: "Custom HTML attribute for every element",
-							  defaultValue: '',
-							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
-							  }
-							},
-							customElementClass: {
-							  ref: "props.customElementClass",
-							  type: "string",
-							  label: "Custom HTML class for every element",
-							  defaultValue: '',
-							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
-							  }
-							},
-							customStyleCSS: {
-							  ref: "props.customStyleCSS",
-							  type: "string",
-							  label: "Custom CSS style for every element",
-							  defaultValue: ''
+							removeLabel: {
+							  ref: "props.removeLabel",
+							  type: "boolean",
+							  label: "Do not print labels",
+							  defaultValue: false
 							}
 						}
 					},
@@ -774,7 +737,7 @@ define( [], function () {
 								defaultValue: true,
 								show: function ( data ) {
 									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) 
-									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' 
+									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' 
 										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) ); //if multi select
 							  	}
 							},
@@ -784,7 +747,7 @@ define( [], function () {
 								label: "Menu options",
 								show: function ( data ) {
 									return data.qListObjectDef && data.props && data.props.rightclikcmenu && !(data.props.dimensionIsVariable) 
-									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' 
+									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch'
 										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) );
 								},
 								items:{
@@ -801,7 +764,7 @@ define( [], function () {
 									rightclikcmenu_clear:{ref: "props.rightclikcmenu_clear", type: "boolean",label: "Clear selections",defaultValue: true},
 									rightclikcmenu_reverse:{ref: "props.rightclikcmenu_reverse", type: "boolean",label: "Reverse selections",defaultValue: true},
 									rightclikcmenu_possible:{ref: "props.rightclikcmenu_possible", type: "boolean",label: "Select possible",defaultValue: true},
-									rightclikcmenu_random:{ref: "props.rightclikcmenu_random", type: "boolean",label: "Select randomly (why? well...)",defaultValue: true},
+									rightclikcmenu_random:{ref: "props.rightclikcmenu_random", type: "boolean",label: "Select randomly (why? well...)",defaultValue: false},
 									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true}
 								}
 							},
@@ -813,7 +776,7 @@ define( [], function () {
 								show: function ( data ) {
 									return data.qListObjectDef && data.props && 
 									((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
-									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio')
+									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch')
 									);
 							  	}
 							}
@@ -885,7 +848,27 @@ define( [], function () {
 						items: {
 							aboutcolors:{
 								component: "text",
-								label: "If field is empty, \"default\" value is used. Use CSS color codes, like #fed, blue, #123456. 'Possible' colors and fonts are used for elements which don't have different states. "
+								label: "If field is empty, \"default\" value is used. Use CSS color codes, like #fed, blue, #123456."
+							},
+							transparentBackground: {
+							  ref: "props.transparentBackground",
+							  type: "boolean",
+							  label: "Transparent background?",
+							  defaultValue: false
+							},
+							specialBackgroundColor: {
+							  ref: "props.specialBackgroundColor",
+							  type: "string",
+							  label: "Whole object background color (CSS color code, like #123 or red)",
+							  defaultValue: '',
+							  expression:"optional",
+							  show: function ( data ) {
+								return data.qListObjectDef && data.props && !data.props.transparentBackground;
+							  }
+							},
+							aboutcolors2:{
+								component: "text",
+								label: "Selection state colors. 'Possible'-state colors and fonts are used for elements which don't have different states. "
 							},
 							color_stateS_bg: {
 								type: "string",
@@ -953,7 +936,7 @@ define( [], function () {
 							},
 							color_border: {
 								type: "string",
-								label: "Border color",
+								label: "Border color of the input",
 								ref: "props.color_border",
 								defaultValue: '',
 								expression:"optional"
@@ -965,6 +948,51 @@ define( [], function () {
 								defaultValue: '',
 								expression:"optional"
 							}*/
+						}
+					},
+					advancedCSS:{
+						type: "items",
+						label: "Advanced CSS",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props;
+						},
+						items:{
+							customFontCSS: {
+							  ref: "props.customFontCSS",
+							  type: "string",
+							  label: "Custom \"font:\" css string",
+							  defaultValue: ''
+							},
+							customFontFamilyCSS: {
+							  ref: "props.customFontFamilyCSS",
+							  type: "string",
+							  label: "Custom \"font-family:\" css string",
+							  defaultValue: ''
+							},
+							customElementAttribute: {
+							  ref: "props.customElementAttribute",
+							  type: "string",
+							  label: "Custom HTML attribute for every element",
+							  defaultValue: '',
+							  show: function ( data ) {
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  }
+							},
+							customElementClass: {
+							  ref: "props.customElementClass",
+							  type: "string",
+							  label: "Custom HTML class for every element",
+							  defaultValue: '',
+							  show: function ( data ) {
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  }
+							},
+							customStyleCSS: {
+							  ref: "props.customStyleCSS",
+							  type: "string",
+							  label: "Custom CSS style for every element",
+							  defaultValue: ''
+							}
 						}
 					},
 					Globals: {
@@ -990,7 +1018,17 @@ define( [], function () {
 								defaultValue: '',
 								expression:"optional",
 								show: function ( data ) {
-								 return data.qListObjectDef && data.props &&  data.props.enableGlobals;
+								 return  data.props &&  data.props.enableGlobals;
+							    }
+							},
+							global_elementbgcolor:{
+								type: "string",
+								label: "Background color for all elements",
+								ref: "props.global_elementbgcolor",
+								defaultValue: '',
+								expression:"optional",
+								show: function ( data ) {
+								 return  data.props &&  data.props.enableGlobals;
 							    }
 							},
 							global_bordercolor: {
@@ -1000,7 +1038,7 @@ define( [], function () {
 								defaultValue: '',
 								expression:"optional",
 								show: function ( data ) {
-								 return data.qListObjectDef && data.props &&  data.props.enableGlobals;
+								 return  data.props &&  data.props.enableGlobals;
 							    }
 							},
 							global_borderwidth: {
@@ -1020,14 +1058,33 @@ define( [], function () {
 									{value: "8",label: "8px"}],
 								defaultValue: "-",
 								show: function ( data ) {
-								 return data.qListObjectDef && data.props &&  data.props.enableGlobals;
+								 return  data.props &&  data.props.enableGlobals;
 							    }
+							},
+							global_fontcolor: {
+								type: "string",
+								label: "Font color for the sheet",
+								ref: "props.global_fontcolor",
+								defaultValue: '',
+								expression:"optional",
+								show: function ( data ) {
+								 return  data.props &&  data.props.enableGlobals;
+							    }
+							},
+							fontfamily_global: {
+							  ref: "props.fontfamily_global",
+							  type: "string",
+							  label: "Font-family css parameter for the whole sheet",
+							  defaultValue: "",
+							  show: function ( data ) {
+									return data.props && data.props.enableGlobals;
+							  }
 							},
 							propagationInfo:{
 								component: "text",
 								label: "Most of the following settings are inherited from this sheet to others. You need to have same settings on the other sheets too to have the same effect on every possible landing sheet. Changing some of the values back to default requires browser refresh. Use master items for same settings on every sheet.",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals ;
+									return  data.props && data.props.enableGlobals ;
 							  }
 							},
 							hideFieldsFromSelectionBar: {
@@ -1036,7 +1093,7 @@ define( [], function () {
 							  label: "Hide following fields from the selection bar. Separate by ;",
 							  defaultValue: "",
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
 							  }
 							},
 							hideSheetTitle: {
@@ -1052,7 +1109,7 @@ define( [], function () {
 							  	}
 							  },
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return  data.props && data.props.enableGlobals;
 							  }
 							},
 							removeSheetTitlePadding: {
@@ -1063,7 +1120,7 @@ define( [], function () {
 							  defaultValue: false,
 							  options: [{value: true,label: "Remove padding"}, {value: false,label: "Default padding"}],
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+									return  data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
 							  }
 							},
 							sheetTitleFontSize: {
@@ -1084,7 +1141,7 @@ define( [], function () {
 									{value: 36,label: "36px"}],
 							  defaultValue: -1,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+									return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
 							  }
 							},
 							sheetTitleheight: {
@@ -1105,7 +1162,7 @@ define( [], function () {
 									{value: 48,label: "48px"}],
 							  defaultValue: -1,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+									return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
 							  }
 							},
 							hideSelectionBar: {
@@ -1121,7 +1178,7 @@ define( [], function () {
 							  	}
 							  },
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
 							  }
 							},
 							toolbarheight: {
@@ -1139,7 +1196,7 @@ define( [], function () {
 									{value: 46,label: "46px"}],
 							  defaultValue: -1,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
 							  }
 							},
 							hideGuiToolbar: {
@@ -1155,14 +1212,14 @@ define( [], function () {
 							  	}
 							  },
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
 							  }
 							},
 							hideguitoolbarInfo:{
 								component: "text",
 								label: "When main toolbar is hidden you cannot access edit mode. You have to change last part of the url to /state/edit ",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals && data.props.hideGuiToolbar;
+									return data.props && data.props.enableGlobals && data.props.hideGuiToolbar;
 							  }
 							},
 							removeHeaderFromTextImageObjects: {
@@ -1173,13 +1230,20 @@ define( [], function () {
 							  defaultValue: false,
 							  options: [{value: true,label: "Remove header"}, {value: false,label: "Default header"}],
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
+							  }
+							},
+							headerpaddingAdjustTxt:{
+								component: "text",
+								label: "You can adjust sheet's every objects' padding settings of the default header (Focus Theme).",
+								show: function ( data ) {
+									return data.props && data.props.enableGlobals;
 							  }
 							},
 							headertoppadding_global: {
 								type: "string",
 								component: "dropdown",
-								label: "Header top padding (Focus Theme)",
+								label: "Header top padding for every object",
 								ref: "props.headerTpadding_global",
 								options: [
 									{value: "-",label: "default"},
@@ -1192,9 +1256,25 @@ define( [], function () {
 									{value: "18",label: "18px"}],
 								defaultValue: "-",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals;
 								}
 							},
+							headerbottompadding_global: {
+								type: "string",
+								component: "dropdown",
+								label: "Header bottom padding for every object",
+								ref: "props.headerBpadding_global",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "5",label: "5px"},
+									{value: "15",label: "15px"},
+									{value: "20",label: "20px"}],
+								defaultValue: "-",
+								show: function ( data ) {
+									return data.props && data.props.enableGlobals;
+								}
+							}
 						}
 					}
 				}

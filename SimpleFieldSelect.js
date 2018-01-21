@@ -175,6 +175,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			if (layout.props.noBorders){
 				articleElement.css('border-width','0');
+				articleElement.parent().parent().css('border-width','0');
 			}
 			if (layout.props.removeYscroll){
 				articleInnerElement.find('.qv-object-content-container').css('overflow-y','hidden');
@@ -214,12 +215,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				html += '</label>';
 				
 			}
-			if(layout.props.enablesearch && (visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio')){
+			if(layout.props.enablesearch){
+				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox')){
 				var searchId = 'se'+layout.qInfo.qId;
-				/*html += '<div id="sfssearchdiv">';
-				html += '<label for="'+searchId+'"><span class="lui-icon  lui-icon--search"></span></label>'
-				html += '<input class="sfssearchinput lui-input" type=text id="'+searchId+'" placeholder="search" />';
-				html += '</div>';*/
 				html += '<div class="sfssearchdiv">';
 				html += '<div class="lui-search">';
 				html += '<span class="lui-icon lui-search__search-icon"></span>';
@@ -227,6 +225,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				html += '<span id="cl'+searchId+'" class="lui-icon lui-search__clear-icon sfssearchinput_clear" title="clear search"></span>';
 				html += '</div></div>';
 				html += '<div class="sfssearchIcon"><span class="lui-icon  lui-icon--search"></span></div>';
+				}
 			}
 			//content heigth
 			if(layout.props.contentpadding && layout.props.contentpadding != '-'){
@@ -300,15 +299,29 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (layout.props.global_borderwidth && layout.props.global_borderwidth != '-'){
 					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+layout.props.global_borderwidth+'px;}';
 				}
-				if (layout.props.global_bordercolor){
+				if (layout.props.global_bordercolor){ //tbfixed, border on more than one level
 					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+layout.props.global_bordercolor+';}';
 				}
 				if(layout.props.removeHeaderFromTextImageObjects){
-					csstxt += ".qv-object-text-image header {display:none!important;}";
+					csstxt += " .qv-object-text-image header {display:none!important;}";
 				}
 				if(layout.props.headerTpadding_global && layout.props.headerTpadding_global != '-'){
-					csstxt += ".qv-object header h1 {padding-top:"+layout.props.headerTpadding_global+"px!important;}";
+					csstxt += " .qv-object header h1 {padding-top:"+layout.props.headerTpadding_global+"px!important;}";
 				}
+				if(layout.props.headerBpadding_global && layout.props.headerBpadding_global != '-'){
+					csstxt += " .qv-object header  {padding-bottom:"+layout.props.headerBpadding_global+"px!important;}";
+				}
+				if(layout.props.fontfamily_global && layout.props.fontfamily_global != ''){
+					csstxt += ' .qv-object * {font-family:"'+layout.props.fontfamily_global+'";}';
+				}
+				if(layout.props.global_elementbgcolor && layout.props.global_elementbgcolor != ''){
+					csstxt += ' .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
+				}
+				if(layout.props.global_fontcolor && layout.props.global_fontcolor != ''){
+					csstxt += ' .qv-client.qv-card #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';
+					csstxt += ' .qvt-visualization-title,.qv-object-SimpleFieldSelect .inlinelabeldiv {color:'+layout.props.global_fontcolor+';}';
+				}
+				
 				$(".SFSglobalCSS").html('<style>' + csstxt + '</style>');
 				if (layout.props.hideSheetTitle){
 					$(".sheet-title-container").hide();
@@ -346,7 +359,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			var fontStyleTxt = '';
 			if (layout.props.customFontCSS && layout.props.customFontCSS != ''){
-				fontStyleTxt = ' font:'+layout.props.customFontCSS+';';
+				fontStyleTxt += ' font:'+layout.props.customFontCSS+';';
+			}
+			if (layout.props.customFontFamilyCSS && layout.props.customFontFamilyCSS != ''){
+				fontStyleTxt += ' font-family:'+layout.props.customFontFamilyCSS+';';
 			}
 			var elementStyleCSS = '';
 			if (layout.props.customStyleCSS && layout.props.customStyleCSS != ''){
@@ -558,7 +574,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
 					titletext += layout.props.hovertitletext.replace(/\"/g,'&quot;');
 				}
-				html += '<div class="checkboxgroup"';
+				if(visType=='luiswitch' || visType=='luicheckbox'){
+					html += '<div class="sfs_lui"';
+				} else {
+					html += '<div class="checkboxgroup"';
+				}
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
@@ -595,6 +615,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(layout.props.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding
 				} else if (visType=='btn'){
 					html += '<div '+stylechanges+'>';
+				} else if (visType=='luiswitch' || visType=='luicheckbox'){
+
 				} else {
 					html += 'Select visualization type';
 				}
@@ -662,6 +684,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (layout.props.hidePassiveItems && !layout.props.dimensionIsVariable && row[0].qState === 'X'){ //if passive hiding enabled
 						return; //exit current function
 					}
+					if(layout.props.removeLabel){
+						row[0].qText = '';
+					}
 					//var elementid = layout.qInfo.qId+''+row[0].qElemNumber;
 					var defaultelementclass = '',checkedstatus = '',dis = '', selectedClass = '', dropselection = '', otherdefaultelementclass = '';
 					if (row[0].qState === 'S') { 
@@ -702,44 +727,44 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					}
 					
 					var colorclasses = '', elementstyle = '';
-					if ((visType!='dropdown' && visType!='select2') || layout.props.selectmultiselect ){
+					//if ((visType!='dropdown' && visType!='select2') || layout.props.selectmultiselect ){
 						elementstyle = ' style="';
 						//color selections
-						if (row[0].qState === 'S'){
-							//set special color if set
-							if (layout.props.color_stateS_bg && layout.props.color_stateS_bg != ''){
-								colorclasses += ' disableBGimage';
-								elementstyle += 'background-color:'+layout.props.color_stateS_bg+';';
-							}
-							//font color
-							if (layout.props.color_stateS_fo && layout.props.color_stateS_fo != ''){
-								elementstyle += ' color:'+layout.props.color_stateS_fo+';';
-							}
-						} else if (row[0].qState === 'O'){
-							if (layout.props.color_stateO_bg && layout.props.color_stateO_bg != ''){
-								elementstyle += 'background-color:'+layout.props.color_stateO_bg+';';
-							}
-							if (layout.props.color_stateO_fo && layout.props.color_stateO_fo != ''){
-								elementstyle += ' color:'+layout.props.color_stateO_fo+';';
-							}
-						} else if (row[0].qState === 'X'){
-							if (layout.props.color_stateX_bg && layout.props.color_stateX_bg != ''){
-								elementstyle += 'background-color:'+layout.props.color_stateX_bg+';';
-							}
-							if (layout.props.color_stateX_fo && layout.props.color_stateX_fo != ''){
-								elementstyle += ' color:'+layout.props.color_stateX_fo+';';
-							}
-						} else if (row[0].qState === 'A'){
-							if (layout.props.color_stateA_bg && layout.props.color_stateA_bg != ''){
-								elementstyle += 'background-color:'+layout.props.color_stateA_bg+';';
-							}
-							if (layout.props.color_stateA_fo && layout.props.color_stateA_fo != ''){
-								elementstyle += ' color:'+layout.props.color_stateA_fo+';';
-							}
+					if (row[0].qState === 'S'){
+						//set special color if set
+						if (layout.props.color_stateS_bg && layout.props.color_stateS_bg != ''){
+							colorclasses += ' disableBGimage';
+							elementstyle += 'background-color:'+layout.props.color_stateS_bg+';';
 						}
-						elementstyle += bordercolorstyle+elementStyleCSS+elementpadding;
-						elementstyle += '" ';
+						//font color
+						if (layout.props.color_stateS_fo && layout.props.color_stateS_fo != ''){
+							elementstyle += ' color:'+layout.props.color_stateS_fo+';';
+						}
+					} else if (row[0].qState === 'O'){
+						if (layout.props.color_stateO_bg && layout.props.color_stateO_bg != ''){
+							elementstyle += 'background-color:'+layout.props.color_stateO_bg+';';
+						}
+						if (layout.props.color_stateO_fo && layout.props.color_stateO_fo != ''){
+							elementstyle += ' color:'+layout.props.color_stateO_fo+';';
+						}
+					} else if (row[0].qState === 'X'){
+						if (layout.props.color_stateX_bg && layout.props.color_stateX_bg != ''){
+							elementstyle += 'background-color:'+layout.props.color_stateX_bg+';';
+						}
+						if (layout.props.color_stateX_fo && layout.props.color_stateX_fo != ''){
+							elementstyle += ' color:'+layout.props.color_stateX_fo+';';
+						}
+					} else if (row[0].qState === 'A'){
+						if (layout.props.color_stateA_bg && layout.props.color_stateA_bg != ''){
+							elementstyle += 'background-color:'+layout.props.color_stateA_bg+';';
+						}
+						if (layout.props.color_stateA_fo && layout.props.color_stateA_fo != ''){
+							elementstyle += ' color:'+layout.props.color_stateA_fo+';';
+						}
 					}
+					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding;
+					elementstyle += '" ';
+					//}
 					//list
 					if (visType=='hlist' || visType=='vlist'){
 						html += '<li class="data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
@@ -762,6 +787,20 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					} else if (visType=='dropdown' || visType=='select2'){
 						html += '<option '+elementstyle+'class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '" value="' + row[0].qElemNumber + '"' + dis + dropselection + ' > ' + row[0].qText;
 						html += '</option>';
+					} else if (visType=='luiswitch'){
+						
+						html += '<div style="" class="lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
+						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<span class="lui-switch__wrap"><span class="lui-switch__inner"></span><span class="lui-switch__switch"></span></span></label>';
+						html += '<div class="lui-switch_txt" style="">'+row[0].qText+'</div>';
+						html += '</div>';
+						
+						html += '';
+					} else if (visType=='luicheckbox'){
+						html += '<label class="lui-checkbox" title="'+row[0].qText+'">';
+						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
+						html += '</label>';
 					}
 				});
 				if (visType=='hlist' || visType=='vlist'){
@@ -997,7 +1036,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					});
 				} else
 				//attach click event to checkbox
-				if (visType=='checkbox'){
+				if (visType=='checkbox' || visType=='luiswitch' || visType=='luicheckbox'){
 				  $element.find( 'input' ).on( 'click', function () {
 				  //self.backendApi.clearSelections();
 					  if (debug) console.log('checkbox clicked action');
@@ -1117,16 +1156,31 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if(layout.props.enablesearch){
 				var searchField = $element.find('#'+searchId);
 				var searchIcon = $element.find('.sfssearchIcon');
+				var searchSelectionMethod = 1;
+				if (visType=='checkbox' || visType=='radio' || visType=='luicheckbox'){
+					searchSelectionMethod = 2;
+				} else if(visType=='luiswitch'){
+					searchSelectionMethod = 3;
+				}
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					if (filter == ''){
 						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
 					}
 					var targets = $element.find(".data");
-					//console.log(targets.length);
-					if (visType=='checkbox' || visType=='radio'){
+					if (searchSelectionMethod==2){
 						targets.each(function(){
 							var parent = $(this).parent();
+							//console.log(parent.text());
+							if (parent.text().toLowerCase().indexOf(filter) > -1){
+								parent.removeClass('searchHide').addClass('searchSel');
+							} else {
+								parent.addClass('searchHide').removeClass('searchSel');
+							}
+						});
+					} else if (searchSelectionMethod==3){
+						targets.each(function(){
+							var parent = $(this).parent().parent();
 							//console.log(parent.text());
 							if (parent.text().toLowerCase().indexOf(filter) > -1){
 								parent.removeClass('searchHide').addClass('searchSel');
@@ -1149,7 +1203,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				searchField.keypress(function(e){
 					if(e.which == 13){ //enter key pressed
 						var valuesToSelect = [];
-						if (visType=='checkbox' || visType=='radio'){
+						if (searchSelectionMethod==2 || searchSelectionMethod==3){
 							var targets = $element.find(".searchSel input");
 						} else {
 							var targets = $element.find(".searchSel");

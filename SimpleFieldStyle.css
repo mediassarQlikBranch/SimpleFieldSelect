@@ -208,7 +208,8 @@
 	top:0px;
 	right:5px;
 	border-radius:3px;
-	padding:3px;
+	padding:4px;
+	z-index: 101;
 }
 .qv-object-SimpleFieldSelect .sfssearchIcon:hover, .qv-object-SimpleFieldSelect .sfssearchinput_clear:hover{
 	cursor:pointer;
@@ -227,4 +228,25 @@
 .qv-object-SimpleFieldSelect .select2-selection__choice__remove{}
 .qv-object-SimpleFieldSelect .select2-selection__clear {
 	font-size:120%;
+}
+.qv-object-SimpleFieldSelect .sfs_lui {
+	padding-left:5px;
+	padding-top:5px;
+	height: calc(100% - 5px);
+}
+.qv-object-SimpleFieldSelect .sfs_lui .lui-switch {
+	margin-bottom:4px;
+	margin-top:4px;
+	
+}
+.qv-object-SimpleFieldSelect .sfs_lui .lui-checkbox {
+	margin-bottom:5px;
+}
+.qv-object-SimpleFieldSelect .sfs_lui .lui-checkbox:hover,.qv-object-SimpleFieldSelect .sfs_lui .lui-switch:hover {
+	font-weight:bold;
+}
+.qv-object-SimpleFieldSelect .sfs_lui .lui-switch .lui-switch_txt{
+	position:absolute; 
+	left:50px; top:2px;
+	white-space: nowrap;
 }
