@@ -303,7 +303,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 				var csstxt = '';
 				if (layout.props.global_bgcolor){
-					csstxt += ' .qv-client #qv-stage-container .qvt-sheet { background-color:'+layout.props.global_bgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet { background-color:'+layout.props.global_bgcolor+';}';
 				}
 				if (layout.props.global_borderwidth && layout.props.global_borderwidth != '-'){
 					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+layout.props.global_borderwidth+'px;}';
@@ -324,7 +324,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					csstxt += ' .qv-object * {font-family:"'+layout.props.fontfamily_global+'";}';
 				}
 				if(layout.props.global_elementbgcolor && layout.props.global_elementbgcolor != ''){
-					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
 				}
 				if(layout.props.global_fontcolor && layout.props.global_fontcolor != ''){
 					csstxt += ' .qv-client #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';

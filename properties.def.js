@@ -1025,7 +1025,7 @@ define( [], function () {
 							},
 							global_bgcolor: {
 								type: "string",
-								label: "Background color",
+								label: "Sheet background color",
 								ref: "props.global_bgcolor",
 								defaultValue: '',
 								expression:"optional",
