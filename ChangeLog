@@ -1,3 +1,6 @@
+1.6.5
+ - fix background colors in "Sense Classic" -theme
+ - set variable to empty string when selected is selected again - feature. For new objects default is true.
 1.6.4
  - font-family css parameter added for current object and in the Global modifications -section. Global version will change every 
  - New visualizations: Qlik switch and Qlik checkbox (Qlik's own Leonardo UI components)

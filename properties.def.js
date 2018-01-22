@@ -5,8 +5,10 @@ define( [], function () {
 	//calc variable name IF this is variable selection
 	function findVariableName(listobject,props){
 		props.variableName = listobject.qDef.qFieldDefs[0];
-		if (typeof props.variableName !== 'undefined' && props.variableName){
+		if (typeof props.variableName == 'string' && props.variableName){
+			console.log(typeof props.variableName);
 			props.variableName = props.variableName.replace("=",'');
+
 		} else {
 			props.variableName = '';
 		}
@@ -36,12 +38,12 @@ define( [], function () {
 				min: 1,
 				max: 1,
 				items: {
-					label: {
+					/*label: {
 						type: "string",
 						ref: "qListObjectDef.qDef.qFieldLabels.0",
 						label: "Label",
-						show: false
-					},
+						show: true
+					},*/
 					field: {
 						type: "string",
 						expression: "always",
@@ -79,8 +81,18 @@ define( [], function () {
 						ref: "props.variableIsDate",
 						type: "boolean",
 						label: "Variable is a date selector?",
+						defaultValue: false,
 						show: function ( data ) {
 							return data.qListObjectDef && data.props && data.props.dimensionIsVariable;
+						}
+					},
+					variableEmptyAlreadySelected: {
+						ref: "props.variableEmptyAlreadySelected",
+						type: "boolean",
+						label: "Set variable to empty string when already selected is selected again?",
+						defaultValue: false,
+						show: function ( data ) {
+							return data.qListObjectDef && data.props && data.props.dimensionIsVariable && !data.props.variableIsDate && data.props.visualizationType!='input';
 						}
 					},
                     VisualizationType: {
@@ -1001,7 +1013,7 @@ define( [], function () {
 						items: {
 							aboutglobal:{
 								component: "text",
-								label: "Global modifications let you to customize overall visual theme of the document. You don't need a separate extension for this. Only one Simple Field Select element should have global parameters enabled on one sheet."
+								label: "Global modifications let you to customize overall visual theme of the document. You don't need a separate extension for this. Only one Simple Field Select element should have global parameters enabled on one sheet. If you disable, reload page."
 							},
 							enableGlobals: {
 							  ref: "props.enableGlobals",

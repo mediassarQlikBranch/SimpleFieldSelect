@@ -64,8 +64,14 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if(debug) console.log('set variable value to '+value);
 			var valueTxt = layout.props.variableOptionsForValuesArray[ value ];
 			//if value is not defined, forexample nothing is selected for variable.
+			var clearingSelection = 0;
 			if (typeof valueTxt == 'undefined' ){
 				valueTxt = '';
+				clearingSelection = 1;
+			}
+			if(layout.props.variableEmptyAlreadySelected && layout.variableValue==valueTxt){
+				valueTxt = '';
+				clearingSelection = 1;
 			}
 			if(debug) console.log(' means '+valueTxt+' to variable ' +layout.props.variableName);
 			//set variable
@@ -74,6 +80,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (layout.props.variableOptionsForKeysArray != [] && layout.props.variableNameForKey && layout.props.variableOptionsForKeysArray[ value ]){
 				var keyTxt = layout.props.variableOptionsForKeysArray[ value ];
 				if(debug) console.log(' key value '+keyTxt+' to variable ' +layout.props.variableNameForKey);
+				if (clearingSelection){ //if main value is being set to empty, set key also.
+					keyTxt = '';
+				}
 				app.variable.setContent(layout.props.variableNameForKey, keyTxt);
 			}
 		//set field
@@ -294,7 +303,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 				var csstxt = '';
 				if (layout.props.global_bgcolor){
-					csstxt += ' .qv-client.qv-card #qv-stage-container .qvt-sheet { background-color:'+layout.props.global_bgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container .qvt-sheet { background-color:'+layout.props.global_bgcolor+';}';
 				}
 				if (layout.props.global_borderwidth && layout.props.global_borderwidth != '-'){
 					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+layout.props.global_borderwidth+'px;}';
@@ -315,11 +324,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					csstxt += ' .qv-object * {font-family:"'+layout.props.fontfamily_global+'";}';
 				}
 				if(layout.props.global_elementbgcolor && layout.props.global_elementbgcolor != ''){
-					csstxt += ' .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
 				}
 				if(layout.props.global_fontcolor && layout.props.global_fontcolor != ''){
-					csstxt += ' .qv-client.qv-card #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';
-					csstxt += ' .qvt-visualization-title,.qv-object-SimpleFieldSelect .inlinelabeldiv {color:'+layout.props.global_fontcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';
+					csstxt += ' .qvt-visualization-title, .qv-object-SimpleFieldSelect .inlinelabeldiv, .qv-object .qv-media-tool-html {color:'+layout.props.global_fontcolor+';}';
 				}
 				
 				$(".SFSglobalCSS").html('<style>' + csstxt + '</style>');
@@ -985,17 +994,21 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							this.classList.toggle("selected");
 						//deselect, because selected already
 						} else {
-							if (layout.props.dimensionIsVariable || layout.props.selectOnlyOne){
-								if (debug) console.log('no selection change');
-							} else {
-								if (debug) console.log('de selecting');
-								clicktarget.removeClass('selected');
+							if (layout.props.dimensionIsVariable && layout.props.variableEmptyAlreadySelected){ //for variable "clean"
 								selectValueInQlik(self,kohteenValueID,layout,app,true);
-								var selectedCount = 0;
-								$element.find( '.selected' ).each(function(){
-								  selectedCount += 1;
-								});
-								checkDefaultValueSelection($element,selectedCount,layout,self,app);
+							} else {
+								if (layout.props.dimensionIsVariable || layout.props.selectOnlyOne){
+									if (debug) console.log('no selection change');
+								} else {
+									if (debug) console.log('de selecting');
+									clicktarget.removeClass('selected');
+									selectValueInQlik(self,kohteenValueID,layout,app,true);
+									var selectedCount = 0;
+									$element.find( '.selected' ).each(function(){
+									  selectedCount += 1;
+									});
+									checkDefaultValueSelection($element,selectedCount,layout,self,app);
+								}
 							}
 						}
 					} );

@@ -8,6 +8,7 @@ Download a ZIP file from the dist directory. First click the zip file in dist di
 Now you can also clone the whole branch.
 
 ## Latest features
+- Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 - Now you can select horizontal or vertical list by dragging with mouse. Like in the Qlik Sense selection.
@@ -31,6 +32,7 @@ Now you can also clone the whole branch.
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 - search can be enabled for some of the visualizations
+- background color for the object itself
 
 ## Global sheet level settings
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
@@ -44,7 +46,7 @@ All following global settings are sheet specific. You can use for example master
   - Hide header from the Text & Image objects. You will get much more space for the text itself! Many times users cannot see the text because of the size of the header in the text object so now you can get rid of it!
   - Reduce header padding in all objects while using Focus theme
   - Font-family and font color can be set for all elements
-- background color for the object itself
+
 
 And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
