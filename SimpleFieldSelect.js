@@ -743,7 +743,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						//set special color if set
 						if (layout.props.color_stateS_bg && layout.props.color_stateS_bg != ''){
 							colorclasses += ' disableBGimage';
-							elementstyle += 'background-color:'+layout.props.color_stateS_bg+';';
+							elementstyle += ' background-color:'+layout.props.color_stateS_bg+';';
 						}
 						//font color
 						if (layout.props.color_stateS_fo && layout.props.color_stateS_fo != ''){
@@ -751,7 +751,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 					} else if (row[0].qState === 'O'){
 						if (layout.props.color_stateO_bg && layout.props.color_stateO_bg != ''){
-							elementstyle += 'background-color:'+layout.props.color_stateO_bg+';';
+							elementstyle += ' background-color:'+layout.props.color_stateO_bg+';';
 						}
 						if (layout.props.color_stateO_fo && layout.props.color_stateO_fo != ''){
 							elementstyle += ' color:'+layout.props.color_stateO_fo+';';
@@ -765,7 +765,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 					} else if (row[0].qState === 'A'){
 						if (layout.props.color_stateA_bg && layout.props.color_stateA_bg != ''){
-							elementstyle += 'background-color:'+layout.props.color_stateA_bg+';';
+							elementstyle += ' background-color:'+layout.props.color_stateA_bg+';';
 						}
 						if (layout.props.color_stateA_fo && layout.props.color_stateA_fo != ''){
 							elementstyle += ' color:'+layout.props.color_stateA_fo+';';
@@ -780,35 +780,35 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						html += '</li>';
 					//checkbox
 					} else if (visType=='checkbox'){
-						html += '<label'+elementstyle+''+elementExtraClass+'>'
-						html += '<input type="checkbox" class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
+						html += '<label'+elementstyle+'>'
+						html += '<input type="checkbox" class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					//button
 					} else if (visType=='btn'){
-						html += '<button'+elementstyle+''+elementExtraClass+''
-						html += ' class="sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+otherdefaultelementclass+ createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"' + dis + ' ' +elementExtraAttribute+ '> ' + row[0].qText; //
+						html += '<button'+elementstyle+''
+						html += ' class="sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"' + dis + ' ' +elementExtraAttribute+ '> ' + row[0].qText; //
 						html += '</button> ';
 					//radio
 					} else if (visType=='radio'){
-						html += '<label'+elementstyle+''+elementExtraClass+'>'
-						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
+						html += '<label'+elementstyle+'>'
+						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					} else if (visType=='dropdown' || visType=='select2'){
 						html += '<option '+elementstyle+'class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '" value="' + row[0].qElemNumber + '"' + dis + dropselection + ' > ' + row[0].qText;
 						html += '</option>';
 					} else if (visType=='luiswitch'){
 						
-						html += '<div style="" class="lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
-						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<div '+elementstyle+' class="lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
+						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<span class="lui-switch__wrap"><span class="lui-switch__inner"></span><span class="lui-switch__switch"></span></span></label>';
 						html += '<div class="lui-switch_txt" style="">'+row[0].qText+'</div>';
 						html += '</div>';
 						
 						html += '';
 					} else if (visType=='luicheckbox'){
-						html += '<label class="lui-checkbox" title="'+row[0].qText+'">';
-						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
-						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
+						html += '<label '+elementstyle+' class="lui-checkbox" title="'+row[0].qText+'">';
+						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(layout.props.addLUIclasses,visType,layout.props.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span '+elementstyle+' class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
 					}
 				});
