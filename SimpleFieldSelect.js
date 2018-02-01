@@ -314,6 +314,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if(layout.props.removeHeaderFromTextImageObjects){
 					csstxt += " .qv-object-text-image header {display:none!important;}";
 				}
+				if(layout.props.removeHeaderFromAllObjects){
+					csstxt += " .qv-object header {display:none!important;}";
+				}
 				if(layout.props.headerTpadding_global && layout.props.headerTpadding_global != '-'){
 					csstxt += " .qv-object header h1 {padding-top:"+layout.props.headerTpadding_global+"px!important;}";
 				}
@@ -355,10 +358,6 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if(layout.props.hideGuiToolbar && $(".qv-mode-edit").length == 0){
 					$(".qui-toolbar").hide();
 				}
-				
-				/*if(layout.props.removeHeaderFromTextImageObjects){
-					$(".qv-object-text-image header").hide();
-				}*/
 			}
 			//get variable value
 			var varvalue = '';

@@ -1023,6 +1023,13 @@ define( [], function () {
 							  defaultValue: false,
 							  options: [{value: true,label: "Enabled"}, {value: false,label: "Disabled"}]
 							},
+							propagationInfo:{
+								component: "text",
+								label: "Most of the following settings are inherited from this sheet to others. You need to have same settings on the other sheets too to have the same effect on every possible landing sheet. Changing some of the values back to default requires browser refresh. Use master items for same settings on every sheet.",
+								show: function ( data ) {
+									return  data.props && data.props.enableGlobals ;
+							  }
+							},
 							global_bgcolor: {
 								type: "string",
 								label: "Sheet background color",
@@ -1090,13 +1097,6 @@ define( [], function () {
 							  defaultValue: "",
 							  show: function ( data ) {
 									return data.props && data.props.enableGlobals;
-							  }
-							},
-							propagationInfo:{
-								component: "text",
-								label: "Most of the following settings are inherited from this sheet to others. You need to have same settings on the other sheets too to have the same effect on every possible landing sheet. Changing some of the values back to default requires browser refresh. Use master items for same settings on every sheet.",
-								show: function ( data ) {
-									return  data.props && data.props.enableGlobals ;
 							  }
 							},
 							hideFieldsFromSelectionBar: {
@@ -1240,7 +1240,18 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Text & Image objects: remove header",
 							  defaultValue: false,
-							  options: [{value: true,label: "Remove header"}, {value: false,label: "Default header"}],
+							  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
+							  show: function ( data ) {
+									return data.props && data.props.enableGlobals;
+							  }
+							},
+							removeHeaderFromAllObjects: {
+							  ref: "props.removeHeaderFromAllObjects",
+							  component: "switch",
+							  type: "boolean",
+							  label: "Remove header from all objects",
+							  defaultValue: false,
+							  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
 							  show: function ( data ) {
 									return data.props && data.props.enableGlobals;
 							  }
@@ -1268,7 +1279,7 @@ define( [], function () {
 									{value: "18",label: "18px"}],
 								defaultValue: "-",
 								show: function ( data ) {
-									return data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
 								}
 							},
 							headerbottompadding_global: {
@@ -1284,7 +1295,7 @@ define( [], function () {
 									{value: "20",label: "20px"}],
 								defaultValue: "-",
 								show: function ( data ) {
-									return data.props && data.props.enableGlobals;
+									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
 								}
 							}
 						}

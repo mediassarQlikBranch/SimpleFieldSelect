@@ -1,13 +1,15 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
-This extension is an "all in one" selection component with several customization options.
-Extension has global options for the current sheet, for example you can set background color of the sheet, hide title bar, modify all borders etc.
+This extension is an "all in one" selection component with several customization options. It gives you many Qlikview features like select only one, default value and context menu.
+To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet, for example you can set background color of the sheet, hide title bar, modify all borders etc. You can hide these settings for example inside the year selector.
+
+If you have a good idea for further development, let us know.
 
 ## To install
-Download a ZIP file from the dist directory. First click the zip file in dist directory and then press download button from the github page. Install the zip as any Qlik Sense extension.
-Now you can also clone the whole branch.
+Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Hide all headers from a sheet
 - Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
@@ -44,11 +46,12 @@ All following global settings are sheet specific. You can use for example master
   - Hide sheet title or modify it's size and font-size
   - Hide selections bar and main menu bar. But be carefull if you remove the main menu, you can access edit mode only by changing the end of the url to /state/edit
   - Hide header from the Text & Image objects. You will get much more space for the text itself! Many times users cannot see the text because of the size of the header in the text object so now you can get rid of it!
+  - Hide header from every object on a sheet
   - Reduce header padding in all objects while using Focus theme
   - Font-family and font color can be set for all elements
 
 
-And the extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
+This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 
 ### Changelog
 [ChangeLog](ChangeLog)
