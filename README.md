@@ -9,7 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Hide all headers from a sheet
+- Hide all headers from a sheet + color options for every header
 - Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.

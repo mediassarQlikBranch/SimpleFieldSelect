@@ -1,3 +1,9 @@
+1.6.9
+ - More Global options for *every* object on the same sheet:
+  - Header font color and background color definition
+  - Hide headers which don't have any text on them
+  - Object padding (left and right) can be adjusted - adjust space around content
+  - Global modifications has been moved
 1.6.8
  - Global option to hide all headers on the sheet
 1.6.7

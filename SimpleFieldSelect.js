@@ -323,6 +323,21 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if(layout.props.headerBpadding_global && layout.props.headerBpadding_global != '-'){
 					csstxt += " .qv-object header  {padding-bottom:"+layout.props.headerBpadding_global+"px!important;}";
 				}
+				if(layout.props.headerfontcolor_global && layout.props.headerfontcolor_global != ''){
+					csstxt += " .qv-object header h1 {color:"+layout.props.headerfontcolor_global+";}";
+				}
+				if(layout.props.headerbgcolor_global && layout.props.headerbgcolor_global != ''){
+					csstxt += " .qv-object header {background-color:"+layout.props.headerbgcolor_global+"!important;}";
+				}
+				if(layout.props.leftpadding_global && layout.props.leftpadding_global != '-'){
+					csstxt += ' .qv-object .qv-inner-object {padding-left:'+layout.props.leftpadding_global+'px!important;}';
+				}
+				if(layout.props.rightpadding_global && layout.props.rightpadding_global != '-'){
+					csstxt += ' .qv-object .qv-inner-object {padding-right:'+layout.props.rightpadding_global+'px!important;}';
+				}
+				if(layout.props.removeHeaderIfNoText){
+					csstxt += ' .qv-object header.thin {display:none!important;}';
+				}
 				if(layout.props.fontfamily_global && layout.props.fontfamily_global != ''){
 					csstxt += ' .qv-object * {font-family:"'+layout.props.fontfamily_global+'";}';
 				}

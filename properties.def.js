@@ -2,11 +2,11 @@
 define( [], function () {
 	'use strict';
 	var debug = false;
-	//calc variable name IF this is variable selection
+	//calc variable name IF this is variable selection - should be removed
 	function findVariableName(listobject,props){
 		props.variableName = listobject.qDef.qFieldDefs[0];
 		if (typeof props.variableName == 'string' && props.variableName){
-			console.log(typeof props.variableName);
+			if (debug) console.log(typeof props.variableName);
 			props.variableName = props.variableName.replace("=",'');
 
 		} else {
@@ -1006,7 +1006,9 @@ define( [], function () {
 							  defaultValue: ''
 							}
 						}
-					},
+					}
+				}
+			},
 					Globals: {
 						type: "items",
 						label: "Global modifications",
@@ -1245,6 +1247,13 @@ define( [], function () {
 									return data.props && data.props.enableGlobals;
 							  }
 							},
+							globalobjectheadertxt:{
+								component: "text",
+								label: "Following will affect to all objects on the sheet.",
+								show: function ( data ) {
+									return  data.props && data.props.enableGlobals ;
+							  }
+							},
 							removeHeaderFromAllObjects: {
 							  ref: "props.removeHeaderFromAllObjects",
 							  component: "switch",
@@ -1256,6 +1265,38 @@ define( [], function () {
 									return data.props && data.props.enableGlobals;
 							  }
 							},
+							removeHeaderIfNoText: {
+							  ref: "props.removeHeaderIfNoText",
+							  component: "switch",
+							  type: "boolean",
+							  label: "Remove empty header (no header text)",
+							  defaultValue: false,
+							  options: [{value: true,label: "Remove"}, {value: false,label: "Default headers"}],
+							  show: function ( data ) {
+									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+							  }
+							},							
+							headerfontcolor_global: {
+								type: "string",
+								label: "Header font color",
+								ref: "props.headerfontcolor_global",
+								defaultValue: '',
+								expression:"optional",
+								show: function ( data ) {
+								 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+							    }
+							},
+							headerbgcolor_global: {
+								type: "string",
+								label: "Header background color",
+								ref: "props.headerbgcolor_global",
+								defaultValue: '',
+								expression:"optional",
+								show: function ( data ) {
+								 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+							    }
+							},
+							
 							headerpaddingAdjustTxt:{
 								component: "text",
 								label: "You can adjust sheet's every objects' padding settings of the default header (Focus Theme).",
@@ -1266,7 +1307,7 @@ define( [], function () {
 							headertoppadding_global: {
 								type: "string",
 								component: "dropdown",
-								label: "Header top padding for every object",
+								label: "Header top padding",
 								ref: "props.headerTpadding_global",
 								options: [
 									{value: "-",label: "default"},
@@ -1285,7 +1326,7 @@ define( [], function () {
 							headerbottompadding_global: {
 								type: "string",
 								component: "dropdown",
-								label: "Header bottom padding for every object",
+								label: "Header bottom padding",
 								ref: "props.headerBpadding_global",
 								options: [
 									{value: "-",label: "default"},
@@ -1297,10 +1338,46 @@ define( [], function () {
 								show: function ( data ) {
 									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
 								}
+							},
+							leftpadding_global: {
+								type: "string",
+								component: "dropdown",
+								label: "Left padding, object content",
+								ref: "props.leftpadding_global",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "4",label: "4px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"}],
+								defaultValue: "-",
+								show: function ( data ) {
+									return data.props && data.props.enableGlobals;
+								}
+							},
+							rightpadding_global: {
+								type: "string",
+								component: "dropdown",
+								label: "Right padding, object content",
+								ref: "props.rightpadding_global",
+								options: [
+									{value: "-",label: "default"},
+									{value: "0",label: "0px"},
+									{value: "2",label: "2px"},
+									{value: "4",label: "4px"},
+									{value: "6",label: "6px"},
+									{value: "8",label: "8px"},
+									{value: "10",label: "10px"}],
+								defaultValue: "-",
+								show: function ( data ) {
+									return data.props && data.props.enableGlobals;
+								}
 							}
 						}
-					}
-				}
+					
+				
 			},
 			abouttxt:{
 				label: "About",
