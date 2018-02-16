@@ -324,7 +324,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					csstxt += " .qv-object header  {padding-bottom:"+layout.props.headerBpadding_global+"px!important;}";
 				}
 				if(layout.props.headerfontcolor_global && layout.props.headerfontcolor_global != ''){
-					csstxt += " .qv-object header h1 {color:"+layout.props.headerfontcolor_global+";}";
+					csstxt += " .qv-object header h1 {color:"+layout.props.headerfontcolor_global+"!important;}";
 				}
 				if(layout.props.headerbgcolor_global && layout.props.headerbgcolor_global != ''){
 					csstxt += " .qv-object header {background-color:"+layout.props.headerbgcolor_global+"!important;}";
@@ -342,7 +342,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					csstxt += ' .qv-object * {font-family:"'+layout.props.fontfamily_global+'";}';
 				}
 				if(layout.props.global_elementbgcolor && layout.props.global_elementbgcolor != ''){
-					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+layout.props.global_elementbgcolor+'!important;}'; //ow element style
 				}
 				if(layout.props.global_fontcolor && layout.props.global_fontcolor != ''){
 					csstxt += ' .qv-client #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';

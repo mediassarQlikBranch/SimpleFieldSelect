@@ -1,3 +1,5 @@
+1.7.0
+ - Fixes for Qlik Sense February 2018 version, part of the global color options didn't work.
 1.6.9
  - More Global options for *every* object on the same sheet:
   - Header font color and background color definition
