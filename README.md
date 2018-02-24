@@ -9,13 +9,12 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Global option to hide pivot tables "boxes" - frees a lot of space
+- Global option to add extra text field to sheet header and selections bar - use for example to show document update time etc
 - Hide all headers from a sheet + color options for every header
 - Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
-- Now you can select horizontal or vertical list by dragging with mouse. Like in the Qlik Sense selection.
-- Search can be enabled for most of the visualizations
-- slider has a tooltip
 
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
@@ -49,6 +48,8 @@ All following global settings are sheet specific. You can use for example master
   - Hide header from every object on a sheet
   - Reduce header padding in all objects while using Focus theme
   - Font-family and font color can be set for all elements
+  - Remove filter boxes from Pivot tables
+  - Extra text field to selection bar and header
 
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.

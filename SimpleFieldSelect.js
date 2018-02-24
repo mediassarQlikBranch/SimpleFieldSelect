@@ -348,7 +348,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					csstxt += ' .qv-client #qv-stage-container .qvt-sheet {color:'+layout.props.global_fontcolor+';}';
 					csstxt += ' .qvt-visualization-title, .qv-object-SimpleFieldSelect .inlinelabeldiv, .qv-object .qv-media-tool-html {color:'+layout.props.global_fontcolor+';}';
 				}
-				
+				if(layout.props.hidepivotTableSelectors){
+					csstxt += " .qv-object .left-meta-headers,.qv-object .top-meta {display:none!important;}";
+				}
 				$(".SFSglobalCSS").html('<style>' + csstxt + '</style>');
 				if (layout.props.hideSheetTitle){
 					$(".sheet-title-container").hide();
@@ -363,9 +365,22 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if(layout.props.sheetTitleFontSize && layout.props.sheetTitleFontSize != -1){
 						$("#sheet-title").css('font-size',layout.props.sheetTitleFontSize +'px');
 					}
+					if(layout.props.sheetTitleExtraText && layout.props.sheetTitleExtraText != ''){
+						if ($("#sfsSheetTitleTxt").length==0){
+							$("#sheet-title").append('<div id="sfsSheetTitleTxt"></div>');
+						}
+						$("#sfsSheetTitleTxt").html(layout.props.sheetTitleExtraText);
+					}
 				}
 				if (layout.props.hideSelectionBar){
 					$(".qvt-selections").hide();
+				} else {
+					if(layout.props.selBarExtraText && layout.props.selBarExtraText != ''){
+						if ($("#sfsSelBartxt").length==0){
+							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item"></div>');
+						}
+						$("#sfsSelBartxt").html(layout.props.selBarExtraText);
+					}
 				}
 				if(layout.props.toolbarheight && layout.props.toolbarheight != -1){
 					$(".qui-toolbar").css('height',layout.props.toolbarheight +'px');

@@ -1009,375 +1009,404 @@ define( [], function () {
 					}
 				}
 			},
-					Globals: {
-						type: "items",
-						label: "Global modifications",
-						items: {
-							aboutglobal:{
-								component: "text",
-								label: "Global modifications let you to customize overall visual theme of the document. You don't need a separate extension for this. Only one Simple Field Select element should have global parameters enabled on one sheet. If you disable, reload page."
-							},
-							enableGlobals: {
-							  ref: "props.enableGlobals",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Enable global modifications?",
-							  defaultValue: false,
-							  options: [{value: true,label: "Enabled"}, {value: false,label: "Disabled"}]
-							},
-							propagationInfo:{
-								component: "text",
-								label: "Most of the following settings are inherited from this sheet to others. You need to have same settings on the other sheets too to have the same effect on every possible landing sheet. Changing some of the values back to default requires browser refresh. Use master items for same settings on every sheet.",
-								show: function ( data ) {
-									return  data.props && data.props.enableGlobals ;
-							  }
-							},
-							global_bgcolor: {
-								type: "string",
-								label: "Sheet background color",
-								ref: "props.global_bgcolor",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals;
-							    }
-							},
-							global_elementbgcolor:{
-								type: "string",
-								label: "Background color for all elements",
-								ref: "props.global_elementbgcolor",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals;
-							    }
-							},
-							global_bordercolor: {
-								type: "string",
-								label: "Border color for all elements",
-								ref: "props.global_bordercolor",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals;
-							    }
-							},
-							global_borderwidth: {
-								type: "string",
-								component: "dropdown",
-								label: "Border width",
-								ref: "props.global_borderwidth",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "1",label: "1px"},
-									{value: "2",label: "2px"},
-									{value: "3",label: "3px"},
-									{value: "4",label: "4px"},
-									{value: "5",label: "5px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"}],
-								defaultValue: "-",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals;
-							    }
-							},
-							global_fontcolor: {
-								type: "string",
-								label: "Font color for the sheet",
-								ref: "props.global_fontcolor",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals;
-							    }
-							},
-							fontfamily_global: {
-							  ref: "props.fontfamily_global",
-							  type: "string",
-							  label: "Font-family css parameter for the whole sheet",
-							  defaultValue: "",
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							hideFieldsFromSelectionBar: {
-							  ref: "props.hideFieldsFromSelectionBar",
-							  type: "string",
-							  label: "Hide following fields from the selection bar. Separate by ;",
-							  defaultValue: "",
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							hideSheetTitle: {
-							  ref: "props.hideSheetTitle",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Hide sheet title?",
-							  defaultValue: false,
-							  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
-							  change: function(data){
-							  	if (!data.props.hideSheetTitle){
-							  		$(".sheet-title-container").show();
-							  	}
-							  },
-							  show: function ( data ) {
-									return  data.props && data.props.enableGlobals;
-							  }
-							},
-							removeSheetTitlePadding: {
-							  ref: "props.removeSheetTitlePadding",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Remove sheet title padding?",
-							  defaultValue: false,
-							  options: [{value: true,label: "Remove padding"}, {value: false,label: "Default padding"}],
-							  show: function ( data ) {
-									return  data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
-							  }
-							},
-							sheetTitleFontSize: {
-							  ref: "props.sheetTitleFontSize",
-							  component: "dropdown",
-							  label: "Sheet title font size",
-							  type: "number",
-							  options: [
-									{value: -1,label: "default"},
-									{value: 8,label: "8px"},
-									{value: 10,label: "10px"},
-									{value: 12,label: "12px"},
-									{value: 14,label: "14px"},
-									{value: 16,label: "18px"},
-									{value: 22,label: "22px"},
-									{value: 26,label: "26px"},
-									{value: 30,label: "30px"},
-									{value: 36,label: "36px"}],
-							  defaultValue: -1,
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
-							  }
-							},
-							sheetTitleheight: {
-							  ref: "props.sheetTitleheight",
-							  component: "dropdown",
-							  label: "Sheet title height",
-							  type: "number",
-							  options: [
-									{value: -1,label: "default"},
-									{value: 12,label: "12px"},
-									{value: 16,label: "16px"},
-									{value: 20,label: "20px"},
-									{value: 24,label: "24px"},
-									{value: 28,label: "28px"},
-									{value: 32,label: "32px"},
-									{value: 36,label: "36px"},
-									{value: 40,label: "40px"},
-									{value: 48,label: "48px"}],
-							  defaultValue: -1,
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
-							  }
-							},
-							hideSelectionBar: {
-							  ref: "props.hideSelectionBar",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Hide whole selection bar?",
-							  defaultValue: false,
-							  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
-							  change: function(data){
-							  	if (!data.props.hideSelectionBar){
-							  		$(".qvt-selections").show();
-							  	}
-							  },
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							toolbarheight: {
-							  ref: "props.toolbarheight",
-							  component: "dropdown",
-							  label: "Toolbar height",
-							  type: "number",
-							  options: [
-									{value: -1,label: "default"},
-									{value: 26,label: "26px"},
-									{value: 30,label: "30px"},
-									{value: 34,label: "36px"},
-									{value: 38,label: "38px"},
-									{value: 42,label: "42px"},
-									{value: 46,label: "46px"}],
-							  defaultValue: -1,
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							hideGuiToolbar: {
-							  ref: "props.hideGuiToolbar",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Hide whole main toolbar?",
-							  defaultValue: false,
-							  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
-							  change: function(data){
-							  	if (!data.props.hideGuiToolbar){
-							  		$(".qui-toolbar").show();
-							  	}
-							  },
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							hideguitoolbarInfo:{
-								component: "text",
-								label: "When main toolbar is hidden you cannot access edit mode. You have to change last part of the url to /state/edit ",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals && data.props.hideGuiToolbar;
-							  }
-							},
-							removeHeaderFromTextImageObjects: {
-							  ref: "props.removeHeaderFromTextImageObjects",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Text & Image objects: remove header",
-							  defaultValue: false,
-							  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							globalobjectheadertxt:{
-								component: "text",
-								label: "Following will affect to all objects on the sheet.",
-								show: function ( data ) {
-									return  data.props && data.props.enableGlobals ;
-							  }
-							},
-							removeHeaderFromAllObjects: {
-							  ref: "props.removeHeaderFromAllObjects",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Remove header from all objects",
-							  defaultValue: false,
-							  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							removeHeaderIfNoText: {
-							  ref: "props.removeHeaderIfNoText",
-							  component: "switch",
-							  type: "boolean",
-							  label: "Remove empty header (no header text)",
-							  defaultValue: false,
-							  options: [{value: true,label: "Remove"}, {value: false,label: "Default headers"}],
-							  show: function ( data ) {
-									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
-							  }
-							},							
-							headerfontcolor_global: {
-								type: "string",
-								label: "Header font color",
-								ref: "props.headerfontcolor_global",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
-							    }
-							},
-							headerbgcolor_global: {
-								type: "string",
-								label: "Header background color",
-								ref: "props.headerbgcolor_global",
-								defaultValue: '',
-								expression:"optional",
-								show: function ( data ) {
-								 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
-							    }
-							},
-							
-							headerpaddingAdjustTxt:{
-								component: "text",
-								label: "You can adjust sheet's every objects' padding settings of the default header (Focus Theme).",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-							  }
-							},
-							headertoppadding_global: {
-								type: "string",
-								component: "dropdown",
-								label: "Header top padding",
-								ref: "props.headerTpadding_global",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "14",label: "14px"},
-									{value: "18",label: "18px"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
-								}
-							},
-							headerbottompadding_global: {
-								type: "string",
-								component: "dropdown",
-								label: "Header bottom padding",
-								ref: "props.headerBpadding_global",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "5",label: "5px"},
-									{value: "15",label: "15px"},
-									{value: "20",label: "20px"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
-								}
-							},
-							leftpadding_global: {
-								type: "string",
-								component: "dropdown",
-								label: "Left padding, object content",
-								ref: "props.leftpadding_global",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-								}
-							},
-							rightpadding_global: {
-								type: "string",
-								component: "dropdown",
-								label: "Right padding, object content",
-								ref: "props.rightpadding_global",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"}],
-								defaultValue: "-",
-								show: function ( data ) {
-									return data.props && data.props.enableGlobals;
-								}
-							}
-						}
+			Globals: {
+				type: "items",
+				label: "Global modifications",
+				items: {
+					aboutglobal:{
+						component: "text",
+						label: "Global modifications let you to customize overall visual theme of the document. You don't need a separate extension for this. Only one Simple Field Select element should have global parameters enabled on one sheet. If you disable, reload page."
+					},
+					enableGlobals: {
+					  ref: "props.enableGlobals",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Enable global modifications?",
+					  defaultValue: false,
+					  options: [{value: true,label: "Enabled"}, {value: false,label: "Disabled"}]
+					},
+					propagationInfo:{
+						component: "text",
+						label: "Most of the following settings are inherited from this sheet to others. You need to have same settings on the other sheets too to have the same effect on every possible landing sheet. Changing some of the values back to default requires browser refresh. Use master items for same settings on every sheet.",
+						show: function ( data ) {
+							return  data.props && data.props.enableGlobals ;
+					  }
+					},
+					global_bgcolor: {
+						type: "string",
+						label: "Sheet background color",
+						ref: "props.global_bgcolor",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
+					global_elementbgcolor:{
+						type: "string",
+						label: "Background color for all elements",
+						ref: "props.global_elementbgcolor",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
+					global_bordercolor: {
+						type: "string",
+						label: "Border color for all elements",
+						ref: "props.global_bordercolor",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
+					global_borderwidth: {
+						type: "string",
+						component: "dropdown",
+						label: "Border width",
+						ref: "props.global_borderwidth",
+						options: [
+							{value: "-",label: "default"},
+							{value: "0",label: "0px"},
+							{value: "1",label: "1px"},
+							{value: "2",label: "2px"},
+							{value: "3",label: "3px"},
+							{value: "4",label: "4px"},
+							{value: "5",label: "5px"},
+							{value: "6",label: "6px"},
+							{value: "8",label: "8px"}],
+						defaultValue: "-",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
+					global_fontcolor: {
+						type: "string",
+						label: "Font color for the sheet",
+						ref: "props.global_fontcolor",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
+					fontfamily_global: {
+					  ref: "props.fontfamily_global",
+					  type: "string",
+					  label: "Font-family css parameter for the whole sheet",
+					  defaultValue: "",
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					hideFieldsFromSelectionBar: {
+					  ref: "props.hideFieldsFromSelectionBar",
+					  type: "string",
+					  label: "Hide following fields from the selection bar. Separate by ;",
+					  defaultValue: "",
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					hideSheetTitle: {
+					  ref: "props.hideSheetTitle",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Hide sheet title?",
+					  defaultValue: false,
+					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+					  change: function(data){
+					  	if (!data.props.hideSheetTitle){
+					  		$(".sheet-title-container").show();
+					  	}
+					  },
+					  show: function ( data ) {
+							return  data.props && data.props.enableGlobals;
+					  }
+					},
+					removeSheetTitlePadding: {
+					  ref: "props.removeSheetTitlePadding",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Remove sheet title padding?",
+					  defaultValue: false,
+					  options: [{value: true,label: "Remove padding"}, {value: false,label: "Default padding"}],
+					  show: function ( data ) {
+							return  data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+					  }
+					},
+					sheetTitleFontSize: {
+					  ref: "props.sheetTitleFontSize",
+					  component: "dropdown",
+					  label: "Sheet title font size",
+					  type: "number",
+					  options: [
+							{value: -1,label: "default"},
+							{value: 8,label: "8px"},
+							{value: 10,label: "10px"},
+							{value: 12,label: "12px"},
+							{value: 14,label: "14px"},
+							{value: 16,label: "18px"},
+							{value: 22,label: "22px"},
+							{value: 26,label: "26px"},
+							{value: 30,label: "30px"},
+							{value: 36,label: "36px"}],
+					  defaultValue: -1,
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+					  }
+					},
+					sheetTitleheight: {
+					  ref: "props.sheetTitleheight",
+					  component: "dropdown",
+					  label: "Sheet title height",
+					  type: "number",
+					  options: [
+							{value: -1,label: "default"},
+							{value: 12,label: "12px"},
+							{value: 16,label: "16px"},
+							{value: 20,label: "20px"},
+							{value: 24,label: "24px"},
+							{value: 28,label: "28px"},
+							{value: 32,label: "32px"},
+							{value: 36,label: "36px"},
+							{value: 40,label: "40px"},
+							{value: 48,label: "48px"}],
+					  defaultValue: -1,
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+					  }
+					},
+					sheetTitleExtraText: {
+					  ref: "props.sheetTitleExtraText",
+					  expression:"optional",
+					  type: "string",
+					  label: "Sheet title extra text element",
+					  defaultValue: '',
+					  show: function ( data ) {
+							return  data.props && data.props.enableGlobals && !data.props.hideSheetTitle;
+					  }
+					},
+					hideSelectionBar: {
+					  ref: "props.hideSelectionBar",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Hide whole selection bar?",
+					  defaultValue: false,
+					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+					  change: function(data){
+					  	if (!data.props.hideSelectionBar){
+					  		$(".qvt-selections").show();
+					  	}
+					  },
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					selBarExtraText: {
+					  ref: "props.selBarExtraText",
+					  expression:"optional",
+					  type: "string",
+					  label: "Selection bar extra text element",
+					  defaultValue: '',
+					  show: function ( data ) {
+							return  data.props && data.props.enableGlobals && !data.props.hideSelectionBar;
+					  }
+					},
+					toolbarheight: {
+					  ref: "props.toolbarheight",
+					  component: "dropdown",
+					  label: "Toolbar height",
+					  type: "number",
+					  options: [
+							{value: -1,label: "default"},
+							{value: 26,label: "26px"},
+							{value: 30,label: "30px"},
+							{value: 34,label: "36px"},
+							{value: 38,label: "38px"},
+							{value: 42,label: "42px"},
+							{value: 46,label: "46px"}],
+					  defaultValue: -1,
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					hideGuiToolbar: {
+					  ref: "props.hideGuiToolbar",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Hide whole main toolbar?",
+					  defaultValue: false,
+					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+					  change: function(data){
+					  	if (!data.props.hideGuiToolbar){
+					  		$(".qui-toolbar").show();
+					  	}
+					  },
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					hideguitoolbarInfo:{
+						component: "text",
+						label: "When main toolbar is hidden you cannot access edit mode. You have to change last part of the url to /state/edit ",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals && data.props.hideGuiToolbar;
+					  }
+					},
+					removeHeaderFromTextImageObjects: {
+					  ref: "props.removeHeaderFromTextImageObjects",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Text & Image objects: remove header",
+					  defaultValue: false,
+					  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					globalobjectheadertxt:{
+						component: "text",
+						label: "Following will affect to all objects on the sheet.",
+						show: function ( data ) {
+							return  data.props && data.props.enableGlobals ;
+					  }
+					},
+					removeHeaderFromAllObjects: {
+					  ref: "props.removeHeaderFromAllObjects",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Remove header from all objects",
+					  defaultValue: false,
+					  options: [{value: true,label: "Remove headers"}, {value: false,label: "Default headers"}],
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					removeHeaderIfNoText: {
+					  ref: "props.removeHeaderIfNoText",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Remove empty header (no header text)",
+					  defaultValue: false,
+					  options: [{value: true,label: "Remove"}, {value: false,label: "Default headers"}],
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+					  }
+					},							
+					headerfontcolor_global: {
+						type: "string",
+						label: "Header font color",
+						ref: "props.headerfontcolor_global",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+					    }
+					},
+					headerbgcolor_global: {
+						type: "string",
+						label: "Header background color",
+						ref: "props.headerbgcolor_global",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+					    }
+					},
 					
-				
+					headerpaddingAdjustTxt:{
+						component: "text",
+						label: "You can adjust sheet's every objects' padding settings of the default header (Focus Theme).",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					},
+					headertoppadding_global: {
+						type: "string",
+						component: "dropdown",
+						label: "Header top padding",
+						ref: "props.headerTpadding_global",
+						options: [
+							{value: "-",label: "default"},
+							{value: "0",label: "0px"},
+							{value: "2",label: "2px"},
+							{value: "6",label: "6px"},
+							{value: "8",label: "8px"},
+							{value: "10",label: "10px"},
+							{value: "14",label: "14px"},
+							{value: "18",label: "18px"}],
+						defaultValue: "-",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+						}
+					},
+					headerbottompadding_global: {
+						type: "string",
+						component: "dropdown",
+						label: "Header bottom padding",
+						ref: "props.headerBpadding_global",
+						options: [
+							{value: "-",label: "default"},
+							{value: "0",label: "0px"},
+							{value: "5",label: "5px"},
+							{value: "15",label: "15px"},
+							{value: "20",label: "20px"}],
+						defaultValue: "-",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals && !data.props.removeHeaderFromAllObjects;
+						}
+					},
+					leftpadding_global: {
+						type: "string",
+						component: "dropdown",
+						label: "Left padding, object content",
+						ref: "props.leftpadding_global",
+						options: [
+							{value: "-",label: "default"},
+							{value: "0",label: "0px"},
+							{value: "2",label: "2px"},
+							{value: "4",label: "4px"},
+							{value: "6",label: "6px"},
+							{value: "8",label: "8px"},
+							{value: "10",label: "10px"}],
+						defaultValue: "-",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+						}
+					},
+					rightpadding_global: {
+						type: "string",
+						component: "dropdown",
+						label: "Right padding, object content",
+						ref: "props.rightpadding_global",
+						options: [
+							{value: "-",label: "default"},
+							{value: "0",label: "0px"},
+							{value: "2",label: "2px"},
+							{value: "4",label: "4px"},
+							{value: "6",label: "6px"},
+							{value: "8",label: "8px"},
+							{value: "10",label: "10px"}],
+						defaultValue: "-",
+						show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+						}
+					},
+					hidepivotTableSelectors: {
+					  ref: "props.hidepivotTableSelectors",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Pivot, remove \"selectors\"",
+					  defaultValue: false,
+					  options: [{value: true,label: "Remove"}, {value: false,label: "Default"}],
+					  show: function ( data ) {
+							return data.props && data.props.enableGlobals;
+					  }
+					}
+				}
 			},
 			abouttxt:{
 				label: "About",
