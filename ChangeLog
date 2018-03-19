@@ -1,3 +1,5 @@
+1.7.2
+ - Improved performance
 1.7.1
  - Global option to remove Pivot table's "dimension selector boxes"
  - Global option to add extra text field to sheet header and selections bar - use for example to show document update time etc

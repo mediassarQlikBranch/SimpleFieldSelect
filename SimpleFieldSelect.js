@@ -146,6 +146,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			export: false,
 			exportData : false
 		},
+		resize: function(){
+			if (debug) console.log('resize method');
+		},
 		paint: function ( $element,layout ) {
 			if (debug){ console.log('start painting');	console.log(layout); }
 			//copy old parameters to support newer structure
