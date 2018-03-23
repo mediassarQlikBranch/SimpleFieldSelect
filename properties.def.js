@@ -1042,6 +1042,16 @@ define( [], function () {
 						 return  data.props &&  data.props.enableGlobals;
 					    }
 					},
+					global_bgcss: {
+						type: "string",
+						label: "Sheet background CSS",
+						ref: "props.global_bgcss",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+						 return  data.props &&  data.props.enableGlobals;
+					    }
+					},
 					global_elementbgcolor:{
 						type: "string",
 						label: "Background color for all elements",
