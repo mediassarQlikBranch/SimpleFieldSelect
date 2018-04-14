@@ -1,5 +1,7 @@
+1.7.4
+ - fix: De-selecting works when "select only one" is used.
 1.7.3
- - Global option for sheet background CSS. Can be used for example gradiend background: 'background: linear-gradient(90deg, rgb(80,80,80) 0%,rgb(150,150,100) 50%, rgb(255,255,125) 100%)'
+ - Global option for sheet background CSS. Can be used for example gradiend background: 'background: linear-gradient(90deg, rgb(80,80,80) 0%,rgb(150,150,100) 50%, rgb(255,255,125) 100%);'
 1.7.2
  - Improved performance
 1.7.1

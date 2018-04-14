@@ -2,7 +2,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	$( "<style>" ).html( cssContent ).appendTo( "head" );
-	var debug = false;
+	var debug = true;
 	
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
@@ -58,10 +58,14 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			selectValuesInQlik(self, valuesToSelect ,layout,app,false);
 		}
 	}
-	function selectValueInQlik(self,value,layout,app,selectvalueMethod){ //selectvalueMethod true or false
+	function selectValueInQlik(self,value,layout,app,selectvalueMethod){ //selectvalueMethod true or false. This is not used for datepicker
 		//Variable
 		if (layout.props.dimensionIsVariable){
 			if(debug) console.log('set variable value to '+value);
+			if (! (layout.props.variableOptionsForValuesArray && layout.props.variableOptionsForValuesArray.length>0)){
+				if(debug) console.log('No values in variableOptionsForValuesArray');
+				return;
+			}
 			var valueTxt = layout.props.variableOptionsForValuesArray[ value ];
 			//if value is not defined, forexample nothing is selected for variable.
 			var clearingSelection = 0;
@@ -675,6 +679,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					}
 					var splitted = layout.props.variableOptionsForValues.split(";");
 					var varindex = 0; //index is used to access variable
+					//create lists for variable values
 					layout.props.variableOptionsForValuesArray = [];
 					layout.props.variableOptionsForKeysArray = [];
 					splitted.forEach(function(opt){
@@ -1032,7 +1037,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							if (layout.props.dimensionIsVariable && layout.props.variableEmptyAlreadySelected){ //for variable "clean"
 								selectValueInQlik(self,kohteenValueID,layout,app,true);
 							} else {
-								if (layout.props.dimensionIsVariable || layout.props.selectOnlyOne){
+								if (layout.props.dimensionIsVariable){ //layout.props.selectOnlyOne
 									if (debug) console.log('no selection change');
 								} else {
 									if (debug) console.log('de selecting');
