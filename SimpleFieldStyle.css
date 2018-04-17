@@ -250,3 +250,6 @@
 	left:50px; top:2px;
 	white-space: nowrap;
 }
+.qv-object-SimpleFieldSelect .txtonly {
+	height:100%;
+}

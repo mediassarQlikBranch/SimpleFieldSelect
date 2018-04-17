@@ -2,7 +2,7 @@
 define( [], function () {
 	'use strict';
 	var debug = false;
-	//calc variable name IF this is variable selection - should be removed
+	//calc variable name IF this is variable selection - should be removed and changed
 	function findVariableName(listobject,props){
 		props.variableName = listobject.qDef.qFieldDefs[0];
 		if (typeof props.variableName == 'string' && props.variableName){
@@ -19,8 +19,8 @@ define( [], function () {
 		if (props.variableName == '' || !props.variableName){
 			//listobject.variableName = listobject.qDimensionInfo.qGroupFieldDefs[0]; //try this one if not defined.
 			props.variableName = listobject.qDef.qFieldDefs[0];
-			if(debug){ console.log(props.variableName); }
-			if (typeof props.variableName !== 'undefined'){
+			if(debug){ console.log(typeof props.variableName); }
+			if (typeof props.variableName !== 'undefined' && typeof props.variableName !== 'object'){
 				props.variableName = props.variableName.replace("=",'');
 			} else {
 				props.variableName = '';
@@ -35,7 +35,7 @@ define( [], function () {
 				type: "items",
 				label: "Dimensions",
 				ref: "qListObjectDef",
-				min: 1,
+				min: 0,
 				max: 1,
 				items: {
 					/*label: {
@@ -57,8 +57,12 @@ define( [], function () {
 							if (data.props.dimensionIsVariable){
 								findVariableName(data.qListObjectDef,data.props);
 								data.variableValue = data.variableValue || {};
-								data.variableValue.qStringExpression = '=' + data.props.variableName;
-								if(debug){ console.log('variable name is '+data.qListObjectDef.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); }
+								if (data.props.variableName && typeof data.props.variableName !== 'object'){
+									data.variableValue.qStringExpression = '=' + data.props.variableName;
+								} else {
+									data.variableValue.qStringExpression = '=1';
+								}
+								if(debug){ console.log('variable name is '+data.qListObjectDef.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); console.log(data);}
 							}
                         }
 					},
@@ -110,14 +114,50 @@ define( [], function () {
 							value: "input",label: "Standard HTML5 input (numbers, text, sliders)"}, {
 							value: "select2",label: "Select2 dropdown"}, {
 							value: "luiswitch",label: "Qlik Switch"}, {
-							value: "luicheckbox",label: "Qlik Checkbox"
-							}
+							value: "luicheckbox",label: "Qlik Checkbox"}, {
+							value: "txtonly",label: "Only a textarea"}
 						],
 						defaultValue: "hlist",
 						show: function ( data ) {
 							return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable && (data.props.variableIsDate ));
 						}
 					},
+					textareaonlytext: {
+						component: "textarea",
+						rows: 10,
+						defaultValue: '',
+						label: "Text",
+						expression:"optional",
+						ref: "props.textareaonlytext",
+						show: function ( data ) {
+							return data.props.visualizationType=='txtonly';
+						}
+					},
+					textareaonlytext2: {
+						type: "string",
+						defaultValue: '',
+						label: "Another text (with expression possibility)",
+						expression:"optional",
+						ref: "props.textareaonlytext2",
+						show: function ( data ) {
+							return data.props.visualizationType=='txtonly';
+						}
+					},
+					textareaonlyinfo:{
+						component: "text",
+						label: "Textarea can have html markup also. It may include javascript, like <script>alert('Hei');</script> or CSS element like:",
+						show: function ( data ) {
+							return data.props.visualizationType=='txtonly';
+						}
+					},
+					textareaonlyinfo2:{
+						component: "text",
+						label: "<div id=\"a\">Some text</div> <style>#a {background-color:green; color:#fff; padding:10px;}</style> Remember that do not break Qlik styles or code! Many settings of this extension do apply to this component too. Some parameters visible do not have effect.",
+						show: function ( data ) {
+							return data.props.visualizationType=='txtonly';
+						}
+					},
+
                     visInputFieldType: {
                     	ref: "props.visInputFieldType",
                     	component: "dropdown",
@@ -262,6 +302,9 @@ define( [], function () {
 					sorting: {
 						type: "items",
 						label: "Sorting",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
+						},
 						items: {
 							qSortByState: {
 								type: "numeric", component: "dropdown",
@@ -272,10 +315,7 @@ define( [], function () {
 									{value: 0,label: "No"},
 									{value: -1,label: "Descending"}
 								],
-								defaultValue: 0,
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
-								}
+								defaultValue: 0
 							},
 							qSortByNumeric: {
 								type: "numeric", component: "dropdown",
@@ -286,10 +326,7 @@ define( [], function () {
 									{value: 0,label: "No"},
 									{value: -1,label: "Descending"}
 								],
-								defaultValue: 0,
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
-								}
+								defaultValue: 0
 							},
 							qSortByLoadOrder: {
 								type: "numeric", component: "dropdown",
@@ -300,10 +337,8 @@ define( [], function () {
 									{value: 0,label: "No"},
 									{value: -1,label: "Descending"}
 								],
-								defaultValue: 0,
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
-								}
+								defaultValue: 0
+								
 							},
 							qSortByAscii: {
 								type: "numeric", component: "dropdown",
@@ -314,10 +349,8 @@ define( [], function () {
 									{value: 0,label: "No"},
 									{value: -1,label: "Descending"}
 								],
-								defaultValue: 0,
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
-								}
+								defaultValue: 0
+								
 							},
 							qSortByFrequency: {
 								type: "numeric", component: "dropdown",
@@ -328,10 +361,8 @@ define( [], function () {
 									{value: 0,label: "No"},
 									{value: -1,label: "Descending"}
 								],
-								defaultValue: 0,
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
-								}
+								defaultValue: 0
+								
 							}
 						}
 					},
@@ -622,7 +653,6 @@ define( [], function () {
 							return data.qListObjectDef && data.props && data.props.dimensionIsVariable;
 						},
 						items:{
-							
 							maxname: {
 								ref: "props.maxLimitvariable",
 								label: "(Depricated) Limit date selection to max from variable",

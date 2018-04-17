@@ -2,7 +2,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	$( "<style>" ).html( cssContent ).appendTo( "head" );
-	var debug = true;
+	var debug = false;
 	
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
@@ -65,6 +65,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (! (layout.props.variableOptionsForValuesArray && layout.props.variableOptionsForValuesArray.length>0)){
 				if(debug) console.log('No values in variableOptionsForValuesArray');
 				return;
+			}
+			if(layout.props.variableName=='' || !layout.props.variableName || typeof layout.props.variableName =='object'){
+				if(debug) console.log('Variable name is empty');
+				return;	
 			}
 			var valueTxt = layout.props.variableOptionsForValuesArray[ value ];
 			//if value is not defined, forexample nothing is selected for variable.
@@ -154,12 +158,17 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (debug) console.log('resize method');
 		},
 		paint: function ( $element,layout ) {
-			if (debug){ console.log('start painting');	console.log(layout); }
+			if (debug){ console.log('start painting');	console.log(layout);console.log(layout.qListObject.qDataPages.length);}
 			//copy old parameters to support newer structure
 			
 			var self = this, html = "";
 			var app = qlik.currApp();
 			var visType = layout.props.visualizationType;
+			//exit if needed
+			if (layout.qListObject.qDataPages.length==0 && visType !='txtonly'){
+				$element.html('<h3>Select one dimension first!</h3> Or use textarea only - visualization');
+				return qlik.Promise.resolve();
+			}
 			//change header size
 			var headerelement = $element.parent().parent().prev();
 			if (layout.props && layout.props.showHeader){
@@ -389,7 +398,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						if ($("#sfsSelBartxt").length==0){
 							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item"></div>');
 						}
-						$("#sfsSelBartxt").html(layout.props.selBarExtraText);
+						$("#sfsSelBartxt").html(layout.props.selBarExtraText).prop('title',layout.props.selBarExtraText);
 					}
 				}
 				if(layout.props.toolbarheight && layout.props.toolbarheight != -1){
@@ -440,7 +449,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				elementExtraClass = ' '+layout.props.customElementClass+' ';
 			}
 			var fontsizechanges = '';
-			if (layout.props.fontsizeChange && layout.props.fontsizeChange != ''){
+			if (layout.props.fontsizeChange && layout.props.fontsizeChange != '' && layout.props.fontsizeChange != '100'){
 				fontsizechanges = ' font-size:'+layout.props.fontsizeChange+'%;';
 			}
 			//border color style
@@ -616,6 +625,13 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
       					}
 					});*/
 				}
+			//only txt
+			} else if(visType=='txtonly'){
+				html += '<div class="txtonly '+elementExtraClass+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+'>';
+				if (layout.props.textareaonlytext) html += layout.props.textareaonlytext;
+				if (layout.props.textareaonlytext2) html += layout.props.textareaonlytext2;
+				html += '</div>';
+				$element.html( html );
 			//not date or html input:
 			} else {
 				var titletext = '';
@@ -676,6 +692,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (debug) console.log('variable value '+varvalue);
 					if (!layout.props.variableOptionsForValues){
 						html += 'Set variable options or enable date selector or switch to HTML standard input visualization';
+					}
+					if (layout.props.variableName =='' || !layout.props.variableName){
+						html += ' <br /> Invalid variable name.';
 					}
 					var splitted = layout.props.variableOptionsForValues.split(";");
 					var varindex = 0; //index is used to access variable
