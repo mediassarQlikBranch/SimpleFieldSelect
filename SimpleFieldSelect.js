@@ -99,7 +99,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			self.backendApi.selectValues( 0, [value], selectvalueMethod );
 		}
 	}
-	function selectValuesInQlik(self,values,layout,app,selectvalueMethod){ //select manyvalues at the same time
+	//select manyvalues at the same time
+	function selectValuesInQlik(self,values,layout,app,selectvalueMethod){
 		if(debug) { console.log('set values to indexes '); console.log(values); }
 		if (layout.props.dimensionIsVariable){
 			selectValueInQlik(self,values[0],layout,app,selectvalueMethod);
@@ -107,6 +108,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			self.backendApi.selectValues( 0, values, selectvalueMethod );
 		}
 	}
+	//leonardo ui class
 	function createLUIclass(addLUIclasses,inputtype,visInputFieldType){
 		if(addLUIclasses){
 			if(inputtype=='dropdown' || inputtype=='select2'){
@@ -158,16 +160,23 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (debug) console.log('resize method');
 		},
 		paint: function ( $element,layout ) {
-			if (debug){ console.log('start painting');	console.log(layout);console.log(layout.qListObject.qDataPages.length);}
+			if (debug){ console.log('start painting'); console.log(layout);console.log(layout.qListObject.qDataPages.length);}
 			//copy old parameters to support newer structure
 			
 			var self = this, html = "";
 			var app = qlik.currApp();
 			var visType = layout.props.visualizationType;
-			//exit if needed
-			if (layout.qListObject.qDataPages.length==0 && visType !='txtonly'){
-				$element.html('<h3>Select one dimension first!</h3> Or use textarea only - visualization');
-				return qlik.Promise.resolve();
+			//exit if needed, no dimension, not txtonly, variable empty
+			if (layout.props.dimensionIsVariable){
+				if((!layout.props.variableName || layout.props.variableName=='')){
+					$element.html('<h3>Set / check variable name !</h3>');
+					return qlik.Promise.resolve();
+				}	
+			} else {
+				if (layout.qListObject.qDataPages.length==0 && visType !='txtonly' ) {
+					$element.html('<h3>Select one dimension first!</h3> Or use textarea only - visualization option<br /> Datepicker can only control a variable. To use datepicker, select a varibale and enable "Variable is a date selector"-option.');
+					return qlik.Promise.resolve();
+				}
 			}
 			//change header size
 			var headerelement = $element.parent().parent().prev();
@@ -201,6 +210,13 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (layout.props.noBorders){
 				articleElement.css('border-width','0');
 				articleElement.parent().parent().css('border-width','0');
+			} else {
+				if (layout.props.ownBordercolor2 != ''){
+					articleElement.css('border-color',layout.props.ownBordercolor2);
+				}
+				if (layout.props.ownBordercolor != ''){
+					articleElement.parent().parent().css('border-color',layout.props.ownBordercolor);
+				}
 			}
 			if (layout.props.removeYscroll){
 				articleInnerElement.find('.qv-object-content-container').css('overflow-y','hidden');
@@ -312,6 +328,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			//Globals CSS mod
 			if (layout.props.enableGlobals){
+				if(debug) console.log('enabled globals ' + layout.qInfo.qId);
 				if ($(".SFSglobalCSS").length>0){
 				
 				} else {
@@ -329,6 +346,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 				if (layout.props.global_bordercolor){ //tbfixed, border on more than one level
 					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+layout.props.global_bordercolor+';}';
+				}
+				if (typeof layout.props.global_bordercolor2 === 'undefined'){ //use nro 1
+					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+layout.props.global_bordercolor+';}';
+				} else if (layout.props.global_bordercolor2){ //tbfixed, border on more than one level
+					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) .qv-object { border-color:'+layout.props.global_bordercolor2+'!important;}';
 				}
 				if(layout.props.removeHeaderFromTextImageObjects){
 					csstxt += " .qv-object-text-image header {display:none!important;}";
@@ -386,7 +408,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					}
 					if(layout.props.sheetTitleExtraText && layout.props.sheetTitleExtraText != ''){
 						if ($("#sfsSheetTitleTxt").length==0){
-							$("#sheet-title").append('<div id="sfsSheetTitleTxt"></div>');
+							$("#sheet-title").append('<div id="sfsSheetTitleTxt" style="margin-left:20px;"></div>');
 						}
 						$("#sfsSheetTitleTxt").html(layout.props.sheetTitleExtraText);
 					}
@@ -396,7 +418,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					if(layout.props.selBarExtraText && layout.props.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item"></div>');
+							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px;"></div>');
 						}
 						$("#sfsSelBartxt").html(layout.props.selBarExtraText).prop('title',layout.props.selBarExtraText);
 					}
@@ -461,6 +483,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (layout.props.elementpadding && layout.props.elementpadding != '' && layout.props.elementpadding != '-'){
 				elementpadding = ' padding:'+layout.props.elementpadding+'px;';
 			}
+			var titletext = '';
+			if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
+				titletext += layout.props.hovertitletext.replace(/\"/g,'&quot;');
+			}
 			//if date select to variable
 			if (layout.props.variableIsDate && layout.props.dimensionIsVariable){
 				if ($("#sfsdatepicker").length>0){
@@ -478,8 +504,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						inattributes += ' max="'+layout.props.visInputNumberMax+'"';
 					}
 					html += '<input '+inattributes+' title="';
-					if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
-						html += layout.props.hovertitletext.replace(/\"/g,'&quot;'); //escape quotas!!
+					if (titletext != ''){
+						html += titletext; //escape quotas!!
 					} else {
 						html += 'Click to select date';
 					}
@@ -568,8 +594,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					//build html
 					html += '<input '+inattributes+' title="';
 					if(layout.props.visInputFieldType=='range') html += varvalue+' ';
-					if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
-						html += layout.props.hovertitletext.replace(/\"/g,'&quot;'); //escape quotas!!
+					if (titletext != ''){
+						html += titletext; //escape quotas!!
 					}
 					html += '"';
 					if (datalist) html += ' list="'+datalistID+'"';
@@ -627,17 +653,21 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 			//only txt
 			} else if(visType=='txtonly'){
-				html += '<div class="txtonly '+elementExtraClass+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+'>';
+				html += '<div class="txtonly '+elementExtraClass+'"';
+				if (titletext){
+					html += ' title="'+titletext+'"'; //escape quotas!!
+				}
+				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+'>';
 				if (layout.props.textareaonlytext) html += layout.props.textareaonlytext;
 				if (layout.props.textareaonlytext2) html += layout.props.textareaonlytext2;
+				if (layout.props.helptext){
+					html += '<div class="sfs_helptxt">'+ layout.props.helptext + '</div>';
+				}
 				html += '</div>';
 				$element.html( html );
 			//not date or html input:
 			} else {
-				var titletext = '';
-				if (layout.props.hovertitletext && layout.props.hovertitletext != ''){
-					titletext += layout.props.hovertitletext.replace(/\"/g,'&quot;');
-				}
+				
 				if(visType=='luiswitch' || visType=='luicheckbox'){
 					html += '<div class="sfs_lui"';
 				} else {

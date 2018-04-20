@@ -1,6 +1,13 @@
+1.7.6
+ - fix for text only -visualization. 
+ - Parameter re-arrange.
+ - Object's own border colors can be changed. Object border has two colors, you can now control both.
+ - Second border color parameter added to Global modifications.
+ - improvements to sheet title and selection bar extra text handling
+ - improvements for selected variable handling although it is not perfect yet
 1.7.5
- - text only visualization. SFS can be used to integrate html, javascript or css code. Many same settings can be used, that's why generic text field was implemented.
- - improvements to error handlilng
+ - New text only visualization. SFS can be used to integrate html, javascript or css code. Many same settings can be used, that's why generic text field was implemented.
+ - improvements to error situation handling
 1.7.4
  - fix: De-selecting works when "select only one" is used.
 1.7.3

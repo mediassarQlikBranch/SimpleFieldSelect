@@ -11,7 +11,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 ## Latest features
 - Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be applied, like color and header settings.
 - Global option to hide pivot tables "boxes" - frees a lot of space
-- Global option to add extra text field to sheet header and selections bar - use for example to show document update time etc
+- Global option to add extra text field to sheet header and selections bar - use for example to show document update time, current user etc
 - Hide all headers from a sheet + color options for every header
 - Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
