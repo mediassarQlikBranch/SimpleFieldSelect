@@ -418,7 +418,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					if(layout.props.selBarExtraText && layout.props.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px;"></div>');
+							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; pointer-events:none;"></div>');
 						}
 						$("#sfsSelBartxt").html(layout.props.selBarExtraText).prop('title',layout.props.selBarExtraText);
 					}
