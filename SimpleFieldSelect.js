@@ -1,7 +1,9 @@
 define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./jquery-ui.min","./select2/select2.min"], 
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
-	$( "<style>" ).html( cssContent ).appendTo( "head" );
+	if (!$("#sfscss").length>0){
+		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
+	}
 	var debug = false;
 	
 	//If nothing selected but should be
@@ -418,7 +420,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					if(layout.props.selBarExtraText && layout.props.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; pointer-events:none;"></div>');
+							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; cursor:default;"></div>');
 						}
 						$("#sfsSelBartxt").html(layout.props.selBarExtraText).prop('title',layout.props.selBarExtraText);
 					}

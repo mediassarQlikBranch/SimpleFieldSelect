@@ -366,7 +366,7 @@ define( [], function () {
 							}
 						}
 					},
-					 padandheader: {
+					padandheader: {
 						type: "items",
 						label: "Paddings and header",
 						items: {
@@ -460,6 +460,9 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Show default header?",
 							  defaultValue: true
+							  /*change: function(data){
+							  	$("#sfs"+data.qInfo.qId).parent().parent().parent().prev().toggle();
+							  }*/
 							},
 							headerheightsize: {
 								type: "string",
@@ -730,17 +733,7 @@ define( [], function () {
 								ref: "props.allwaysOneSelectedDefault",
 								defaultValue: "",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.variableIsDate && data.props.dimensionIsVariable);
-								},
-								expression:"optional"
-							},
-							selectAlsoDefaults: {
-								type: "string",
-								label: "Select also these as default, separate by ;",
-								ref: "props.selectAlsoThese",
-								defaultValue: "",
-								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.variableIsDate || data.props.dimensionIsVariable) && !data.props.selectOnlyOne && ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect);
+									return  !(data.props.variableIsDate && data.props.dimensionIsVariable);
 								},
 								expression:"optional"
 							},
@@ -750,8 +743,18 @@ define( [], function () {
 							  label: "Select only one?",
 							  defaultValue: false,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
+									return  !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
 							  }
+							},
+							selectAlsoDefaults: {
+								type: "string",
+								label: "Select also these as default, separate by ;",
+								ref: "props.selectAlsoThese",
+								defaultValue: "",
+								show: function ( data ) {
+									return !(data.props.dimensionIsVariable || data.props.selectOnlyOne || ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !data.props.selectmultiselect) );//!(data.props.dimensionIsVariable) && !(data.props.selectOnlyOne && ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !data.props.selectmultiselect));
+								},
+								expression:"optional"
 							},
 							/*ForceSelections: {
 								type: "string",
@@ -769,7 +772,7 @@ define( [], function () {
 							  label: "Hide items which cannot be selected",
 							  defaultValue: false,
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable);
+									return !(data.props.dimensionIsVariable);
 							  }
 							},
 							rightclikcmenu:{
@@ -778,7 +781,7 @@ define( [], function () {
 								label: "Show contextmenu (right click menu)",
 								defaultValue: true,
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable) 
+									return  !(data.props.dimensionIsVariable) 
 									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' 
 										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) ); //if multi select
 							  	}
@@ -788,7 +791,7 @@ define( [], function () {
 								type: "items",
 								label: "Menu options",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.rightclikcmenu && !(data.props.dimensionIsVariable) 
+									return  data.props.rightclikcmenu && !(data.props.dimensionIsVariable) 
 									&& (data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch'
 										|| ((data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && data.props.selectmultiselect) );
 								},
@@ -816,8 +819,7 @@ define( [], function () {
 								label: "Enable search",
 								defaultValue: false,
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && 
-									((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
+									return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
 									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch')
 									);
 							  	}
@@ -845,7 +847,7 @@ define( [], function () {
 							  label: "(Opt) Name of the field without special marks (if field has [ mark)",
 							  defaultValue: "",
 							  show: function ( data ) {
-									return data.qListObjectDef && data.props && (data.props.hideFromSelectionsBar);
+									return  (data.props.hideFromSelectionsBar);
 							  }
 							}
 						}
@@ -912,7 +914,12 @@ define( [], function () {
 							  ref: "props.noBorders",
 							  type: "boolean",
 							  label: "No borders? (disabling requires reload)",
-							  defaultValue: false
+							  defaultValue: false,
+							  change: function(data){
+							  	if (data.props.noBorders==false){
+							  		$("#sc"+data.qInfo.qId).parent().parent().parent().prev().parent().parent().css('border-width','1').parent().parent().css('border-width','1'); //restore border
+							  	}
+							  }
 							},
 							ownBordercolor: {
 								ref: "props.ownBordercolor",

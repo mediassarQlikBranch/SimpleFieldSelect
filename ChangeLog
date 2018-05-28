@@ -1,3 +1,6 @@
+1.7.8
+ - fix: multiple default selections -setting was not visible in properties
+ - other fixes and small changes
 1.7.7
  - UI fix for selection bar extra text
 1.7.6
