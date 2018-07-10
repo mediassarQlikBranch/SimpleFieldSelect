@@ -1,3 +1,5 @@
+1.8.0
+ - Fix for maximum row amount. Now SFS supports all rows in a dimension.
 1.7.9
  - Posibility to add HTML before and after every element
  - changes and fixes in context menu

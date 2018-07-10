@@ -5,6 +5,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}
 	var debug = false;
+	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
@@ -140,8 +141,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				qShowAlternatives: true,
 				//qFrequencyMode: "V",
 				qInitialDataFetch: [{
-					qWidth: 2,
-					qHeight: 1000
+					qWidth: initialParameters['qWidth'],
+					qHeight: initialParameters['qHeight']
 				}],
 				qSortByState: 0,
 			},
@@ -163,10 +164,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			return false;
 		},
 		paint: function ( $element,layout ) {
-			if (debug){ console.log('start painting '+layout.qInfo.qId); console.log(layout);console.log(layout.qListObject.qDataPages.length);}
-			//copy old parameters to support newer structure
+			if (debug){ console.log('start painting '+layout.qInfo.qId);  console.log(layout.qListObject.qDataPages.length);}
 
-			
 			var self = this, html = "";
 			var app = qlik.currApp();
 			
@@ -185,6 +184,42 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					return qlik.Promise.resolve();
 				}
 			}
+			//if dimension is there, data exists
+			var matrixdata = [];
+			if (layout.qListObject.qDataPages[0] && layout.qListObject.qDataPages[0].qMatrix.length > 0){
+				var rowcount = layout.qListObject.qDataPages[0].qMatrix.length;
+				var allrowscount = self.backendApi.getRowCount();
+				if(allrowscount > rowcount){ //if more rows need to be fetched
+					var lastrow = 0;
+					this.backendApi.eachDataRow( function ( rownum, row ) {
+						lastrow = rownum;
+					});
+					if (debug) console.log('fetching more rows ' + lastrow);
+					if(this.backendApi.getRowCount() > lastrow +1){
+						var requestPage = [{
+						qTop: lastrow + 1,
+						qLeft: 0,
+						qWidth: initialParameters['qWidth'], //should be # of columns
+						qHeight: Math.min( initialParameters['qHeight'], this.backendApi.getRowCount() - lastrow )
+						}];
+						this.backendApi.getData( requestPage ).then( function ( dataPages ) {
+							self.paint( $element,layout );
+						} );
+						$element.html('wait for data');
+						return;
+					} else {
+						//finally read all
+						this.backendApi.eachDataRow( function ( rownum, row ) {
+							matrixdata[rownum] = row;
+						});
+					}
+				} else {
+					//use matrix data if paging is nor needed.
+					matrixdata = layout.qListObject.qDataPages[0].qMatrix;
+				}
+			}
+			if (debug) console.log(layout);
+			
 			//change header size
 			var headerelement = $element.parent().parent().prev();
 			if (pr && pr.showHeader){
@@ -787,7 +822,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					
 				//if not variable:
 				} else {
-					optionsforselect = layout.qListObject.qDataPages[0].qMatrix;
+					optionsforselect = matrixdata;
 				}
 				//dropdown default option
 				var visTypedropdownOrSelect2 = visType=='dropdown' || visType=='select2';
@@ -1386,6 +1421,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			//curent selections to url
 			function getSelectedUrl(){
 				if(debug) console.log('get selected to url');
+				if (!$("#sfsgetselurl").length>0){
+					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text /></p><br /><button type=button class="lui-button">Close</button></div>';
+					$('body').append(sfsgetselurl);
+				}
 				
 			}
 			function hideGetSelUrlFromESC(e){
