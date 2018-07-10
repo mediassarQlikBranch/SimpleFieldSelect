@@ -159,7 +159,7 @@
 }
 .qv-object-SimpleFieldSelect.sfsrmenu {
 	display: none;
-	z-index: 1000;
+	z-index: 1100;
 	position: fixed;
 	overflow: hidden;
 	border: 1px solid #CCC;
@@ -251,5 +251,20 @@
 	white-space: nowrap;
 }
 .qv-object-SimpleFieldSelect .txtonly {
-	height:100%;
+	/*height:100%;*/
+}
+#sfsgetselurl {
+	display: none;
+	width:50%;
+	padding:20px;
+	border:1px solid silver;
+	border-radius: 5px;
+	position: fixed;
+	top:10%;
+	left:10%;
+	background-color: #fff;
+	z-index: 1200;
+}
+#sfsgetselurl input {
+	width:100%;
 }

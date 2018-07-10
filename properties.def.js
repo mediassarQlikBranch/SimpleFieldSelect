@@ -129,6 +129,7 @@ define( [], function () {
 						label: "Text",
 						expression:"optional",
 						ref: "props.textareaonlytext",
+						maxlength: 2000,
 						show: function ( data ) {
 							return data.props.visualizationType=='txtonly';
 						}
@@ -852,7 +853,17 @@ define( [], function () {
 							}
 						}
 					},
-					
+					/*other: {
+						type: "items",
+						label: "Other",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props;
+						},
+						items:{
+							rightclikcmenu_getselectionurl:{ref: "props.rightclikcmenu_getselectionurl", type: "boolean",label: "Get url for current state -contextmenu",defaultValue: true}
+						}
+					},*/
+
 					Texts: {
 						type: "items",
 						label: "Texts",
@@ -1064,6 +1075,18 @@ define( [], function () {
 							  type: "string",
 							  label: "Custom CSS style for every element",
 							  defaultValue: ''
+							},
+							preElemHtml: {
+								ref: "props.preElemHtml",
+								type: "string",
+								label: "HTML before every element",
+								defaultValue: ''
+							},
+							postElemHtml: {
+								ref: "props.postElemHtml",
+								type: "string",
+								label: "HTML after every element",
+								defaultValue: ''
 							}
 						}
 					}
