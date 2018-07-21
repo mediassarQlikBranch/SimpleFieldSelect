@@ -9,7 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Row limitation is now removed since 1.8.0 version
+- Leonardo UI styled Radio button
 - Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be reused, like color, header and global settings.
 - Global option to hide pivot tables "boxes" - frees a lot of space
 - Global option to add extra text field to sheet header and selections bar - use for example to show document update time, current user etc
@@ -30,7 +30,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to min and max date
 - mobile zoom effect can be disabled. No need for three clicks if you want to select something. **Only one click is enough!!**
-- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use for example CSS classes from other libraries to render checkboxes.
+- several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use for example CSS classes from other libraries to render elements.
 - supports hiding a field from Qlik Sense's selection row
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well

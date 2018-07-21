@@ -115,6 +115,7 @@ define( [], function () {
 							value: "select2",label: "Select2 dropdown"}, {
 							value: "luiswitch",label: "Qlik Switch"}, {
 							value: "luicheckbox",label: "Qlik Checkbox"}, {
+							value: "luiradio",label: "Qlik Radio button"}, {
 							value: "txtonly",label: "Only a textarea"}
 						],
 						defaultValue: "hlist",

@@ -299,7 +299,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				
 			}
 			if(pr.enablesearch){
-				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox')){
+				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
 				var searchId = 'se'+layout.qInfo.qId;
 				html += '<div class="sfssearchdiv">';
 				html += '<div class="lui-search">';
@@ -727,7 +727,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			//not date or html input:
 			} else {
 				
-				if(visType=='luiswitch' || visType=='luicheckbox'){
+				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 					html += '<div class="sfs_lui"';
 				} else {
 					html += '<div class="checkboxgroup"';
@@ -773,7 +773,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding
 				} else if (visType=='btn'){
 					html += '<div '+stylechanges+'>';
-				} else if (visType=='luiswitch' || visType=='luicheckbox'){
+				} else if (visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 
 				} else {
 					html += 'Select visualization type';
@@ -964,7 +964,13 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span '+elementstyle+' class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
+					} else if (visType=='luiradio'){
+						html += '<label '+elementstyle+' class="lui-radiobutton" title="'+row[0].qText+'">';
+						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="data lui-radiobutton__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<div class="lui-radiobutton__radio-wrap"> <span class="lui-radiobutton__radio"></span> <span '+elementstyle+' class="lui-radiobutton__radio-text">' + row[0].qText+'</span> </div>';
+						html += '</label>';
 					}
+					
 					if (!visTypedropdownOrSelect2 && pr.postElemHtml){
 						html += pr.postElemHtml;
 					}
@@ -1275,7 +1281,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 					} );
 				//radio action
-				} else if (visType=='radio'){
+				} else if (visType=='radio' || visType=='luiradio'){
 					$element.find( 'input' ).on('click',function(){
 						if (debug) console.log('radio change action');
 						var clicktarget = $(this);
@@ -1342,7 +1348,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				var searchField = $element.find('#'+searchId);
 				var searchIcon = $element.find('.sfssearchIcon');
 				var searchSelectionMethod = 1;
-				if (visType=='checkbox' || visType=='radio' || visType=='luicheckbox'){
+				if (visType=='checkbox' || visType=='radio' || visType=='luicheckbox' || visType=='luiradio'){
 					searchSelectionMethod = 2;
 				} else if(visType=='luiswitch'){
 					searchSelectionMethod = 3;
