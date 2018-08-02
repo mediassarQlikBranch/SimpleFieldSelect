@@ -156,11 +156,16 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 		definition: propertiesdef,
 		support : {
 			snapshot: false,
-			export: false,
+			export: true,
 			exportData : false
 		},
-		resize: function(){
+		resize: function($element,layout){
 			if (debug) console.log('resize method');
+			var pr = layout.props;
+			//when exiting edit mode.
+			if(pr.enableGlobals && pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+				$("#qv-toolbar-container").hide();
+			}
 			return false;
 		},
 		paint: function ( $element,layout ) {
@@ -195,18 +200,17 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						lastrow = rownum;
 					});
 					if (debug) console.log('fetching more rows ' + lastrow);
-					if(this.backendApi.getRowCount() > lastrow +1){
+					if(allrowscount > lastrow +1){
 						var requestPage = [{
-						qTop: lastrow + 1,
-						qLeft: 0,
-						qWidth: initialParameters['qWidth'], //should be # of columns
-						qHeight: Math.min( initialParameters['qHeight'], this.backendApi.getRowCount() - lastrow )
+							qTop: lastrow + 1, qLeft: 0,
+							qWidth: initialParameters['qWidth'],
+							qHeight: Math.min( initialParameters['qHeight'], allrowscount - lastrow )
 						}];
 						this.backendApi.getData( requestPage ).then( function ( dataPages ) {
 							self.paint( $element,layout );
 						} );
 						$element.html('wait for data');
-						return;
+						return qlik.Promise.resolve();
 					} else {
 						//finally read all
 						this.backendApi.eachDataRow( function ( rownum, row ) {
@@ -371,10 +375,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			//Globals CSS mod
 			if (pr.enableGlobals){
 				if(debug) console.log('enabled globals ' + layout.qInfo.qId);
-				if ($(".SFSglobalCSS").length>0){
+				var sfsglobalCSSid = "SFSglobalCSS"+layout.qInfo.qId
+				if ($("#"+sfsglobalCSSid).length>0){
 				
 				} else {
-					articleInnerElement.append('<div style="display:none;" class=SFSglobalCSS></div>');
+					articleElement.append($( '<div id="'+sfsglobalCSSid+'" style="display:none;"></div>' ));
 				}
 				var csstxt = '';
 				if (pr.global_bgcolor){
@@ -434,7 +439,21 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if(pr.hidepivotTableSelectors){
 					csstxt += " .qv-object .left-meta-headers,.qv-object .top-meta {display:none!important;}";
 				}
-				$(".SFSglobalCSS").html('<style>' + csstxt + '</style>');
+				if(pr.hideInsightsButton){
+					csstxt += " .qv-insight-toggle-button {display:none!important;}";
+				}
+				if(pr.hideSelectionsTool){
+					csstxt += ' .qv-subtoolbar-button[tid="currentSelections.toggleGlobalSelections"] {display:none!important;}';
+				}
+				if(pr.hideSmartSearchButton){
+					csstxt += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
+				}
+				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+					//$(".qv-toolbar-container").css('display','none');
+					csstxt += ' #qv-toolbar-container {display:none!important;}';
+					csstxt += '.qv-panel {height:100%;}';
+				}
+				$("#"+sfsglobalCSSid).html('<style>' + csstxt + '</style>');
 				if (pr.hideSheetTitle){
 					$(".sheet-title-container").hide();
 				} else {
@@ -467,9 +486,6 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				}
 				if(pr.toolbarheight && pr.toolbarheight != -1){
 					$(".qui-toolbar").css('height',pr.toolbarheight +'px');
-				}
-				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-					$(".qui-toolbar").hide();
 				}
 			}
 			//get variable value
@@ -1020,6 +1036,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if(layout.props.rightclikcmenu_random) contextmenuHtml += '<li act="random">Select randomnly</li>';
 					if(layout.props.rightclikcmenu_defaults) contextmenuHtml += '<li act="defaults">Select defaults</li>';
 					if(layout.props.rightclikcmenu_getselectionurl){contextmenuHtml += '<li act="getselectionurl">Get URL for current state</li>';}
+					if(layout.props.rightclikcmenu_getselurltoclipboard){contextmenuHtml += '<li act="getselectionurlclip">Get URL for current state to clipboard</li>';}
+					
 					contextmenuHtml += '</ul></div>';
 					$('body').append(contextmenuHtml);
 					sfsrmenu = $("."+contextmenuID);
@@ -1039,7 +1057,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							sfsrmenu.find('li').off('click');
 							var valuesToSelect = [];
 							if (action=='getselectionurl'){
-								getSelectedUrl();
+								getSelectedUrl('dialog');
+							} else if (action=='getselectionurlclip'){
+								getSelectedUrl('clipboard');
 							} else {
 							
 								if (action=='all'){
@@ -1425,14 +1445,63 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				});
 			}
 			//curent selections to url
-			function getSelectedUrl(){
+			function getSelectedUrl(dialogOrClipboard){
 				if(debug) console.log('get selected to url');
 				if (!$("#sfsgetselurl").length>0){
-					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text /></p><br /><button type=button class="lui-button">Close</button></div>';
+					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text id="sfsgetselurlinput"/></p><br /><button type=button class="lui-button">Close</button></div>';
 					$('body').append(sfsgetselurl);
 				}
-				
+				app.getList('CurrentSelections',function(reply){
+					if(debug) console.log('getlist currentSelections');
+					if(debug) console.log(reply);
+					//var currentSelections = {};
+					var url = '';
+					reply.qSelectionObject.qSelections.forEach(function(selected){
+						var field = encodeURIComponent(selected.qField);
+						var values = selected.qSelectedFieldSelectionInfo;
+						url += '/select/'+field+'/'
+						var valuearray = [];
+						values.forEach(function(valueobj){
+							var value = encodeURIComponent(valueobj.qName);
+							valuearray.push(value);
+						});
+						url += valuearray.join(';'); //; is the separator
+					});
+					var baseurl = window.location.href;
+					var startofselections = baseurl.indexOf('/select/'); //server path might have this also...
+					if(startofselections>10){
+						baseurl = baseurl.substr(0,startofselections);
+					}
+					if (dialogOrClipboard == 'dialog'){
+						$("#sfsgetselurlinput").val( baseurl+url );
+						$("#sfsgetselurl").show();
+						var copyText = document.getElementById("sfsgetselurlinput");
+						copyText.select();
+
+						$(document).on("keydown",hideGetSelUrlFromESC);
+						$("#sfsgetselurl button").click(function(){
+							$("#sfsgetselurl").hide();
+							$("#sfsgetselurl button").off('click');
+							$(document).off("keydown",hideGetSelUrlFromESC);
+						});
+					}
+					if (dialogOrClipboard == 'clipboard'){
+						$("#sfsgetselurlinput").val( baseurl+url );
+						//$("#sfsgetselurl").show();
+						var copyText = document.getElementById("sfsgetselurlinput");
+						//copyText.focus();
+						copyText.select();
+						document.execCommand("Copy", false, null);
+						//$("#sfsgetselurl").hide("slow");
+						//console.log(copyText.value);
+					}
+					app.destroySessionObject(reply.qInfo.qId); //remove this object
+
+					//$("#sfsgetselurl").dialog({modal: true,buttons: {	Ok: function() {$( this ).dialog( "close" );}}});
+					
+				});
 			}
+
 			function hideGetSelUrlFromESC(e){
 				if (e.keyCode == 27) {
 					$("#sfsgetselurl").hide();

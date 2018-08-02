@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Gloabl options for hiding Smart search, Selections tool and new Insights buttons from the toolbar
 - Leonardo UI styled Radio button
 - Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be reused, like color, header and global settings.
 - Global option to hide pivot tables "boxes" - frees a lot of space
@@ -52,6 +53,8 @@ All following global settings are sheet specific. You can use for example master
   - Font-family and font color can be set for all elements
   - Remove filter boxes from Pivot tables
   - Extra text field to selection bar and header
+  - Hide pivot table filter boxes for space
+  - Hide Smart search, Selections tool and Insights buttons
 
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.

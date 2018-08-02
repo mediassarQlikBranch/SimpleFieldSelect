@@ -27,6 +27,9 @@ define( [], function () {
 			}
 		}
 	}
+	var paddingoptions = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},
+									{value: "4",label: "4px"},{value: "6",label: "6px"},{value: "8",label: "8px"},
+									{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "16",label: "16px"}];
 	return {
 		type: "items",
 		component: "accordion",
@@ -377,16 +380,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Padding for the content",
 								ref: "props.contentpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "12",label: "12px"},
-									{value: "16",label: "16px"}],
+								options: paddingoptions,
 								defaultValue: "-"
 							},
 							leftpadding: {
@@ -394,16 +388,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Left padding, default margin",
 								ref: "props.leftpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "12",label: "12px"},
-									{value: "16",label: "16px"}],
+								options: paddingoptions,
 								defaultValue: "-"
 							},
 							bottompadding: {
@@ -411,16 +396,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Bottom padding, default margin",
 								ref: "props.bottompadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "12",label: "12px"},
-									{value: "16",label: "16px"}],
+								options: paddingoptions,
 								defaultValue: "-"
 							},
 							rightpadding: {
@@ -428,16 +404,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Right padding, default margin",
 								ref: "props.rightpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "12",label: "12px"},
-									{value: "16",label: "16px"}],
+								options: paddingoptions,
 								defaultValue: "-"
 							},
 							elementpadding: {
@@ -445,16 +412,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Padding for the element (inside)",
 								ref: "props.elementpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "4",label: "4px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "12",label: "12px"},
-									{value: "16",label: "16px"}],
+								options: paddingoptions,
 								defaultValue: "-"
 							},
 							showHeader: {
@@ -861,7 +819,9 @@ define( [], function () {
 							return data.qListObjectDef && data.props;
 						},
 						items:{
-							rightclikcmenu_getselectionurl:{ref: "props.rightclikcmenu_getselectionurl", type: "boolean",label: "Get url for current state -contextmenu",defaultValue: true}
+							aboutgetsel:{component: "text",label: "Get URL for current state - contextmenu"},
+							rightclikcmenu_getselectionurl:{ref: "props.rightclikcmenu_getselectionurl", type: "boolean",label: "- Dialog version (works everywhere)",defaultValue: false},
+							rightclikcmenu_getselurltoclipboard:{ref: "props.rightclikcmenu_getselurltoclipboard", type: "boolean",label: "- Straight to clipboard (some browsert do not support)",defaultValue: false}
 						}
 					},*/
 
@@ -1255,8 +1215,32 @@ define( [], function () {
 						  type: "string",
 						  label: "Selection bar extra text element",
 						  defaultValue: '',
-						  show: function ( data ) {
-								return  data.props  && !data.props.hideSelectionBar;
+						  show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						hideInsightsButton: {
+						  ref: "props.hideInsightsButton", component: "switch", type: "boolean", label: "Hide Insights button", defaultValue: false,
+						  options: [{value: true,label: "Hide"}, {value: false,label: "Default"}],show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						hideSelectionsTool: {
+						  ref: "props.hideSelectionsTool",component: "switch", type: "boolean", label: "Hide Selections tool button", defaultValue: false,
+						  options: [{value: true,label: "Hide"}, {value: false,label: "Default"}],show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						hideSmartSearchButton: {
+						  ref: "props.hideSmartSearchButton",component: "switch", type: "boolean", label: "Hide Smart Search button", defaultValue: false,
+						  options: [{value: true,label: "Hide"}, {value: false,label: "Default"}],show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						
+						hideGuiToolbar: {
+						  ref: "props.hideGuiToolbar",
+						  component: "switch",
+						  type: "boolean",
+						  label: "Hide whole main toolbar?",
+						  defaultValue: false,
+						  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+						  change: function(data){
+						  	if (!data.props.hideGuiToolbar){
+						  		$(".qui-toolbar").show();
+						  	}
 						  }
 						},
 						toolbarheight: {
@@ -1272,49 +1256,39 @@ define( [], function () {
 								{value: 38,label: "38px"},
 								{value: 42,label: "42px"},
 								{value: 46,label: "46px"}],
-						  defaultValue: -1
-						},
-						hideGuiToolbar: {
-						  ref: "props.hideGuiToolbar",
-						  component: "switch",
-						  type: "boolean",
-						  label: "Hide whole main toolbar?",
-						  defaultValue: false,
-						  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
-						  change: function(data){
-						  	if (!data.props.hideGuiToolbar){
-						  		$(".qui-toolbar").show();
-						  	}
+						  defaultValue: -1,
+						  show: function ( data ) {
+								return  data.props  && !data.props.hideGuiToolbar;
 						  }
 						},
 						hideguitoolbarInfo:{
 							component: "text",
-							label: "When main toolbar is hidden you cannot access edit mode. You have to change last part of the url to /state/edit ",
+							label: "When main toolbar is hidden you cannot access Edit mode. You have to change last part of the url to /state/edit . Toolbar will be hidden only when not in Edit mode.",
 							show: function ( data ) {
 								return data.props  && data.props.hideGuiToolbar;
 						  }
 						},
 						globalobjectgeneral:{
 							component: "text",
-							label: "Global object related:"
+							label: "Global object related modifications which will be applied to all objects on the sheet:"
 						},
 						global_elementbgcolor:{
 							type: "string",
-							label: "Background color for all objects",
+							label: "Object background color",
 							ref: "props.global_elementbgcolor",
 							defaultValue: '',
 							expression:"optional"
 						},
 						global_bordercolor: {
 							type: "string",
-							label: "Border color for all objects",
+							label: "Border color",
 							ref: "props.global_bordercolor",
 							defaultValue: '',
 							expression:"optional"
 						},
 						global_bordercolor2: {
 							type: "string",
-							label: "Border color 2 for all objects",
+							label: "Border color 2",
 							ref: "props.global_bordercolor2",
 							defaultValue: '',
 							expression:"optional"
@@ -1454,11 +1428,7 @@ define( [], function () {
 							defaultValue: "-"
 						},
 						hidepivotTableSelectors: {
-						  ref: "props.hidepivotTableSelectors",
-						  component: "switch",
-						  type: "boolean",
-						  label: "Pivot table, remove \"selectors\"",
-						  defaultValue: false,
+						  ref: "props.hidepivotTableSelectors", component: "switch", type: "boolean", label: "Pivot table, remove \"selectors\"", defaultValue: false,
 						  options: [{value: true,label: "Remove"}, {value: false,label: "Default"}]
 						}
 					}

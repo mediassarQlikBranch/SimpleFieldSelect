@@ -1,3 +1,8 @@
+1.8.2
+ - Change for data waiting in case of a lot of data
+ - Export parameter is now set to true. Extension will be visible in PDF:s etc. Also export option will be shown when right clikced.
+ - Gloabl options for hiding Smart search, Selections tool and Insights from the toolbar
+ - Fix if main toolbar is hidden, no more empty on the bottom of the page. Hiding logic changed.
 1.8.1
  - Leonardo UI (Qlik native) styled Radio button
 1.8.0
