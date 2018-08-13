@@ -178,11 +178,18 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			var visType = pr.visualizationType;
 
 			//exit if needed, no dimension, not txtonly, variable empty
-			if (layout.props.dimensionIsVariable){
+			if (pr.dimensionIsVariable){
 				if((!pr.variableName || pr.variableName=='')){
 					$element.html('<h3>Set / check variable name !</h3>');
 					return qlik.Promise.resolve();
-				}	
+				}
+			} else if ((pr.rightclikcmenu_getselectionurl || pr.rightclikcmenu_getselurltoclipboard) && pr.rightclikcmenu_getselectionurlAsButton){
+				pr.rightclikcmenu_getselectionurlAsButtonTxt = pr.rightclikcmenu_getselectionurlAsButtonTxt ? pr.rightclikcmenu_getselectionurlAsButtonTxt : 'Get current selections as an URL';
+				$element.html('<button type="button" class="sfs_getselectionurl lui-button">'+pr.rightclikcmenu_getselectionurlAsButtonTxt+'</button>');
+				$(".sfs_getselectionurl").click(function(){
+					getSelectedUrl('dialog');
+				});
+				return qlik.Promise.resolve();
 			} else {
 				if (layout.qListObject.qDataPages.length==0 && visType !='txtonly' ) {
 					$element.html('<h3>Select one dimension first!</h3> Or use textarea only - visualization option<br /> Datepicker can only control a variable. To use datepicker, select a varibale and enable "Variable is a date selector"-option.');
@@ -224,6 +231,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			if (debug) console.log(layout);
 			
+			var objectCSSid = 'sf'+layout.qInfo.qId;
+			var extraStyle = ''; //object spesific
 			//change header size
 			var headerelement = $element.parent().parent().prev();
 			if (pr && pr.showHeader){
@@ -267,6 +276,15 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			if (pr.removeYscroll){
 				articleInnerElement.find('.qv-object-content-container').css('overflow-y','hidden');
 			}
+			if (pr.showXscroll){
+				articleInnerElement.find('.qv-object-content-container').css('overflow-x','auto');
+			}
+			if (pr.whitespacenowrap){
+				extraStyle += ' .'+objectCSSid + ', .'+objectCSSid + ' .sfe {white-space:nowrap; display:inline-block;}';
+				if (visType=='luiradio'){
+					extraStyle += ' .'+objectCSSid + ' .lui-radiobutton {padding-right:5px;}'
+				}
+			}
 			/*if (layout.props.specialFontcolor){
 				articleElement.css('color',layout.props.specialFontcolor);
 			} else {
@@ -281,6 +299,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			if(pr.bottompadding && pr.bottompadding != '-'){
 				articleInnerElement.css('padding-bottom',pr.bottompadding+'px');
+			}
+			if (extraStyle){
+				html += '<style>'+extraStyle+'</style>';
 			}
 			//padding
 			var paddingDivAdded = 1;
@@ -479,7 +500,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					if(pr.selBarExtraText && pr.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; cursor:default;"></div>');
+							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; cursor:default;padding-left:5px;padding-right:15px;"></div>');
 						}
 						$("#sfsSelBartxt").html(pr.selBarExtraText).prop('title',pr.selBarExtraText);
 					}
@@ -564,13 +585,14 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
+					html += '<div class="checkboxgroup '+objectCSSid+'">';
 					html += '<input '+inattributes+' title="';
 					if (titletext != ''){
 						html += titletext; //escape quotas!!
 					} else {
 						html += 'Click to select date';
 					}
-					html += '" class="pickdate'+elementExtraClass+createLUIclass(pr.addLUIclasses,'input','text')+'" ';
+					html += '" class="sfe pickdate'+elementExtraClass+createLUIclass(pr.addLUIclasses,'input','text')+'" ';
 					if (pr.visInputPlaceholdertxt && pr.visInputPlaceholdertxt != ''){
 						html += ' placeholder="'+pr.visInputPlaceholdertxt.replace(/\"/g,'&quot;')+'"'; //escape quotas!!
 					}
@@ -587,6 +609,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.helptext){
 						html += '<div class="sfs_helptxt">'+ pr.helptext + '</div>';
 					}
+					html += '</div>';
 					if(paddingDivAdded) html += '</div>';
 
 					$element.html( html );
@@ -655,6 +678,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 					}
 					//build html
+					html += '<div class="checkboxgroup '+objectCSSid+'">';
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
@@ -668,7 +692,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.visInputPlaceholdertxt && pr.visInputPlaceholdertxt != ''){
 						html += ' placeholder="'+pr.visInputPlaceholdertxt.replace(/\"/g,'&quot;')+'"'; //escape quotas!!
 					}
-					html += ' class="htmlin '+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+elementExtraClass+'" value="'+varvalue+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+ '/>';
+					html += ' class="sfe htmlin '+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+elementExtraClass+'" value="'+varvalue+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+ '/>';
 					if (pr.postElemHtml){
 						html += pr.postElemHtml;
 					}
@@ -683,7 +707,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.helptext){
 						html += '<div class="sfs_helptxt">'+ pr.helptext + '</div>';
 					}
+					html += '</div>';
 					if(paddingDivAdded) html += '</div>';
+
 				}
 				$element.html( html );
 				$element.find( '.htmlin' ).on( 'change select', function () { //select for datalist
@@ -725,7 +751,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (pr.preElemHtml){
 					html += pr.preElemHtml;
 				}
-				html += '<div class="txtonly '+elementExtraClass+'"';
+				html += '<div class="'+objectCSSid+' sfe txtonly '+elementExtraClass+'"';
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
@@ -744,9 +770,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			} else {
 				
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
-					html += '<div class="sfs_lui"';
+					html += '<div class="sfs_lui '+objectCSSid+'"';
 				} else {
-					html += '<div class="checkboxgroup"';
+					html += '<div class="checkboxgroup '+objectCSSid+'"';
 				}
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
@@ -907,8 +933,8 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					
 					var colorclasses = '', elementstyle = '';
 					//if ((visType!='dropdown' && visType!='select2') || pr.selectmultiselect ){
-						elementstyle = ' style="';
-						//color selections
+					
+					//color selections
 					if (row[0].qState === 'S'){
 						//set special color if set
 						if (pr.color_stateS_bg && pr.color_stateS_bg != ''){
@@ -942,46 +968,48 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 					}
 					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding;
-					elementstyle += '" ';
+					if (elementstyle){
+						elementstyle = ' style="' + elementstyle + '" ';
+					}
 					
 					if (!visTypedropdownOrSelect2 && pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
 					//list
 					if (visType=='hlist' || visType=='vlist'){
-						html += '<li class="data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
+						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
 						html += '</li>';
 					//checkbox
 					} else if (visType=='checkbox'){
-						html += '<label'+elementstyle+'>'
-						html += '<input type="checkbox" class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
+						html += '<label'+elementstyle+' class="sfe">'
+						html += '<input type="checkbox" class=" data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					//button
 					} else if (visType=='btn'){
 						html += '<button'+elementstyle+''
-						html += ' class="sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"' + dis + ' ' +elementExtraAttribute+ '> ' + row[0].qText; //
+						html += ' class="sfe sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"' + dis + ' ' +elementExtraAttribute+ '> ' + row[0].qText; //
 						html += '</button> ';
 					//radio
 					} else if (visType=='radio'){
-						html += '<label'+elementstyle+'>'
+						html += '<label'+elementstyle+' class="sfe">'
 						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					} else if (visTypedropdownOrSelect2){
 						html += '<option '+elementstyle+'class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '" value="' + row[0].qElemNumber + '"' + dis + dropselection + ' > ' + row[0].qText;
 						html += '</option>';
 					} else if (visType=='luiswitch'){
-						html += '<div '+elementstyle+' class="lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
+						html += '<div '+elementstyle+' class="sfe lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
 						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<span class="lui-switch__wrap"><span class="lui-switch__inner"></span><span class="lui-switch__switch"></span></span></label>';
 						html += '<div class="lui-switch_txt" style="">'+row[0].qText+'</div>';
 						html += '</div>';
 					} else if (visType=='luicheckbox'){
-						html += '<label '+elementstyle+' class="lui-checkbox" title="'+row[0].qText+'">';
+						html += '<label '+elementstyle+' class="sfe lui-checkbox" title="'+row[0].qText+'">';
 						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span '+elementstyle+' class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
 					} else if (visType=='luiradio'){
-						html += '<label '+elementstyle+' class="lui-radiobutton" title="'+row[0].qText+'">';
+						html += '<label '+elementstyle+' class="sfe lui-radiobutton" title="'+row[0].qText+'">';
 						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="data lui-radiobutton__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<div class="lui-radiobutton__radio-wrap"> <span class="lui-radiobutton__radio"></span> <span '+elementstyle+' class="lui-radiobutton__radio-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
@@ -1117,7 +1145,6 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						$(document).off('mousedown',hidermenu);
 					}
 				}
-
 				
 				//list action
 				if (visType=='hlist' || visType=='vlist'){
@@ -1443,63 +1470,17 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					searchField.parent().parent().show('fast');
 					searchField.focus();
 				});
+				if (pr.showXscroll){ //if x scroll, move search icon
+					articleInnerElement.find('.qv-object-content-container').scroll(function(){
+						var scrollleft = $(this).scrollLeft();
+						searchIcon.css('right',-scrollleft);
+					});
+				}
 			}
 			//curent selections to url
 			function getSelectedUrl(dialogOrClipboard){
 				if(debug) console.log('get selected to url');
-				if (!$("#sfsgetselurl").length>0){
-					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text id="sfsgetselurlinput"/></p><br /><button type=button class="lui-button">Close</button></div>';
-					$('body').append(sfsgetselurl);
-				}
-				app.getList('CurrentSelections',function(reply){
-					if(debug) console.log('getlist currentSelections');
-					if(debug) console.log(reply);
-					//var currentSelections = {};
-					var url = '';
-					reply.qSelectionObject.qSelections.forEach(function(selected){
-						var field = encodeURIComponent(selected.qField);
-						var values = selected.qSelectedFieldSelectionInfo;
-						url += '/select/'+field+'/'
-						var valuearray = [];
-						values.forEach(function(valueobj){
-							var value = encodeURIComponent(valueobj.qName);
-							valuearray.push(value);
-						});
-						url += valuearray.join(';'); //; is the separator
-					});
-					var baseurl = window.location.href;
-					var startofselections = baseurl.indexOf('/select/'); //server path might have this also...
-					if(startofselections>10){
-						baseurl = baseurl.substr(0,startofselections);
-					}
-					if (dialogOrClipboard == 'dialog'){
-						$("#sfsgetselurlinput").val( baseurl+url );
-						$("#sfsgetselurl").show();
-						var copyText = document.getElementById("sfsgetselurlinput");
-						copyText.select();
-
-						$(document).on("keydown",hideGetSelUrlFromESC);
-						$("#sfsgetselurl button").click(function(){
-							$("#sfsgetselurl").hide();
-							$("#sfsgetselurl button").off('click');
-							$(document).off("keydown",hideGetSelUrlFromESC);
-						});
-					}
-					if (dialogOrClipboard == 'clipboard'){
-						$("#sfsgetselurlinput").val( baseurl+url );
-						//$("#sfsgetselurl").show();
-						var copyText = document.getElementById("sfsgetselurlinput");
-						//copyText.focus();
-						copyText.select();
-						document.execCommand("Copy", false, null);
-						//$("#sfsgetselurl").hide("slow");
-						//console.log(copyText.value);
-					}
-					app.destroySessionObject(reply.qInfo.qId); //remove this object
-
-					//$("#sfsgetselurl").dialog({modal: true,buttons: {	Ok: function() {$( this ).dialog( "close" );}}});
-					
-				});
+				
 			}
 
 			function hideGetSelUrlFromESC(e){

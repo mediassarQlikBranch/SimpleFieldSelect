@@ -1,8 +1,8 @@
 {
 	"name": "SimpleFieldSelect",
-	"description": "Simple field and variable selector for Qlik Sense",
+	"description": "Field and variable selector for Qlik Sense",
 	"type": "visualization",
-	"version": "1.8.2",
+	"version": "1.8.3",
 	"icon": "list",
 	"author": "Matti Punkeri / Mediassar Oy",
 	"homepage": "",

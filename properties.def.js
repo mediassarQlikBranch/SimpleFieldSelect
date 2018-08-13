@@ -30,6 +30,10 @@ define( [], function () {
 	var paddingoptions = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},
 									{value: "4",label: "4px"},{value: "6",label: "6px"},{value: "8",label: "8px"},
 									{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "16",label: "16px"}];
+	var paddingoptions2 = [{value: "-",label: "default"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "6",label: "6px"},
+									{value: "8",label: "8px"},	{value: "10",label: "10px"},{value: "14",label: "14px"},{value: "18",label: "18px"},
+									{value: "22",label: "22px"},{value: "26",label: "26px"},{value: "30",label: "30px"},
+									{value: "36",label: "36px"},{value: "42",label: "42px"},{value: "50",label: "50px"}];
 	return {
 		type: "items",
 		component: "accordion",
@@ -429,19 +433,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Header height in pixels",
 								ref: "props.headerSize",
-								options: [
-									{value: "-",label: "default"},
-									{value: "2",label: "2px"},
-									{value: "6",label: "6px"},
-									{value: "10",label: "10px"},
-									{value: "14",label: "14px"},
-									{value: "18",label: "18px"},
-									{value: "22",label: "22px"},
-									{value: "26",label: "26px"},
-									{value: "30",label: "30px"},
-									{value: "36",label: "36px"},
-									{value: "42",label: "42px"},
-									{value: "50",label: "50px"}],
+								options: paddingoptions2,
 								defaultValue: "-",
 								show: function ( data ) {
 									return data.qListObjectDef && data.props &&  data.props.showHeader;
@@ -452,16 +444,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Header bottom padding",
 								ref: "props.headerBpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "2",label: "2px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "14",label: "14px"},
-									{value: "18",label: "18px"},
-									{value: "22",label: "22px"},
-									{value: "26",label: "26px"}],
+								options: paddingoptions2,
 								defaultValue: "-",
 								show: function ( data ) {
 									return data.qListObjectDef && data.props &&  data.props.showHeader;
@@ -472,15 +455,7 @@ define( [], function () {
 								component: "dropdown",
 								label: "Header H1 top padding (global will overwrite this)",
 								ref: "props.headerTpadding",
-								options: [
-									{value: "-",label: "default"},
-									{value: "0",label: "0px"},
-									{value: "2",label: "2px"},
-									{value: "6",label: "6px"},
-									{value: "8",label: "8px"},
-									{value: "10",label: "10px"},
-									{value: "14",label: "14px"},
-									{value: "18",label: "18px"}],
+								options: paddingoptions2,
 								defaultValue: "-",
 								show: function ( data ) {
 									return data.qListObjectDef && data.props &&  data.props.showHeader;
@@ -599,12 +574,23 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Disable vertical scroll in anycase",
 							  defaultValue: false
-							  
+							},
+							showXscroll: {
+							  ref: "props.showXscroll",
+							  type: "boolean",
+							  label: "Show horizontal scroll (auto, hidden by default)",
+							  defaultValue: false
 							},
 							removeLabel: {
 							  ref: "props.removeLabel",
 							  type: "boolean",
 							  label: "Do not print labels",
+							  defaultValue: false
+							},
+							whitespacenowrap: {
+							  ref: "props.whitespacenowrap",
+							  type: "boolean",
+							  label: "Do not wrap white space",
 							  defaultValue: false
 							}
 						}
@@ -812,18 +798,7 @@ define( [], function () {
 							}
 						}
 					},
-					/*other: {
-						type: "items",
-						label: "Other",
-						show: function ( data ) {
-							return data.qListObjectDef && data.props;
-						},
-						items:{
-							aboutgetsel:{component: "text",label: "Get URL for current state - contextmenu"},
-							rightclikcmenu_getselectionurl:{ref: "props.rightclikcmenu_getselectionurl", type: "boolean",label: "- Dialog version (works everywhere)",defaultValue: false},
-							rightclikcmenu_getselurltoclipboard:{ref: "props.rightclikcmenu_getselurltoclipboard", type: "boolean",label: "- Straight to clipboard (some browsert do not support)",defaultValue: false}
-						}
-					},*/
+					
 
 					Texts: {
 						type: "items",
@@ -1367,15 +1342,7 @@ define( [], function () {
 							component: "dropdown",
 							label: "Header top padding",
 							ref: "props.headerTpadding_global",
-							options: [
-								{value: "-",label: "default"},
-								{value: "0",label: "0px"},
-								{value: "2",label: "2px"},
-								{value: "6",label: "6px"},
-								{value: "8",label: "8px"},
-								{value: "10",label: "10px"},
-								{value: "14",label: "14px"},
-								{value: "18",label: "18px"}],
+							options: paddingoptions2,
 							defaultValue: "-",
 							show: function ( data ) {
 								return data.props  && !data.props.removeHeaderFromAllObjects;
@@ -1402,14 +1369,7 @@ define( [], function () {
 							component: "dropdown",
 							label: "Left padding, object content",
 							ref: "props.leftpadding_global",
-							options: [
-								{value: "-",label: "default"},
-								{value: "0",label: "0px"},
-								{value: "2",label: "2px"},
-								{value: "4",label: "4px"},
-								{value: "6",label: "6px"},
-								{value: "8",label: "8px"},
-								{value: "10",label: "10px"}],
+							options: paddingoptions,
 							defaultValue: "-"
 						},
 						rightpadding_global: {
@@ -1417,14 +1377,7 @@ define( [], function () {
 							component: "dropdown",
 							label: "Right padding, object content",
 							ref: "props.rightpadding_global",
-							options: [
-								{value: "-",label: "default"},
-								{value: "0",label: "0px"},
-								{value: "2",label: "2px"},
-								{value: "4",label: "4px"},
-								{value: "6",label: "6px"},
-								{value: "8",label: "8px"},
-								{value: "10",label: "10px"}],
+							options: paddingoptions,
 							defaultValue: "-"
 						},
 						hidepivotTableSelectors: {
