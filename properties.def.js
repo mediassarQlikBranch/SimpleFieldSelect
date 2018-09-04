@@ -45,15 +45,9 @@ define( [], function () {
 				min: 0,
 				max: 1,
 				items: {
-					/*label: {
-						type: "string",
-						ref: "qListObjectDef.qDef.qFieldLabels.0",
-						label: "Label",
-						show: true
-					},*/
 					field: {
 						type: "string",
-						expression: "always",
+						expression: "optional",
 						expressionType: "dimension",
 						ref: "qListObjectDef.qDef.qFieldDefs.0",
 						label: "Field or variable name",
@@ -73,6 +67,23 @@ define( [], function () {
 							}
                         }
 					},
+					
+					/*disableDimensionSelection: {
+							ref: "qListObjectDef.qDef.qExpressions.0.qExpr",
+							label: "Disable dimension selection",
+							type: "string",
+							expression: 'optional',
+							defaultValue: '=count(1)'
+					},
+					bgcolor: {
+							type: "string",
+							component: 'expression',
+							expression: "optional",
+							label: "Background color (css string)",
+							//expression: "always",
+							ref: 'qListObjectDef.qDef.qAttributeExpression.0.qExpression',
+							defaultValue: ''
+						},*/
 					dimensionIsVariable: {
 					  ref: "props.dimensionIsVariable",
 					  type: "boolean",
@@ -792,13 +803,32 @@ define( [], function () {
 							  type: "string",
 							  label: "(Opt) Name of the field without special marks (if field has [ mark)",
 							  defaultValue: "",
+							  expression:"optional",
 							  show: function ( data ) {
 									return  (data.props.hideFromSelectionsBar);
 							  }
 							}
 						}
 					},
-					
+					/*other: {
+						type: "items",
+						label: "Other",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props;
+						},
+						items:{
+							aboutgetsel:{component: "text",label: "Get URL for current state - contextmenu"},
+							rightclikcmenu_getselectionurl:{ref: "props.rightclikcmenu_getselectionurl", type: "boolean",label: "- Dialog version (works everywhere)",defaultValue: false},
+							rightclikcmenu_getselurltoclipboard:{ref: "props.rightclikcmenu_getselurltoclipboard", type: "boolean",label: "- Straight to clipboard (some browsert do not support)",defaultValue: false},
+							rightclikcmenu_getselectionurlAsButton:{ref: "props.rightclikcmenu_getselectionurlAsButton", type: "boolean",label: "Show as a button (only)",defaultValue: false},
+							rightclikcmenu_getselectionurlAsButtonTxt:{
+								ref: "props.rightclikcmenu_getselectionurlAsButtonTxt", type: "string",label: "Button text",expression:"optional",defaultValue: 'Get current selections as an URL',
+								show: function(data){
+									return data.props.rightclikcmenu_getselectionurlAsButton;
+								}
+							}
+						}
+					},*/
 
 					Texts: {
 						type: "items",
@@ -1392,9 +1422,15 @@ define( [], function () {
 				label: "About",
 				type: "items",
 				items: {
-					aboutt:{
-						component: "text",
-						label: "Developed by Matti Punkeri / Mediassar Oy"
+					abouttxt2:{
+						label: "About",
+						type: "items",
+						items: {
+							aboutt:{
+							component: "text",
+							label: "Developed by Matti Punkeri / Mediassar Oy"
+							}
+						}
 					}
 				}
 			}

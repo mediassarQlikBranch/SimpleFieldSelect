@@ -86,7 +86,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			}
 			if(debug) console.log(' means '+valueTxt+' to variable ' +layout.props.variableName);
 			//set variable
-			app.variable.setContent(layout.props.variableName, valueTxt);
+			app.variable.setStringValue(layout.props.variableName, valueTxt);
 			//set key value too if defined
 			if (layout.props.variableOptionsForKeysArray != [] && layout.props.variableNameForKey && layout.props.variableOptionsForKeysArray[ value ]){
 				var keyTxt = layout.props.variableOptionsForKeysArray[ value ];
@@ -94,7 +94,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (clearingSelection){ //if main value is being set to empty, set key also.
 					keyTxt = '';
 				}
-				app.variable.setContent(layout.props.variableNameForKey, keyTxt);
+				app.variable.setStringValue(layout.props.variableNameForKey, keyTxt);
 			}
 		//set field
 		} else {
@@ -356,7 +356,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					parent.css('height','65px');
 				}
 			}
-			//hiding
+			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
 				//add hide area if needed
 				if ($(".hideselstyles").length>0){
@@ -369,10 +369,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					var splittedfields = pr.hideFieldsFromSelectionBar.split(";");
 					if (debug){ console.log('hiding fields:'); console.log(splittedfields); }
 					splittedfields.forEach(function(fieldToHide,i){
-						if ($('#hid'+fieldToHide).length>0){
+						var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
+						if ($('#hid'+fieldToHideSelector).length>0){
 						//already hidden
 						} else {
-							$('.hideselstyles').append('<style id="hid'+fieldToHide+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+							$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
 						}
 					});
 				}
@@ -386,10 +387,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						}
 						fieldToHide = fieldToHide.replace(/[\[\]']+/g,''); //reomve []
 					}
-					if ($('#hid'+fieldToHide).length>0){
+					var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
+					if ($('#hid'+fieldToHideSelector).length>0){
 						//already hidden
 					} else {
-						$('.hideselstyles').append('<style id="hid'+fieldToHide+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+						$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
 					}
 				}
 			}
@@ -634,7 +636,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					$element.find( '.pickdate' ).on( 'change', function () {
 						var newval = $(this).val();
 						if(debug) console.log('NEW '+newval + ' to '+pr.variableName);
-						app.variable.setContent(pr.variableName, newval);
+						app.variable.setStringValue(pr.variableName, newval);
 					});
 				}
 			//html input for variable
@@ -716,7 +718,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					var newval = $(this).val();
 					if (newval != layout.variableValue){
 						if(debug) console.log('NEW '+newval + ' to '+pr.variableName);
-						app.variable.setContent(pr.variableName, newval);
+						app.variable.setStringValue(pr.variableName, newval);
 					}
 				});
 				//range actions

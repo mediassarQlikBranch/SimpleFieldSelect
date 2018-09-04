@@ -1,3 +1,7 @@
+1.8.4
+ - Field name of the hiding can be set with expression if needed
+ - Fix for hiding field from selection bar, name handling
+ - Replaced depricated variable setContent function
 1.8.3
  - Increased padding for selection bar extra text
  - Visual option to enable horizontal scroll
