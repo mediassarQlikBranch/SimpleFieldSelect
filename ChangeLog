@@ -1,3 +1,5 @@
+1.8.5
+ - GLobal modifications: Selection bar extra text element has been moved to correct position in DOM, custom CSS can be set and "Qlik style" can be applied
 1.8.4
  - Field name of the hiding can be set with expression if needed
  - Fix for hiding field from selection bar, name handling

@@ -370,10 +370,12 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (debug){ console.log('hiding fields:'); console.log(splittedfields); }
 					splittedfields.forEach(function(fieldToHide,i){
 						var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
-						if ($('#hid'+fieldToHideSelector).length>0){
-						//already hidden
-						} else {
-							$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+						if (fieldToHideSelector){
+							if ($('#hid'+fieldToHideSelector).length>0){
+							//already hidden
+							} else {
+								$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+							}
 						}
 					});
 				}
@@ -388,10 +390,12 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						fieldToHide = fieldToHide.replace(/[\[\]']+/g,''); //reomve []
 					}
 					var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
-					if ($('#hid'+fieldToHideSelector).length>0){
-						//already hidden
-					} else {
-						$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+					if (fieldToHideSelector){
+						if ($('#hid'+fieldToHideSelector).length>0){
+							//already hidden
+						} else {
+							$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+						}
 					}
 				}
 			}
@@ -502,9 +506,14 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					if(pr.selBarExtraText && pr.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager").append('<div id="sfsSelBartxt" class="item" style="width:unset; max-width:220px; cursor:default;padding-left:5px;padding-right:15px;"></div>');
+							$(".qv-selections-pager .buttons-end").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>');
 						}
-						$("#sfsSelBartxt").html(pr.selBarExtraText).prop('title',pr.selBarExtraText);
+						$("#sfsSelBartxt").html(pr.selBarExtraText).prop('title',pr.selBarExtraText).prop('style',pr.selBarExtraTextcss);
+						if (pr.selBarExtraTextQlikStyle){
+							$("#sfsSelBartxt").addClass('selbarqlikstyle');
+						} else {
+							$("#sfsSelBartxt").removeClass('selbarqlikstyle');
+						}
 					}
 				}
 				if(pr.toolbarheight && pr.toolbarheight != -1){
@@ -1482,7 +1491,59 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			//curent selections to url
 			function getSelectedUrl(dialogOrClipboard){
 				if(debug) console.log('get selected to url');
-				
+				if (!$("#sfsgetselurl").length>0){
+					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text id="sfsgetselurlinput"/></p><br /><button type=button class="lui-button">Close</button></div>';
+					$('body').append(sfsgetselurl);
+				}
+				app.getList('CurrentSelections',function(reply){
+					if(debug) console.log('getlist currentSelections');
+					if(debug) console.log(reply);
+					//var currentSelections = {};
+					var url = '';
+					reply.qSelectionObject.qSelections.forEach(function(selected){
+						var field = encodeURIComponent(selected.qField);
+						var values = selected.qSelectedFieldSelectionInfo;
+						url += '/select/'+field+'/'
+						var valuearray = [];
+						values.forEach(function(valueobj){
+							var value = encodeURIComponent(valueobj.qName);
+							valuearray.push(value);
+						});
+						url += valuearray.join(';'); //; is the separator
+					});
+					var baseurl = window.location.href;
+					var startofselections = baseurl.indexOf('/select/'); //server path might have this also...
+					if(startofselections>10){
+						baseurl = baseurl.substr(0,startofselections);
+					}
+					if (dialogOrClipboard == 'dialog'){
+						$("#sfsgetselurlinput").val( baseurl+url );
+						$("#sfsgetselurl").show();
+						var copyText = document.getElementById("sfsgetselurlinput");
+						copyText.select();
+
+						$(document).on("keydown",hideGetSelUrlFromESC);
+						$("#sfsgetselurl button").click(function(){
+							$("#sfsgetselurl").hide();
+							$("#sfsgetselurl button").off('click');
+							$(document).off("keydown",hideGetSelUrlFromESC);
+						});
+					}
+					if (dialogOrClipboard == 'clipboard'){
+						$("#sfsgetselurlinput").val( baseurl+url );
+						//$("#sfsgetselurl").show();
+						var copyText = document.getElementById("sfsgetselurlinput");
+						//copyText.focus();
+						copyText.select();
+						document.execCommand("Copy", false, null);
+						//$("#sfsgetselurl").hide("slow");
+						//console.log(copyText.value);
+					}
+					app.destroySessionObject(reply.qInfo.qId); //remove this object
+
+					//$("#sfsgetselurl").dialog({modal: true,buttons: {	Ok: function() {$( this ).dialog( "close" );}}});
+					
+				});
 			}
 
 			function hideGetSelUrlFromESC(e){

@@ -810,7 +810,7 @@ define( [], function () {
 							}
 						}
 					},
-					/*other: {
+					other: {
 						type: "items",
 						label: "Other",
 						show: function ( data ) {
@@ -828,7 +828,7 @@ define( [], function () {
 								}
 							}
 						}
-					},*/
+					},
 
 					Texts: {
 						type: "items",
@@ -1221,6 +1221,23 @@ define( [], function () {
 						  label: "Selection bar extra text element",
 						  defaultValue: '',
 						  show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						selBarExtraTextcss: {
+						  ref: "props.selBarExtraTextcss",
+						  expression:"optional",
+						  type: "string",
+						  label: "Custom CSS for Selection bar extra text",
+						  defaultValue: '',
+						  show: function ( data ) {	return !data.props.hideSelectionBar; }
+						},
+						selBarExtraTextQlikStyle: {
+						  ref: "props.selBarExtraTextQlikStyle",
+						  type: "boolean",
+						  label: "Apply Qlik style to Selection bar extra text",
+						  defaultValue: false,
+						  show: function ( data ) {
+								return !data.props.hideSelectionBar;
+						  }
 						},
 						hideInsightsButton: {
 						  ref: "props.hideInsightsButton", component: "switch", type: "boolean", label: "Hide Insights button", defaultValue: false,

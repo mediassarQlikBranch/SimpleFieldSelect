@@ -268,3 +268,18 @@
 #sfsgetselurl input {
 	width:100%;
 }
+#sfsSelBartxt.qv-object-SimpleFieldSelect {
+	width:unset; max-width:220px; cursor:default;padding-left:5px;padding-right:15px;
+	white-space: normal;
+	line-height: normal;
+	background: transparent;
+    color: #404040;
+    border-bottom: 1px solid #d9d9d9;
+    text-overflow: ellipsis;
+}
+#sfsSelBartxt.qv-object-SimpleFieldSelect.selbarqlikstyle {
+	    font-weight: 700;
+	    white-space: nowrap;
+	    line-height: 37px;
+
+}
