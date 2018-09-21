@@ -1,9 +1,9 @@
-define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./jquery-ui.min","./select2/select2.min"], 
+define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","./properties.def","css!./select2/select2.css","./jquery-ui.min","./select2/select2.min"], 
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
-	if (!$("#sfscss").length>0){
-		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
-	}
+	// if (!$("#sfscss").length>0){
+	// 	$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
+	// }
 	var debug = false;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	
