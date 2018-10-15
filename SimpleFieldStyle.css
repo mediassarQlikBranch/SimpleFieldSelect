@@ -210,10 +210,29 @@
 	border-radius:3px;
 	padding:4px;
 	z-index: 101;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
 }
 .qv-object-SimpleFieldSelect .sfssearchIcon:hover, .qv-object-SimpleFieldSelect .sfssearchinput_clear:hover{
 	cursor:pointer;
 	background-color:#eee;
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+.qv-object-SimpleFieldSelect .contextmenulaunch{
+	position:absolute;
+	top:25px;
+	right:5px;
+	border-radius:3px;
+	padding:4px;
+	z-index: 102;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+}
+.qv-object-SimpleFieldSelect .contextmenulaunch:hover{
+	cursor:pointer;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
 }
 .qv-object-SimpleFieldSelect .sfssearchinput {
 

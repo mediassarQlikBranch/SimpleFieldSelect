@@ -1,3 +1,11 @@
+1.8.6
+ - Enabling Export possibility in version 1.8.2 caused that the right click menu, context menu didn't work anymore. Now there is a switch which allows you to enable export mode. As default it is disabled.
+ - Alternative version for context menu triggering, show as a menu icon
+ - Margin for each element can be now set
+ - Paddings and header property section rearranged
+ - Responsive font size for elements
+ - "Enable search" moved to Other settings section
+ - rearrange Global modifications -settings
 1.8.5
  - GLobal modifications: Selection bar extra text element has been moved to correct position in DOM, custom CSS can be set and "Qlik style" can be applied
 1.8.4
@@ -10,7 +18,7 @@
  - Visual option to show elements without white space wrap = set all elements to one line - doesn't work with Qlik Switch -visualization yet
 1.8.2
  - Change for data waiting in case of a lot of data
- - Export parameter is now set to true. Extension will be visible in PDF:s etc. Also export option will be shown when right clikced.
+ - Export parameter is now set to true. Extension will be visible in PDF:s etc. Also export option will be shown when right clicked.
  - Gloabl options for hiding Smart search, Selections tool and Insights from the toolbar
  - Fix if main toolbar is hidden, no more empty on the bottom of the page. Hiding logic changed.
 1.8.1

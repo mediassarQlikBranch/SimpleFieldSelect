@@ -4,9 +4,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 	if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}
-	var debug = false;
+	var debug = 1;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
-	
+	var sfsstatus = {};
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
 	  if(debug) console.log('checkin default selection, selected: '+countselected);
@@ -156,12 +156,18 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 		definition: propertiesdef,
 		support : {
 			snapshot: false,
-			export: true,
+			export: function( layout ) {
+				return layout.props.exportenabled;
+			},
 			exportData : false
 		},
 		resize: function($element,layout){
 			if (debug) console.log('resize method');
 			var pr = layout.props;
+			if (pr.visualizationType=='actions'){
+				if (debug) console.log('resize paint');
+				this.paint( $element,layout);
+			}
 			//when exiting edit mode.
 			if(pr.enableGlobals && pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
 				$("#qv-toolbar-container").hide();
@@ -169,11 +175,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			return false;
 		},
 		paint: function ( $element,layout ) {
-			if (debug){ console.log('start painting '+layout.qInfo.qId);  console.log(layout.qListObject.qDataPages.length);}
+			if (debug){ console.log('start painting '+layout.qInfo.qId);  console.log(layout.qListObject.qDataPages.length); console.log($element);}
 
 			var self = this, html = "";
 			var app = qlik.currApp();
-			
 			var pr = layout.props;
 			var visType = pr.visualizationType;
 
@@ -187,8 +192,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				pr.rightclikcmenu_getselectionurlAsButtonTxt = pr.rightclikcmenu_getselectionurlAsButtonTxt ? pr.rightclikcmenu_getselectionurlAsButtonTxt : 'Get current selections as an URL';
 				$element.html('<button type="button" class="sfs_getselectionurl lui-button">'+pr.rightclikcmenu_getselectionurlAsButtonTxt+'</button>');
 				$(".sfs_getselectionurl").click(function(){
-					getSelectedUrl('dialog');
+					//getSelectedUrl('dialog');
 				});
+				return qlik.Promise.resolve();
+			//actions
+			} else if (pr.visualizationType=='actions') {
 				return qlik.Promise.resolve();
 			} else {
 				if (layout.qListObject.qDataPages.length==0 && visType !='txtonly' ) {
@@ -319,7 +327,11 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				} else {
 					containerDivHeight_reduce += 22;
 				}
-				html += '">'+pr.inlinelabeltext+'</div> ';
+				html += '"';
+				if (pr.inlinelabelcss){
+					html = ' style="'+pr.inlinelabelcss+'"'
+				}
+				html += '>'+pr.inlinelabeltext+'</div> ';
 				html += '</label>';
 				
 			}
@@ -332,7 +344,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" maxlength="255" spellcheck="false" type="text" placeholder="Search"/>';
 				html += '<span id="cl'+searchId+'" class="lui-icon lui-search__clear-icon sfssearchinput_clear" title="clear search"></span>';
 				html += '</div></div>';
-				html += '<div class="sfssearchIcon"><span class="lui-icon  lui-icon--search"></span></div>';
+				html += '<div class="sfssearchIcon"><span class="lui-icon lui-icon--search"></span></div>';
 				}
 			}
 			//content heigth
@@ -561,6 +573,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				elementExtraClass = ' '+pr.customElementClass+' ';
 			}
 			var fontsizechanges = '';
+			if (pr.responsivefontsize){
+				fontsizechanges = ' font-size:'+pr.responsivefontvalue + pr.responsivefonttype+';';
+			} else 
 			if (pr.fontsizeChange && pr.fontsizeChange != '' && pr.fontsizeChange != '100'){
 				fontsizechanges = ' font-size:'+pr.fontsizeChange+'%;';
 			}
@@ -572,6 +587,10 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 			var elementpadding = '';
 			if (pr.elementpadding && pr.elementpadding != '' && pr.elementpadding != '-'){
 				elementpadding = ' padding:'+pr.elementpadding+'px;';
+			}
+			var elementmargin = '';
+			if (pr.elementmargin && pr.elementmargin != '' && pr.elementmargin != '-'){
+				elementmargin = ' margin:'+pr.elementmargin+'px;';
 			}
 			var titletext = '';
 			if (pr.hovertitletext && pr.hovertitletext != ''){
@@ -613,7 +632,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.color_stateO_fo && pr.color_stateO_fo != ''){
 						elementStyleCSS += ' color:'+pr.color_stateO_fo+';';
 					}
-					html += 'value="'+varvalue+'" style="width:6em; max-width:80%;'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+'"' +elementExtraAttribute+ '/>';
+					html += 'value="'+varvalue+'" style="width:6em; max-width:80%;'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+'"' +elementExtraAttribute+ '/>';
 					if (pr.postElemHtml){
 						html += pr.postElemHtml;
 					}
@@ -703,7 +722,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.visInputPlaceholdertxt && pr.visInputPlaceholdertxt != ''){
 						html += ' placeholder="'+pr.visInputPlaceholdertxt.replace(/\"/g,'&quot;')+'"'; //escape quotas!!
 					}
-					html += ' class="sfe htmlin '+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+elementExtraClass+'" value="'+varvalue+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+ '/>';
+					html += ' class="sfe htmlin '+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+elementExtraClass+'" value="'+varvalue+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+'"' +elementExtraAttribute+ '/>';
 					if (pr.postElemHtml){
 						html += pr.postElemHtml;
 					}
@@ -766,7 +785,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
-				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+'>';
+				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+'"' +elementExtraAttribute+'>';
 				if (pr.textareaonlytext) html += pr.textareaonlytext;
 				if (pr.textareaonlytext2) html += pr.textareaonlytext2;
 				if (pr.helptext){
@@ -818,12 +837,12 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
-					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+containerStyles+'"' +elementExtraAttribute+multiselect+ '>';
+					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+'"' +elementExtraAttribute+multiselect+ '>';
 				} else if (visType=='select2'){
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
-					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding
+					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding/margin
 				} else if (visType=='btn'){
 					html += '<div '+stylechanges+'>';
 				} else if (visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
@@ -978,7 +997,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							elementstyle += ' color:'+pr.color_stateA_fo+';';
 						}
 					}
-					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding;
+					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding+elementmargin;
 					if (elementstyle){
 						elementstyle = ' style="' + elementstyle + '" ';
 					}
@@ -1050,7 +1069,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 				if (pr.rightclikcmenu && !pr.dimensionIsVariable && (visType=='hlist' || visType=='vlist' || visType=='checkbox' || (visTypedropdownOrSelect2 && pr.selectmultiselect) )) {
 					showContextMenu = 1;
 				}
-
+				if (pr.rightclikcmenu_getselectionurl || pr.rightclikcmenu_getselurltoclipboard){
+					showContextMenu = 1;
+				}
 				$element.html( html );
 				//context menu actions
 				if (showContextMenu){
@@ -1068,24 +1089,31 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 						$("."+contextmenuID).remove();
 					}
 					var contextmenuHtml = '<div class="qv-object-SimpleFieldSelect sfsrmenu '+contextmenuID+'"><ul>';
-					if(layout.props.rightclikcmenu_selall) contextmenuHtml += '<li act="all">Select all</li>';
-					if(layout.props.rightclikcmenu_clear) contextmenuHtml += '<li act="clear">Clear selections</li>';
-					if(layout.props.rightclikcmenu_reverse) contextmenuHtml += '<li act="reverse">Reverse selection</li>';
-					if(layout.props.rightclikcmenu_possible) contextmenuHtml += '<li act="possible">Select possible</li>';
-					if(layout.props.rightclikcmenu_random) contextmenuHtml += '<li act="random">Select randomnly</li>';
-					if(layout.props.rightclikcmenu_defaults) contextmenuHtml += '<li act="defaults">Select defaults</li>';
-					if(layout.props.rightclikcmenu_getselectionurl){contextmenuHtml += '<li act="getselectionurl">Get URL for current state</li>';}
-					if(layout.props.rightclikcmenu_getselurltoclipboard){contextmenuHtml += '<li act="getselectionurlclip">Get URL for current state to clipboard</li>';}
+					if(pr.rightclikcmenu_selall) contextmenuHtml += '<li act="all">Select all</li>';
+					if(pr.rightclikcmenu_clear) contextmenuHtml += '<li act="clear">Clear selections</li>';
+					if(pr.rightclikcmenu_reverse) contextmenuHtml += '<li act="reverse">Reverse selection</li>';
+					if(pr.rightclikcmenu_possible) contextmenuHtml += '<li act="possible">Select possible</li>';
+					if(pr.rightclikcmenu_random) contextmenuHtml += '<li act="random">Select randomnly</li>';
+					if(pr.rightclikcmenu_defaults) contextmenuHtml += '<li act="defaults">Select defaults</li>';
+					
 					
 					contextmenuHtml += '</ul></div>';
 					$('body').append(contextmenuHtml);
 					sfsrmenu = $("."+contextmenuID);
 					if (debug) console.log('set contextmenu action on');
-					$element.on("contextmenu", function (event) {
+					//add icon trigger
+					if (pr.rigthclickmenushowasicon){
+						$element.append('<div class="contextmenulaunch" style="" cm="'+contextmenuID+'" title="Show menu"><style></style><span class="lui-icon lui-icon--menu"></span></div>');
+						$element.on("click",".contextmenulaunch",showcontextmenuevent);
+					}
+					//right click trigger
+					$element.on("contextmenu",$element, showcontextmenuevent);
+					function showcontextmenuevent (event) {
+					//$(document).on("click",$element,function(event) {
 						if (debug) console.log('show contextmenu '+contextmenuID);
 						event.preventDefault();
 						sfsrmenu.finish().toggle(100).
-							css({top: event.pageY + "px", left: event.pageX + "px"});
+							css({top: (event.pageY+20) + "px", left: event.pageX + "px"});
 						
 						sfsrmenu = $("."+contextmenuID);
 						if (debug) console.log(sfsrmenu.find('li'));
@@ -1096,9 +1124,9 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							sfsrmenu.find('li').off('click');
 							var valuesToSelect = [];
 							if (action=='getselectionurl'){
-								getSelectedUrl('dialog');
+								//getSelectedUrl('dialog');
 							} else if (action=='getselectionurlclip'){
-								getSelectedUrl('clipboard');
+								//getSelectedUrl('clipboard');
 							} else {
 							
 								if (action=='all'){
@@ -1146,7 +1174,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 							}
 						});
 						$(document).on("mousedown", document, hidermenu);
-					});
+					}
 					function hidermenu(e){ //hide menu
 						if (!$(e.target).parents("."+contextmenuID).length > 0) { //+contextmenuID
 							//e.preventDefault();
@@ -1488,117 +1516,6 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 					});
 				}
 			}
-			//curent selections to url
-			function getSelectedUrl(dialogOrClipboard){
-				if(debug) console.log('get selected to url');
-				if (!$("#sfsgetselurl").length>0){
-					var sfsgetselurl = '<div id="sfsgetselurl"><p>Copy url:<br /><input type=text id="sfsgetselurlinput"/></p><br /><button type=button class="lui-button">Close</button></div>';
-					$('body').append(sfsgetselurl);
-				}
-				app.getList('CurrentSelections',function(reply){
-					if(debug) console.log('getlist currentSelections');
-					if(debug) console.log(reply);
-					//var currentSelections = {};
-					var url = '';
-					reply.qSelectionObject.qSelections.forEach(function(selected){
-						var field = encodeURIComponent(selected.qField);
-						var values = selected.qSelectedFieldSelectionInfo;
-						url += '/select/'+field+'/'
-						var valuearray = [];
-						values.forEach(function(valueobj){
-							var value = encodeURIComponent(valueobj.qName);
-							valuearray.push(value);
-						});
-						url += valuearray.join(';'); //; is the separator
-					});
-					var baseurl = window.location.href;
-					var startofselections = baseurl.indexOf('/select/'); //server path might have this also...
-					if(startofselections>10){
-						baseurl = baseurl.substr(0,startofselections);
-					}
-					if (dialogOrClipboard == 'dialog'){
-						$("#sfsgetselurlinput").val( baseurl+url );
-						$("#sfsgetselurl").show();
-						var copyText = document.getElementById("sfsgetselurlinput");
-						copyText.select();
-
-						$(document).on("keydown",hideGetSelUrlFromESC);
-						$("#sfsgetselurl button").click(function(){
-							$("#sfsgetselurl").hide();
-							$("#sfsgetselurl button").off('click');
-							$(document).off("keydown",hideGetSelUrlFromESC);
-						});
-					}
-					if (dialogOrClipboard == 'clipboard'){
-						$("#sfsgetselurlinput").val( baseurl+url );
-						//$("#sfsgetselurl").show();
-						var copyText = document.getElementById("sfsgetselurlinput");
-						//copyText.focus();
-						copyText.select();
-						document.execCommand("Copy", false, null);
-						//$("#sfsgetselurl").hide("slow");
-						//console.log(copyText.value);
-					}
-					app.destroySessionObject(reply.qInfo.qId); //remove this object
-
-					//$("#sfsgetselurl").dialog({modal: true,buttons: {	Ok: function() {$( this ).dialog( "close" );}}});
-					
-				});
-			}
-
-			function hideGetSelUrlFromESC(e){
-				if (e.keyCode == 27) {
-					$("#sfsgetselurl").hide();
-					$(document).off("keydown",hideGetSelUrlFromESC);
-				}
-			}
-			/*var storedObject = null;
-			$('.qv-gridcell').on('click',function(e){
-				e.preventDefault();
-				var parentdiv = $(e.target).closest('.qv-gridcell');
-				var objectID = parentdiv.attr('tid');
-				if (objectID){
-					console.log(objectID+' '+storedObject); //.closest('div:has(*[tid])')
-					if (objectID==storedObject){} 
-					else {
-						parentdiv.attr('id',objectID);
-						qBlob.saveToFile(objectID, objectID+'output.png');
-						storedObject = objectID;
-					}
-				}
-			});
-			//
-			$(document).on('click',function(e){
-				function downloadURI(uri, name) {
-			        var link = document.createElement("a");
-			        link.download = name;
-			        link.href = uri;
-			        link.click();
-			        //after creating link you should delete dynamic link
-			        //clearDynamicLink(link); 
-			    }
-
-			    if (e.target){
-			    	
-			    } else {
-			    	return;
-			    }
-			    var div = $(e.target).html();
-			    
-			    var canvas = $('<canvas/>').attr('id','canvasid').html(div);
-			    //$('body').append(canvas);
-			    //console.log(canvas);
-			    printToFile(canvas[0]) ;
-			    //Your modified code.
-			    function printToFile(canvasdata) {
-			    	//console.log(canvasdata);
-			        
-			        //div = document.getElementById("canvasid"); 
-			        var myImage = canvasdata.toDataURL("image/png");
-			        console.log(canvasdata.toDataURL());
-			        downloadURI("data:" + myImage, "yourImage.png");
-			    }
-			});*/
 			return qlik.Promise.resolve();
 		}
 	};

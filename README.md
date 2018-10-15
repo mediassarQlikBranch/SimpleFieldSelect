@@ -9,15 +9,14 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Note! Change to export mode handling in 1.8.6, see release notes
+- Responsive font size options
+- Menu icon styled right click menu trigger - if export mode is used, right click menu won't work
 - Gloabl options for hiding Smart search, Selections tool and new Insights buttons from the toolbar
 - Leonardo UI styled Radio button
 - Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be reused, like color, header and global settings.
 - Global option to hide pivot tables "boxes" - frees a lot of space
 - Global option to add extra text field to sheet header and selections bar - use for example to show document update time, current user etc
-- Hide all headers from a sheet + color options for every header
-- Qlik Sense styled switch and checkbox
-- Dropdown can be now used as multiselect. Naturally doesn't work with variables
-- Select2 plugin has now been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
@@ -37,6 +36,10 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 - search can be enabled for some of the visualizations
 - background color for the object itself
+- Hide all headers from a sheet + color options for every header
+- Qlik Sense styled switch and checkbox
+- Dropdown can be now used as multiselect. Naturally doesn't work with variables
+- Select2 plugin has been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 
 ## Global sheet level settings
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
@@ -58,6 +61,7 @@ All following global settings are sheet specific. You can use for example master
 
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
+Note that some text field allow Qlik developer to write javascript, HTML and CSS.
 
 ### Changelog
 [ChangeLog](ChangeLog)
