@@ -4,7 +4,7 @@ define( ["qlik", "jquery", "text!./SimpleFieldStyle.css","text!./datepicker.css"
 	if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}
-	var debug = 1;
+	var debug = false;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	var sfsstatus = {};
 	//If nothing selected but should be
