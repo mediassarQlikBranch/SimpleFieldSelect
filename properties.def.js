@@ -172,6 +172,13 @@ define( [], function () {
 					propagationInfo:{
 						component: "text",
 						label: "Most of the following settings are inherited from this sheet to others when user changes sheet. You need to have same settings on other sheets too to have the same effect on every possible landing sheet. Use master items for same settings on every sheet. Changing some of the values back to default requires browser refresh.",					
+					},
+					errorglobal: { //cannot be shown when editing masterobject
+						component: "text",
+						label: "This sheet has two or more global modifications enabled. Use only one",
+						show: function(){
+							return $(".sfsglobalcss").length>1;
+						}
 					}
 				}
 			},
@@ -586,6 +593,23 @@ define( [], function () {
 							}
                         }
 					},
+					
+					/*disableDimensionSelection: {
+							ref: "qListObjectDef.qDef.qExpressions.0.qExpr",
+							label: "Disable dimension selection",
+							type: "string",
+							expression: 'optional',
+							defaultValue: '=count(1)'
+					},
+					bgcolor: {
+							type: "string",
+							component: 'expression',
+							expression: "optional",
+							label: "Background color (css string)",
+							//expression: "always",
+							ref: 'qListObjectDef.qDef.qAttributeExpression.0.qExpression',
+							defaultValue: ''
+						},*/
 					dimensionIsVariable: {
 					  ref: "props.dimensionIsVariable",
 					  type: "boolean",
@@ -637,6 +661,7 @@ define( [], function () {
 							value: "luicheckbox",label: "Qlik Checkbox"}, {
 							value: "luiradio",label: "Qlik Radio button"}, {
 							value: "txtonly",label: "Only a textarea"}
+							//, {value: "actions",label: "Actions and functions"}
 						],
 						defaultValue: "hlist",
 						show: function ( data ) {
@@ -815,6 +840,32 @@ define( [], function () {
 							}
 						}
 					}
+					/*vizactiontype: {
+						type: "string",
+						component: "dropdown",
+						label: "Action",
+						ref: "props.actiontype",
+						options: [{
+							value: "copyto",label: "Allow text copy to clipboard"}, {
+							value: "",label: "---"}
+							
+						],
+						defaultValue: "copyto",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props && data.props.visualizationType=='actions';
+						}
+					},
+					actions: {
+						type: "items",
+						label: "Other",
+						show: function ( data ) {
+							return data.qListObjectDef && data.props && data.props.visualizationType=='actions';
+						},
+						items:{
+							
+							
+						}
+					}*/
 				}
 			},
 			settings: {
@@ -910,7 +961,7 @@ define( [], function () {
 							},
 							responsivefontvalue: {
 								type: "number",
-								label: "Number value",
+								label: "Number value (like 1.1)",
 								ref: "props.responsivefontvalue",
 								defaultValue: 1.0,
 								show: function ( data ) { return data.props.responsivefontsize;	}
@@ -1023,6 +1074,15 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Do not wrap white space",
 							  defaultValue: false
+							},
+							mainobjectwidth: {
+								ref: "props.mainobjectwidth",
+								type: "string",
+								label: "Width of the main object (use 70%, 50px)",
+								defaultValue: '',
+								show: function(data){
+									return data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2')
+								}
 							}
 						}
 					},
@@ -1133,6 +1193,15 @@ define( [], function () {
 								},
 								expression:"optional"
 							},
+							selectDefaultsOnlyOnce: {
+							  ref: "props.selectDefaultsOnlyOnce",
+							  type: "boolean",
+							  label: "Select defaults only once?",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return  !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
+							  }
+							},
 							/*ForceSelections: {
 								type: "string",
 								label: "Force/lock these selections, separate by ;",
@@ -1147,6 +1216,15 @@ define( [], function () {
 							  ref: "props.hidePassiveItems",
 							  type: "boolean",
 							  label: "Hide items which cannot be selected",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return !(data.props.dimensionIsVariable);
+							  }
+							},
+							showOnlySelectedItems: {
+							  ref: "props.showOnlySelectedItems",
+							  type: "boolean",
+							  label: "Hide items which are not selected (show only selected)",
 							  defaultValue: false,
 							  show: function ( data ) {
 									return !(data.props.dimensionIsVariable);
@@ -1220,7 +1298,6 @@ define( [], function () {
 							  label: "Enable export support (if enabled right click menu not working)",
 							  defaultValue: false
 							}
-							
 						}
 					},
 					Hiding: {
@@ -1281,6 +1358,16 @@ define( [], function () {
 								ref: "props.helptext",
 								defaultValue: '',
 								expression:"optional"
+							},
+							helptextcss: {
+								type: "string",
+								label: "Help text CSS style",
+								ref: "props.helptextcss",
+								defaultValue: '',
+								expression:"optional",
+								show: function ( data ) {
+									return  data.props.helptext;
+							  }
 							},
 							hovertitle: {
 								type: "string",

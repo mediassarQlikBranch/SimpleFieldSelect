@@ -1,7 +1,7 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
-This extension is an "all in one" selection component with several customization options. It gives you many Qlikview features like select only one, default value and context menu.
-To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet, for example you can set background color of the sheet, hide title bar, modify all borders etc. You can hide these settings for example inside the year selector.
+This extension is an "all in one" selection component with several customization options. It gives Qlik Sense many Qlikview features like select only one, default value and context menu.
+To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide these settings for example inside the year selector. With these global settings, for example, you can set a background color of the sheet, hide title bar, modify all borders, remove Insights button etc.
 
 If you have a good idea for further development, let us know.
 
@@ -13,20 +13,20 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Responsive font size options
 - Menu icon styled right click menu trigger - if export mode is used, right click menu won't work
 - Gloabl options for hiding Smart search, Selections tool and new Insights buttons from the toolbar
-- Leonardo UI styled Radio button
+- Leonardo UI (Qlik native) styled Radio button
 - Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be reused, like color, header and global settings.
-- Global option to hide pivot tables "boxes" - frees a lot of space
+- Global option to hide pivot table's "boxes" - frees a lot of space
 - Global option to add extra text field to sheet header and selections bar - use for example to show document update time, current user etc
 
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
-- Has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
+- has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox, standard radio button or drop down selector.
-- For variable control there is now almost every HTML5 standard input
-  - For example slider
+- for variable control there is now almost every HTML5 standard input
+  - for example slider
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
-- can set variable value from predefined list or via date picker
+- can set variable value from predefined list or via **date picker**
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to min and max date
 - mobile zoom effect can be disabled. No need for three clicks if you want to select something. **Only one click is enough!!**
@@ -35,11 +35,12 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - supports transparency of the object
 - Some of the visualizations allow to use Qlik Sense's Leonard UI styling, for example for drop down select Leonard UI styling works well
 - search can be enabled for some of the visualizations
-- background color for the object itself
+- several color settings like background color for the object itself
 - Hide all headers from a sheet + color options for every header
 - Qlik Sense styled switch and checkbox
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
+- custom HTML pre/post every element
 
 ## Global sheet level settings
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
@@ -56,12 +57,12 @@ All following global settings are sheet specific. You can use for example master
   - Font-family and font color can be set for all elements
   - Remove filter boxes from Pivot tables
   - Extra text field to selection bar and header
-  - Hide pivot table filter boxes for space
+  - Hide pivot table filter boxes for extra space
   - Hide Smart search, Selections tool and Insights buttons
 
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
-Note that some text field allow Qlik developer to write javascript, HTML and CSS.
+** Note: To allow extent modification possibilities in this extension some text fields allow Qlik developer to write Javascript, HTML and CSS and this might cause issues if user written code is broken or does unwanted things. **
 
 ### Changelog
 [ChangeLog](ChangeLog)

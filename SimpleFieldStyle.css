@@ -221,13 +221,16 @@
 }
 .qv-object-SimpleFieldSelect .contextmenulaunch{
 	position:absolute;
-	top:25px;
+	top:0px;
 	right:5px;
 	border-radius:3px;
 	padding:4px;
 	z-index: 102;
 	opacity: 0.2;
 	filter: alpha(opacity=20);
+}
+.qv-object-SimpleFieldSelect .contextmenulaunchwithsearch{
+	top:25px;
 }
 .qv-object-SimpleFieldSelect .contextmenulaunch:hover{
 	cursor:pointer;

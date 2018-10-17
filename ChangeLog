@@ -1,3 +1,10 @@
+1.8.7
+ - Select defaults only once - option added. During first page load deafaults are selected but not afterwards when this option is enabled.
+ - Show only selected -option. So the output is empty if nothing from this particular field is selected.
+ - Help text CSS style
+ - Context menu fix
+ - Main object width parameter for drop down and select visualizations (change the width of the drop down menu)
+ - CSS handling change
 1.8.6
  - Enabling Export possibility in version 1.8.2 caused that the right click menu, context menu didn't work anymore. Now there is a switch which allows you to enable export mode. As default it is disabled.
  - Alternative version for context menu triggering, show as a menu icon
