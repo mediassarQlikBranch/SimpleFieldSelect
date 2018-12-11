@@ -804,9 +804,9 @@ define( [], function () {
 					selectmultiselect: {
 						ref: "props.selectmultiselect",
 						type: "boolean",
-						label: "Allow multiple selects?",
+						label: "Allow multiple selections?",
 						show: function ( data ) {
-							return data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !data.props.dimensionIsVariable;
+							return data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2') && !(data.props.dimensionIsVariable && !data.props.varMultiselectAllow);
 						}
 					},
 					select2options:{
@@ -839,32 +839,12 @@ define( [], function () {
 								}
 							}
 						}
-					}
+					},
 					/*vizactiontype: {
-						type: "string",
-						component: "dropdown",
-						label: "Action",
-						ref: "props.actiontype",
-						options: [{
-							value: "copyto",label: "Allow text copy to clipboard"}, {
-							value: "",label: "---"}
-							
-						],
-						defaultValue: "copyto",
-						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.visualizationType=='actions';
-						}
+						
 					},
 					actions: {
-						type: "items",
-						label: "Other",
-						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.visualizationType=='actions';
-						},
-						items:{
-							
-							
-						}
+						
 					}*/
 				}
 			},
@@ -1098,7 +1078,7 @@ define( [], function () {
 								label: "(Depricated) Limit date selection to max from variable",
 								type: "string",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.variableIsDate && data.props.dimensionIsVariable;
+									return data.qListObjectDef && data.props.variableIsDate;
 								},
 								expression:"optional"
 							},
@@ -1108,7 +1088,7 @@ define( [], function () {
 								type: "string",
 								defaultValue: "d.m.yy",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.variableIsDate && data.props.dimensionIsVariable;
+									return data.props.variableIsDate;
 								},
 								expression:"optional"
 							},
@@ -1118,7 +1098,26 @@ define( [], function () {
 								type: "string",
 								defaultValue: "",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !data.props.variableIsDate && data.props.dimensionIsVariable;
+									return  !data.props.variableIsDate;
+								},
+								expression:"optional"
+							},
+							varMultiselectAllow: {
+								ref: "props.varMultiselectAllow",
+								type: "boolean",
+								label: "Allow multple value selects?",
+								defaultValue: false,
+								show: function ( data ) {
+									return  !data.props.variableIsDate && data.props.visualizationType!='input'; //select2 single select exlude
+							  }
+							},
+							varMultiselectSep: {
+								ref: "props.varMultiselectSep",
+								label: "Separate variable values with",
+								type: "string",
+								defaultValue: "|",
+								show: function ( data ) {
+									return data.props.varMultiselectAllow;
 								},
 								expression:"optional"
 							},
@@ -1126,7 +1125,7 @@ define( [], function () {
 								component: "text",
 								label: "You can set another variable to follow the main variables selections. You can use this feature like a key for the first variable",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !data.props.variableIsDate && data.props.dimensionIsVariable && data.props.visualizationType!='input';
+									return  !data.props.variableIsDate && data.props.visualizationType!='input';
 								}
 							},
 							variableNameForKey: {
@@ -1135,14 +1134,14 @@ define( [], function () {
 								type: "string",
 								defaultValue: "",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !data.props.variableIsDate && data.props.dimensionIsVariable && data.props.visualizationType!='input';
+									return  !data.props.variableIsDate  && data.props.visualizationType!='input';
 								}
 							},
 							aboutSecondVariableOptions:{
 								component: "text",
 								label: "Define as many options as there are options for the main variable",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !data.props.variableIsDate && data.props.dimensionIsVariable && (data.props.variableNameForKey || data.props.visualizationType=='input' && (data.props.visInputFieldType=='number' || data.props.visInputFieldType=='range'));
+									return  !data.props.variableIsDate  && (data.props.variableNameForKey || data.props.visualizationType=='input' && (data.props.visInputFieldType=='number' || data.props.visInputFieldType=='range'));
 								}
 							},
 							variableOptionsForKeys: {
@@ -1151,7 +1150,7 @@ define( [], function () {
 								type: "string",
 								defaultValue: "",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && !data.props.variableIsDate && data.props.dimensionIsVariable && (data.props.variableNameForKey || data.props.visualizationType=='input' );
+									return  !data.props.variableIsDate && data.props.dimensionIsVariable && (data.props.variableNameForKey || data.props.visualizationType=='input' );
 								},
 								expression:"optional"
 							}

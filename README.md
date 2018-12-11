@@ -9,14 +9,16 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.
+- Option to select many values into one variable
+- Select defaults only once
+- Show only selected
+- Main object width parameter
 - Note! Change to export mode handling in 1.8.6, see release notes
 - Responsive font size options
 - Menu icon styled right click menu trigger - if export mode is used, right click menu won't work
 - Gloabl options for hiding Smart search, Selections tool and new Insights buttons from the toolbar
-- Leonardo UI (Qlik native) styled Radio button
-- Only text object visualization. Use CSS, Javascript and HTML on a text box. This was implemented because most of the SFS settings can be reused, like color, header and global settings.
-- Global option to hide pivot table's "boxes" - frees a lot of space
-- Global option to add extra text field to sheet header and selections bar - use for example to show document update time, current user etc
+
 
 ## Features
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected

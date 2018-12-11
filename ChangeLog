@@ -1,3 +1,6 @@
+1.8.8
+ - Option to select many values into one variable. The result string will be concatenated from the selected options.
+ - Fix for variable default value selection - for best functionality, set default value normally to variable if possible.
 1.8.7
  - Select defaults only once - option added. During first page load deafaults are selected but not afterwards when this option is enabled.
  - Show only selected -option. So the output is empty if nothing from this particular field is selected.
