@@ -1,3 +1,6 @@
+1.8.9
+ - CSS inputfield checking improvement
+ - Fix for CSS control of Qlik native visualizations
 1.8.8
  - Option to select many values into one variable. The result string will be concatenated from the selected options.
  - Fix for variable default value selection - for best functionality, set default value normally to variable if possible.

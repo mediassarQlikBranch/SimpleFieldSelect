@@ -374,7 +374,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				html += '"';
 				if (pr.inlinelabelcss){
-					html = ' style="'+pr.inlinelabelcss+'"'
+					html = ' style="'+checkUserCSSstyle2(pr.inlinelabelcss,1)+'"'
 				}
 				html += '>'+pr.inlinelabeltext+'</div> ';
 				html += '</label>';
@@ -595,14 +595,14 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			var fontStyleTxt = '';
 			if (pr.customFontCSS && pr.customFontCSS != ''){
-				fontStyleTxt += ' font:'+pr.customFontCSS+';';
+				fontStyleTxt += ' font:'+checkUserCSSstyle2(pr.customFontCSS, 1);
 			}
 			if (pr.customFontFamilyCSS && pr.customFontFamilyCSS != ''){
-				fontStyleTxt += ' font-family:'+pr.customFontFamilyCSS+';';
+				fontStyleTxt += ' font-family:'+checkUserCSSstyle2(pr.customFontFamilyCSS);
 			}
 			var elementStyleCSS = '';
 			if (pr.customStyleCSS && pr.customStyleCSS != ''){
-				elementStyleCSS = ' '+pr.customStyleCSS+';';
+				elementStyleCSS = ' '+checkUserCSSstyle2(pr.customStyleCSS);
 			}
 			var containerStyles = '';
 			if (pr.useMaxHeight){
@@ -855,9 +855,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				$element.html( html );
 			//not date or html input:
 			} else {
-				
+				var stylechanges = ' style="'+fontsizechanges+fontStyleTxt+containerStyles+'"';
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
-					html += '<div class="sfs_lui '+objectCSSid+'"';
+					html += '<div class="sfs_lui '+objectCSSid+'"'+stylechanges;
 				} else {
 					html += '<div class="checkboxgroup '+objectCSSid+'"';
 				}
@@ -866,7 +866,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				html += '>';
 				var countselected = 0;
-				var stylechanges = ' style="'+fontsizechanges+fontStyleTxt+containerStyles+'"';
 				var multiselect = ''; //dropdown multi
 				if (pr.selectmultiselect && !(pr.dimensionIsVariable && !pr.varMultiselectAllow)) {
 					multiselect = ' multiple="multiple"';
@@ -1608,9 +1607,23 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			
 			function createhelptextdiv(pr){
 				var a = '<div class="sfs_helptxt"';
-				if (pr.helptextcss) a += ' style="'+pr.helptextcss+'"';
+				if (pr.helptextcss) a += ' style="'+checkUserCSSstyle2(pr.helptextcss,1)+'"';
 				a += '>'+ pr.helptext + '</div>';
 				return a;
+			}
+			function checkUserCSSstyle2(css, checkquote){
+				if (css){
+					css.trim();
+					if (css != '' && css.slice(-1) != ';'){
+						css += ';';
+					}
+					if (checkquote){
+						css = css.replace(/"/g, "'"); //replace " to '
+					}
+				} else {
+					css = '';
+				}
+				return css;
 			}
 			return qlik.Promise.resolve();
 		}
