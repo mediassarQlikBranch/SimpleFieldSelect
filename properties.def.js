@@ -1,5 +1,5 @@
 //Properties definitions
-define( [], function () {
+define( ["ng!$q"], function ($q) {
 	'use strict';
 	var debug = false;
 	//calc variable name IF this is variable selection - should be removed and changed
@@ -839,7 +839,7 @@ define( [], function () {
 								}
 							}
 						}
-					},
+					}
 					/*vizactiontype: {
 						
 					},
@@ -1542,19 +1542,19 @@ define( [], function () {
 							  }
 							},
 							customElementClass: {
-							  ref: "props.customElementClass",
-							  type: "string",
-							  label: "Custom HTML class for every element",
-							  defaultValue: '',
-							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
-							  }
+								ref: "props.customElementClass",
+								type: "string",
+								label: "Custom HTML class for every element",
+								defaultValue: '',
+								show: function ( data ) {
+									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+								}
 							},
 							customStyleCSS: {
-							  ref: "props.customStyleCSS",
-							  type: "string",
-							  label: "Custom CSS style for every element",
-							  defaultValue: ''
+								ref: "props.customStyleCSS",
+								type: "string",
+								label: "Custom CSS style for every element",
+								defaultValue: ''
 							},
 							preElemHtml: {
 								ref: "props.preElemHtml",
@@ -1567,6 +1567,255 @@ define( [], function () {
 								type: "string",
 								label: "HTML after every element",
 								defaultValue: ''
+							}
+						}
+					},
+					actionsBefore: {
+						type: "items",
+						label: "Actions",
+						items: {
+							isActionsBefore: {
+								type: "boolean",
+								component: "switch",
+								label: "Actions before selection",
+								ref: "props.isActionsBefore",
+								defaultValue: !1,
+								options: [{
+									value: !0,
+									label: "Enabled"
+								}, {
+									value: !1,
+									label: "Disabled"
+								}]
+							},
+							actionBefore1: {
+								type: "string",
+								component: "dropdown",
+								label: "First Action",
+								ref: "props.actionBefore1",
+								defaultValue: "none",
+								show: function(data) {
+									return data.props.isActionsBefore
+								},
+								options: [{
+									value: "none",
+									label: "None"
+								}, {
+									value: "applyBookmark",
+									label: "Apply Bookmark"
+								}, {
+									value: "clearAll",
+									label: "Clear All Selections"
+								}, {
+									value: "clearField",
+									label: "Clear Selection in Field"
+								}, {
+									value: "lockField",
+									label: "Lock Field"
+								}, {
+									value: "selectExcluded",
+									label: "Select Excluded Values"
+								}, {
+									value: "selectPossible",
+									label: "Select Possible Values"
+								}, {
+									value: "selectAlternative",
+									label: "Select Alternative Values"
+								}, {
+									value: "selectandLockField",
+									label: "Select and Lock in Field"
+								}, {
+									value: "selectField",
+									label: "Select Value in Field"
+								}, {
+									value: "selectValues",
+									label: "Select Multiple Values in Field"
+								}, {
+									value: "setVariable",
+									label: "Set Variable Value"
+								}, {
+									value: "lockAll",
+									label: "Lock All Selections"
+								}, {
+									value: "unlockAll",
+									label: "Unlock All Selections"
+								}]
+							},
+							field1: {
+								type: "string",
+								ref: "props.field1",
+								label: "Field",
+								expression: "optional",
+								show: function(data) {
+									return ["selectField", "selectValues", "clearField", "selectandLockField", "lockField", "selectPossible", "selectAlternative", "selectExcluded"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							variable1: {
+								type: "string",
+								ref: "props.variable1",
+								label: "Variable Name",
+								expression: "optional",
+								show: function(data) {
+									return ["setVariable"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							value1: {
+								type: "string",
+								ref: "props.value1",
+								label: "Value",
+								expression: "optional",
+								show: function(data) {
+									return ["selectField", "selectValues", "setVariable", "selectandLockField"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							value1Desc: {
+								type: "text",
+								component: "text",
+								ref: "props.value1Desc",
+								label: "Define multiple values separated with a semi-colon (;).",
+								show: function(data) {
+									return ["selectValues"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							bookmark1: {
+								type: "string",
+								component: "dropdown",
+								label: "Select Bookmark",
+								ref: "props.bookmark1",
+								options: function() {
+									return function() {
+										var defer = $q.defer();
+										return app.getList("BookmarkList", function(items) {
+											defer.resolve(items.qBookmarkList.qItems.map(function(item) {
+												return {
+													value: item.qInfo.qId,
+													label: item.qData.title
+												}
+											}))
+										}), defer.promise
+									}.then(function(items) {
+										return items
+									})
+								},
+								show: function(data) {
+									return ["applyBookmark"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							softlock1: {
+								type: "boolean",
+								label: "Soft Lock",
+								ref: "props.softlock1",
+								defaultValue: !1,
+								show: function(data) {
+									return ["selectAlternative", "selectExcluded"].indexOf(data.props.actionBefore1) > -1
+								}
+							},
+							actionBefore2: {
+								type: "string",
+								component: "dropdown",
+								label: "Second Action",
+								ref: "props.actionBefore2",
+								defaultValue: "none",
+								show: function(data) {
+									return data.props.isActionsBefore && "none" !== data.props.actionBefore1
+								},
+								options: [{
+									value: "none",
+									label: "None"
+								}, {
+									value: "applyBookmark",
+									label: "Apply Bookmark"
+								}, {
+									value: "clearAll",
+									label: "Clear All Selections"
+								}, {
+									value: "clearField",
+									label: "Clear Selection in Field"
+								}, {
+									value: "lockField",
+									label: "Lock Field"
+								}, {
+									value: "selectExcluded",
+									label: "Select Excluded Values"
+								}, {
+									value: "selectPossible",
+									label: "Select Possible Values"
+								}, {
+									value: "selectAlternative",
+									label: "Select Alternative Values"
+								}, {
+									value: "selectandLockField",
+									label: "Select and Lock in Field"
+								}, {
+									value: "selectField",
+									label: "Select Value in Field"
+								}, {
+									value: "selectValues",
+									label: "Select Multiple Values in Field"
+								}, {
+									value: "setVariable",
+									label: "Set Variable Value"
+								}, {
+									value: "lockAll",
+									label: "Lock All Selections"
+								}, {
+									value: "unlockAll",
+									label: "Unlock All Selections"
+								}]
+							},
+							field2: {
+								type: "string",
+								ref: "props.field2",
+								label: "Field",
+								expression: "optional",
+								show: function(data) {
+									return ["selectField", "selectValues", "clearField", "selectandLockField", "lockField", "selectPossible", "selectAlternative", "selectExcluded"].indexOf(data.props.actionBefore2) > -1
+								}
+							},
+							variable2: {
+								type: "string",
+								ref: "props.variable2",
+								label: "Variable Name",
+								expression: "optional",
+								show: function(data) {
+									return ["setVariable"].indexOf(data.props.actionBefore2) > -1
+								}
+							},
+							value2: {
+								type: "string",
+								ref: "props.value2",
+								label: "Value",
+								expression: "optional",
+								show: function(data) {
+									return ["selectField", "selectValues", "setVariable", "selectandLockField"].indexOf(data.props.actionBefore2) > -1
+								}
+							},
+							value2Desc: {
+								type: "string",
+								component: "text",
+								ref: "props.value2Desc",
+								label: "Define multiple values separated with a semi-colon (;).",
+								show: function(data) {
+									return ["selectValues"].indexOf(data.props.actionBefore2) > -1
+								}
+							},
+							bookmark2: {
+								type: "string",
+								ref: "props.bookmark2",
+								label: "Bookmark Id",
+								expression: "optional",
+								show: function(data) {
+									return ["applyBookmark"].indexOf(data.props.actionBefore2) > -1
+								}
+							},
+							softlock2: {
+								type: "boolean",
+								label: "Soft Lock",
+								ref: "props.softlock2",
+								defaultValue: !1,
+								show: function(data) {
+									return ["selectAlternative", "selectExcluded"].indexOf(data.props.actionBefore2) > -1
+								}
 							}
 						}
 					}
@@ -1583,7 +1832,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Developed by Matti Punkeri / Mediassar Oy"
+							label: "Developed by Matti Punkeri / Mediassar Oy / Enrique Mora"
 							}
 						}
 					}

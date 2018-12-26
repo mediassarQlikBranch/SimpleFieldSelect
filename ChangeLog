@@ -1,3 +1,17 @@
+1.8.10
+ - Actions in select2 as:
+  - Clear all selection
+  - Lock all selection
+  - Unlock all selection
+  - Clear field selection
+  - Select alternative
+  - Select excluded
+  - Select in field
+  - Select values
+  - Select and Lock field
+  - Lock field
+  - Apply Bookmark
+  - Set variable
 1.8.9
  - CSS inputfield checking improvement
  - Fix for CSS control of Qlik native visualizations
