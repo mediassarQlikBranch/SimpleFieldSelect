@@ -1384,6 +1384,50 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							});
 							selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
 						}
+						if (layout.props.isActionsBefore)
+		                    for (var app = qlik.currApp(), fld = null, val = null, softlock = null, i = 1; i <= 2; i++) switch (fld = layout.props["field" + i], val = layout.props["value" + i], softlock = layout.props["softlock" + i], layout.props["actionBefore" + i]) {
+		                        case "clearAll":
+		                            app.clearAll();
+		                            break;
+		                        case "lockAll":
+		                            app.lockAll();
+		                            break;
+		                        case "unlockAll":
+		                            app.unlockAll();
+		                            break;
+		                        case "clearField":
+		                            _.isEmpty(fld) || app.field(fld).clear();
+		                            break;
+		                        case "selectPossible":
+		                            _.isEmpty(fld) || app.field(fld).selectPossible();
+		                            break;
+		                        case "selectAlternative":
+		                            _.isEmpty(fld) || app.field(fld).selectAlternative(softlock);
+		                            break;
+		                        case "selectExcluded":
+		                            _.isEmpty(fld) || app.field(fld).selectExcluded(softlock);
+		                            break;
+		                        case "selectField":
+		                            _.isEmpty(fld) || _.isEmpty(val) || app.field(fld).selectMatch(val, !1);
+		                            break;
+		                        case "selectValues":
+		                            if (!_.isEmpty(fld) && !_.isEmpty(val)) {
+		                                var vals = splitToStringNum(val, ";");
+		                                app.field(fld).selectValues(vals, !1)
+		                            }
+		                            break;
+		                        case "selectandLockField":
+		                            _.isEmpty(fld) || _.isEmpty(val) || (app.field(fld).selectMatch(val, !0), app.field(fld).lock());
+		                            break;
+		                        case "lockField":
+		                            _.isEmpty(fld) || app.field(fld).lock();
+		                            break;
+		                        case "applyBookmark":
+		                            _.isEmpty(layout.props["bookmark" + i]) || app.bookmark.apply(layout.props["bookmark" + i]);
+		                            break;
+		                        case "setVariable":
+		                            _.isEmpty(layout.props["variable" + i]) || setVariableContent(layout.props["variable" + i], val)
+		                    }
 					});
 				} else
 				//attach click event to checkbox
