@@ -1,3 +1,6 @@
+1.9.0
+ - Global option to clear all selections on first load (on sheet open/arrival)
+ - Global option to clear all selections when leaving a sheet
 1.8.9
  - CSS inputfield checking improvement
  - Fix for CSS control of Qlik native visualizations

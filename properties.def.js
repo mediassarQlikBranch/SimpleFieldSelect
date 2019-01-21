@@ -311,6 +311,18 @@ define( [], function () {
 					  label: "Hide following fields from the selection bar. Separate by ;",
 					  defaultValue: ""
 					},
+					clearAllSelOnFirstLoad: {
+					  ref: "props.clearAllSelOnFirstLoad",
+					  type: "boolean",
+					  label: "Clear all selections on first load / refresh",
+					  defaultValue: false
+					},
+					clearAllSelOnLeave: {
+					  ref: "props.clearAllSelOnLeave",
+					  type: "boolean",
+					  label: "Clear all selections on sheet leave (requires refresh after this setting has been changed)",
+					  defaultValue: false
+					}
 				}
 
 			},

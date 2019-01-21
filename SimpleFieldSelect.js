@@ -1,12 +1,12 @@
 define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./jquery-ui.min","./select2/select2.min"], 
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
-	if (!$("#sfscss").length>0){
+	/*if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
-	}
+	}*/
 	var debug = 0;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
-	var sfsstatus = {};
+	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app){
@@ -219,9 +219,29 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			return false;
 		},
+		/*mounted: function( $element){
+			if (debug){ console.log('mounted'); }
+			globalAllSelectionsCleared = 0; //reset
+		},*/
+		controller: ['$scope', '$element', function ($scope, $element) {
+			if (debug) console.log('controller init');
+			var scpr = $scope.layout.props;
+			//globalAllSelectionsCleared = 0; //reset
+			if (scpr.enableGlobals && scpr.clearAllSelOnFirstLoad){
+				if (debug) console.log('clear all');
+				var app = qlik.currApp();
+				app.clearAll();
+			}
+			if (scpr.enableGlobals && scpr.clearAllSelOnLeave){
+				$scope.$on('$destroy', function (ev) {
+					if (debug) console.log('clear all');
+					var app = qlik.currApp();
+					app.clearAll();
+				});
+			}
+		}],
 		paint: function ( $element,layout ) {
 			if (debug){ console.log('start painting '+layout.qInfo.qId); console.log($element);}
-
 			var self = this, html = "";
 			var app = qlik.currApp();
 			var pr = layout.props;
@@ -468,7 +488,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if( $(".sfsglobalcss").length>1 ){
 					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled');
 				}
-
+				/*if (pr.clearAllSelOnFirstLoad && globalAllSelectionsCleared == 0){
+					if (debug) console.log('Clear all sel');
+					globalAllSelectionsCleared = 1;
+					app.clearAll();
+				}*/
 				var csstxt = '';
 				if (pr.global_bgcolor){
 					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet { background-color:'+pr.global_bgcolor+';}';

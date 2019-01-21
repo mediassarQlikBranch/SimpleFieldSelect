@@ -1,7 +1,7 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
 This extension is an "all in one" selection component with several customization options. It gives Qlik Sense many Qlikview features like select only one, default value and context menu.
-To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide these settings for example inside the year selector. With these global settings, for example, you can set a background color of the sheet, hide title bar, modify all borders, remove Insights button etc.
+To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide many settings for example inside the year selector. In addition you can set  background color of the sheet, hide title bar, modify all borders, remove Insights button etc.
 
 If you have a good idea for further development, let us know.
 
@@ -9,6 +9,8 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Global option to clear all selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
+  - Enable Global modifications for only one SimpleFieldSelect object per sheet.
 - Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.
 - Option to select many values into one variable
 - Select defaults only once
@@ -21,7 +23,10 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 
 
 ## Features
+- 
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
+  - If you use default values with variables, it's best to set the default value to the variable in the beginning. 
+  - Default values can be selected only once.
 - has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox, standard radio button or drop down selector.
@@ -61,7 +66,7 @@ All following global settings are sheet specific. You can use for example master
   - Extra text field to selection bar and header
   - Hide pivot table filter boxes for extra space
   - Hide Smart search, Selections tool and Insights buttons
-
+  - Clear all selections when arriving to sheet and when leaving a sheet
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 ** Note: To allow extent modification possibilities in this extension some text fields allow Qlik developer to write Javascript, HTML and CSS and this might cause issues if user written code is broken or does unwanted things. **
