@@ -23,7 +23,6 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 
 
 ## Features
-- 
 - supports **select only one** and **default value(s)** selection - so when you enter to a document or a sheet, you can have default value/values selected
   - If you use default values with variables, it's best to set the default value to the variable in the beginning. 
   - Default values can be selected only once.
