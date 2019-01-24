@@ -400,7 +400,7 @@ define( [], function () {
 					toolbarheight: {
 					  ref: "props.toolbarheight",
 					  component: "dropdown",
-					  label: "Toolbar height",
+					  label: "Main toolbar height",
 					  type: "number",
 					  options: [
 							{value: -1,label: "default"},
@@ -412,7 +412,17 @@ define( [], function () {
 							{value: 46,label: "46px"}],
 					  defaultValue: -1,
 					  show: function ( data ) {
-							return  data.props  && !data.props.hideGuiToolbar;
+							return  !data.props.hideGuiToolbar;
+					  }
+					},
+					toolbarTxt: {
+					  ref: "props.toolbarTxt",
+					  expression:"optional",
+					  type: "string",
+					  label: "Main toolbar extra text field",
+					  defaultValue: '',
+					  show: function ( data ) {
+					  	return !data.props.hideGuiToolbar;
 					  }
 					},
 					hideguitoolbarInfo:{

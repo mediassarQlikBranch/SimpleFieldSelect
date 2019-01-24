@@ -8,8 +8,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
+
 	//If nothing selected but should be
-	function checkDefaultValueSelection($element,countselected,layout,self,app){
+	function checkDefaultValueSelection($element,countselected,layout,self,app,sfssettings){
 	  if(debug) console.log('checkin default selection, selected: '+countselected);
 	  
 	  var selectDefaults = layout.props.allwaysOneSelectedDefault != '' || layout.props.selectAlsoThese != '';
@@ -34,9 +35,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (layout.props.visualizationType=='dropdown'){
 				if (layout.props.dimensionIsVariable){
 					defaulttoselect.addClass('selected');
-					selectValueInQlik(self, defaulttoselect.html() ,layout,app,true,$element); //select here, no other defaults
+					selectValueInQlik(self, defaulttoselect.html() ,layout,app,true,$element,sfssettings); //select here, no other defaults
 				} else {
-					selectValueInQlik(self, parseInt(defaulttoselect.val(),10) ,layout,app,true,$element); //select here, no other defaults
+					selectValueInQlik(self, parseInt(defaulttoselect.val(),10) ,layout,app,true,$element,sfssettings); //select here, no other defaults
 				}
 			  
 			  return false; //no need to continue
@@ -58,7 +59,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 		if (valuesToSelect.length>0){
 			if(debug){ console.log('select many'); console.log(valuesToSelect);}
-			selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+			selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 		}
 	  }
 	}
@@ -69,20 +70,20 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	  	checkForcedSelection(layout,self,app,forcedelements);
 	  	return false;
 	  }*/
-	function checkForcedSelection(layout,self,app,forcedelements){
+	function checkForcedSelection(layout,self,app,forcedelements,sfssettings){
 		var valuesToSelect = [];
 		forcedelements.each(function(elem){
 			valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
 		});
 		if (valuesToSelect.length>0){
-			selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+			selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 		}
 	}
-	function selectValueInQlik(self,value,layout,app,selectvalueMethod,$element){ //selectvalueMethod true or false. This is not used for datepicker
+	function selectValueInQlik(self,value,layout,app,selectvalueMethod,$element,sfssettings){ //selectvalueMethod true or false. This is not used for datepicker
 		//Variable
 		if (layout.props.dimensionIsVariable){
 			if(debug) console.log('set variable value to '+value);
-			if (! (layout.props.variableOptionsForValuesArray && layout.props.variableOptionsForValuesArray.length>0)){
+			if (! (sfssettings.variableOptionsForValuesArray && sfssettings.variableOptionsForValuesArray.length>0)){
 				if(debug) console.log('No values in variableOptionsForValuesArray');
 				return;
 			}
@@ -96,7 +97,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				 $element.find('.selected').each(function(sel){
 					var ind = parseInt($(this).attr("dval"));
 					if (ind>=0){
-						varvaluelist.push( layout.props.variableOptionsForValuesArray[ind] );
+						varvaluelist.push( sfssettings.variableOptionsForValuesArray[ind] );
 						varvalueSelectedIndexes.push(ind);
 					}
 				});
@@ -107,7 +108,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					valueTxt = '';
 				}
 			} else {
-				valueTxt = layout.props.variableOptionsForValuesArray[ value ];
+				valueTxt = sfssettings.variableOptionsForValuesArray[ value ];
 				//if value is not defined, forexample nothing is selected for variable.
 				var clearingSelection = 0;
 				if (typeof valueTxt == 'undefined' ){
@@ -123,16 +124,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//set variable
 			app.variable.setStringValue(layout.props.variableName, valueTxt);
 			//set key value too if defined
-			if (layout.props.variableOptionsForKeysArray != [] && layout.props.variableNameForKey && layout.props.variableOptionsForKeysArray[ value ]){
+			if (sfssettings.variableOptionsForKeysArray != [] && layout.props.variableNameForKey && sfssettings.variableOptionsForKeysArray[ value ]){
 				var keyTxt = '';
 				if ( layout.props.varMultiselectAllow){
 					var varkeylist = [];
 					varvalueSelectedIndexes.forEach(function(ind){
-						varkeylist.push(layout.props.variableOptionsForKeysArray[ind]);
+						varkeylist.push(sfssettings.variableOptionsForKeysArray[ind]);
 					});
 					keyTxt = varkeylist.join(layout.props.varMultiselectSep);
 				} else {
-					keyTxt = layout.props.variableOptionsForKeysArray[ value ];
+					keyTxt = sfssettings.variableOptionsForKeysArray[ value ];
 				}
 				if(debug) console.log(' key value '+keyTxt+' to variable ' +layout.props.variableNameForKey);
 				if (clearingSelection){ //if main value is being set to empty, set key also.
@@ -147,11 +148,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 	}
 	//select manyvalues at the same time
-	function selectValuesInQlik(self,values,layout,app,selectvalueMethod,$element){
+	function selectValuesInQlik(self,values,layout,app,selectvalueMethod,$element,sfssettings){
 		if(debug) { console.log('set values to indexes '); console.log(values); }
 		if (layout.props.dimensionIsVariable){
 			var valueToSet = values[0];
-			selectValueInQlik(self,valueToSet,layout,app,selectvalueMethod,$element);
+			selectValueInQlik(self,valueToSet,layout,app,selectvalueMethod,$element,sfssettings);
 		} else {
 			self.backendApi.selectValues( 0, values, selectvalueMethod );
 		}
@@ -246,6 +247,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			var app = qlik.currApp();
 			var pr = layout.props;
 			var visType = pr.visualizationType;
+			var sfssettings = {};
+
 
 			//exit if needed, no dimension, not txtonly, variable empty
 			if (pr.dimensionIsVariable){
@@ -564,6 +567,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					//$(".qv-toolbar-container").css('display','none');
 					csstxt += ' #qv-toolbar-container {display:none!important;}';
 					csstxt += '.qv-panel {height:100%;}';
+				}
+				if (pr.toolbarTxt && !pr.hideGuiToolbar){
+					if ($("#sfstoolbartxt").length==0){
+						$(".qui-buttonset-left").append('<div id="sfstoolbartxt"></div>');
+					}
+					$("#sfstoolbartxt").html(pr.toolbarTxt); //'+pr.toolbarTxt+'
 				}
 				$("#"+sfsglobalCSSid).html('<style>' + csstxt + '</style>');
 				if (pr.hideSheetTitle){
@@ -947,11 +956,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.variableName =='' || !pr.variableName){
 						html += ' <br /> Invalid variable name.';
 					}
+
+					//create lists for variable values
 					var splitted = pr.variableOptionsForValues.split(";");
 					var varindex = 0; //index is used to access variable
-					//create lists for variable values
-					pr.variableOptionsForValuesArray = [];
-					pr.variableOptionsForKeysArray = [];
+					
+					sfssettings.variableOptionsForValuesArray = [];
+					sfssettings.variableOptionsForKeysArray = [];
 					splitted.forEach(function(opt){
 						var qState = 'O';
 						//if values match with current, mark selected
@@ -963,7 +974,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							qState = 'S'; 
 						} //build qlik style object for printing
 						optionsforselect.push( [{qState:qState, qText:opt, qElemNumber:varindex}] );
-						pr.variableOptionsForValuesArray.push(opt); //when setting variable, take value from here.
+						sfssettings.variableOptionsForValuesArray.push(opt); //when setting variable, take value from here.
 						varindex += 1;
 					});
 					if (debug){ console.log(pr.variableOptionsForValues); }
@@ -972,12 +983,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.variableOptionsForKeys != ''){
 						splitted = pr.variableOptionsForKeys.split(";");
 						splitted.forEach(function(opt){
-							pr.variableOptionsForKeysArray.push(opt); //when setting variable, take value from here.
+							sfssettings.variableOptionsForKeysArray.push(opt); //when setting variable, take value from here.
 							varKeyindex += 1;
 						});
 						if (varindex != varKeyindex){
 							console.log('variable values and key options do not match. Values: '+varindex + ' vs. keys: '+varKeyindex);
-							pr.variableOptionsForKeysArray = []; //reset array
+							sfssettings.variableOptionsForKeysArray = []; //reset array
 						}
 					}
 					
@@ -1028,10 +1039,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						checkedstatus = ''; selectedClass = ''; dropselection = '';
 						if (visTypedropdownOrSelect2){
 						  //self.backendApi.selectValues( 0, [ row[0].qElemNumber ], false );
-						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element);
+						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element,sfssettings);
 						} else {
 						  //self.backendApi.selectValues( 0, [ row[0].qElemNumber ], false );
-						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element);
+						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element,sfssettings);
 						}
 						countselected -= 1; //reduce one because deselected
 					}
@@ -1265,7 +1276,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 									return;
 								}
 
-								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 								return;
 							}
 						});
@@ -1312,7 +1323,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							});
 							newselectionsDone = false;
 							if (valuesToSelect != []){
-								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 							}
 						});
 						/*listtargets.on( 'touchstart', function (e) {
@@ -1347,29 +1358,29 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								var value = parseInt( $(this).attr( "dval" ), 10 );
 								if (value != targetValueID){
 								  $(this).removeClass('selected');
-								  selectValueInQlik(self,value,layout,app,true,$element);
+								  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 								}
 							  });
 							}
 							this.classList.toggle("selected");
-							selectValueInQlik(self,targetValueID,layout,app,true,$element);
+							selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 						//deselect, because selected already
 						} else {
 							if (pr.dimensionIsVariable && pr.variableEmptyAlreadySelected){ //for variable "clean"
 								clicktarget.removeClass('selected');
-								selectValueInQlik(self,targetValueID,layout,app,true,$element);
+								selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 							} else {
 								if (pr.dimensionIsVariable && !pr.varMultiselectAllow){
 									if (debug) console.log('no selection change');
 								} else {
 									if (debug) console.log('de selecting');
 									clicktarget.removeClass('selected');
-									selectValueInQlik(self,targetValueID,layout,app,true,$element);
+									selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 									var selectedCount = 0;
 									$element.find( '.selected' ).each(function(){
 									  selectedCount += 1;
 									});
-									checkDefaultValueSelection($element,selectedCount,layout,self,app);
+									checkDefaultValueSelection($element,selectedCount,layout,self,app,sfssettings);
 								}
 							}
 						}
@@ -1389,12 +1400,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							$element.find( '.selected' ).each(function(){ //clear others
 								var value = parseInt( $(this).val(), 10 );
 								if (value != targetValueID){
-								  selectValueInQlik(self,value,layout,app,true,$element);
+								  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 								  $(this).removeClass('selected');
 								}
 							});
 							clicktarget.addClass('selected').prop('selected',true);
-							selectValueInQlik(self,targetValueID,layout,app,true,$element);
+							selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 						} else { //multi
 							var valuesToSelect = [];
 							var targets = $(this).find(":selected");
@@ -1406,7 +1417,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 									$(this).addClass('selected');
 								}
 							});
-							selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+							selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 						}
 					});
 				} else
@@ -1426,12 +1437,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 									var value = parseInt( $(this).attr( "dval" ), 10 );
 									if (value != targetValueID){
 									  $(this).prop('checked',false).removeClass('selected');
-									  selectValueInQlik(self,value,layout,app,true,$element);
+									  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 									}
 								});
 							}
 							clicktarget.addClass('selected'); //to var contorl
-							selectValueInQlik(self,targetValueID,layout,app,true,$element);
+							selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 						  //remove check from box
 						  } else {
 							  //deselect
@@ -1439,14 +1450,14 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							  //var value = parseInt( $(this).attr( "dval" ), 10 );
 							  clicktarget.prop('checked',false).removeClass('selected');
 							  if (debug) console.log(clicktarget.attr("dval"));
-							  selectValueInQlik(self,targetValueID,layout,app,true,$element);
+							  selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 
 							  var selectedCount = 0;
 							  $element.find( 'input:checked' ).each(function(){
 								  selectedCount += 1;
 							  });
 							  //default selection if needed
-							  checkDefaultValueSelection($element,selectedCount,layout,self,app);
+							  checkDefaultValueSelection($element,selectedCount,layout,self,app,sfssettings);
 						  }
 					  }
 				  } );
@@ -1460,7 +1471,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
 							var value = parseInt( clicktarget.attr( "dval" ), 10 );
 							clicktarget.addClass('selected'); //to var contorl
-							selectValueInQlik(self,value,layout,app,true,$element);
+							selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 						}
 					} );
 				//radio action
@@ -1473,17 +1484,17 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								var value = parseInt( $(this).attr( "dval" ), 10 );
 								if (value != targetValueID){
 								  $(this).removeClass('selected');
-								  selectValueInQlik(self,value,layout,app,true,$element);
+								  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 								}
 						});
 						clicktarget.addClass('selected').prop('selected',true);
-						selectValueInQlik(self,targetValueID,layout,app,true,$element);
+						selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 					});
 
 				} //if
 				//sea
 				//as default:
-				checkDefaultValueSelection($element,countselected,layout,self,app);
+				checkDefaultValueSelection($element,countselected,layout,self,app,sfssettings);
 			}
 			//select2 init
 			if (visType=='select2'){
@@ -1588,7 +1599,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								valuesToSelect.push( val );
 							}
 						});
-						selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element);
+						selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 					}
 				});
 				//clear search

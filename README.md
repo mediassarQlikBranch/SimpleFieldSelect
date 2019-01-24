@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Add text object to menu bar
 - Global option to clear all selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
 - Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.

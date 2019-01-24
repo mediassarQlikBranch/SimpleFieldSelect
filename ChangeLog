@@ -1,3 +1,6 @@
+1.9.1
+ - Fix for variable selection after a qlik native object was in full screen mode and selections were made
+ - Global option to add text to menu bar
 1.9.0
  - Global option to clear all selections on first load (on sheet open/arrival)
  - Global option to clear all selections when leaving a sheet
