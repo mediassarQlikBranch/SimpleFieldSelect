@@ -1,3 +1,8 @@
+1.9.3
+ - Option to clear selections of the current field on first load (on sheet open/arrival) and on sheet exit
+ - Fix, clear generated DOM elements on sheet change
+1.9.2
+ - Fix sheet background color with newer Qlik Sense versions
 1.9.1
  - Fix for variable selection after a qlik native object was in full screen mode and selections were made
  - Global option to add text to menu bar

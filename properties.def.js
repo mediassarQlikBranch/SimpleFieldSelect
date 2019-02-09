@@ -196,6 +196,13 @@ define( [], function () {
 						defaultValue: '',
 						expression:"optional"
 					},
+					/*global_bgcolor2: {
+						type: "string",
+						label: "Sheet background color 2",
+						ref: "props.global_bgcolor2",
+						defaultValue: '',
+						expression:"optional"
+					},*/
 					global_bgcss: {
 						type: "string",
 						label: "Sheet background CSS",
@@ -1221,6 +1228,24 @@ define( [], function () {
 							  defaultValue: false,
 							  show: function ( data ) {
 									return  !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
+							  }
+							},
+							clearFieldSelOnFirstLoad: {
+							  ref: "props.clearFieldSelOnFirstLoad",
+							  type: "boolean",
+							  label: "Clear field selections on first load / refresh",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return  !(data.props.dimensionIsVariable) ;
+							  }
+							},
+							clearFieldSelOnLeave: {
+							  ref: "props.clearFieldSelOnLeave",
+							  type: "boolean",
+							  label: "Clear field selections on sheet leave",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return  !(data.props.dimensionIsVariable) ;
 							  }
 							},
 							/*ForceSelections: {

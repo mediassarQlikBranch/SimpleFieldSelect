@@ -9,8 +9,9 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Option to clear selections of the field on sheet leave / enter
 - Add text object to menu bar
-- Global option to clear all selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
+- Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
 - Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.
 - Option to select many values into one variable
@@ -48,6 +49,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 - custom HTML pre/post every element
+- Option to clear selection on sheet enter or leave.
 
 ## Global sheet level settings
 All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.

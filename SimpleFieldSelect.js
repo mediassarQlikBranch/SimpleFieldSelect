@@ -232,6 +232,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (debug) console.log('clear all');
 				var app = qlik.currApp();
 				app.clearAll();
+			} else if (scpr.clearFieldSelOnFirstLoad){
+				if(debug) console.log('clear selections');
+				$scope.backendApi.selectValues( 0, [], false );
+				//var app = qlik.currApp(); //alternative
+				//app.field($scope.layout.qListObject.qDimensionInfo.qFallbackTitle).clear();
 			}
 			if (scpr.enableGlobals && scpr.clearAllSelOnLeave){
 				$scope.$on('$destroy', function (ev) {
@@ -239,7 +244,17 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					var app = qlik.currApp();
 					app.clearAll();
 				});
+			} else if (scpr.clearFieldSelOnLeave){
+				$scope.$on('$destroy', function (ev) {
+					if (debug) console.log('clear selections');
+					$scope.backendApi.selectValues( 0, [], false );
+				});
 			}
+			$scope.$on('$destroy', function (ev) {
+				var contextmenuID = 'sfsrmenu'+$scope.layout.qInfo.qId;
+				$("."+contextmenuID).remove(); //removes if exists
+			});
+			
 		}],
 		paint: function ( $element,layout ) {
 			if (debug){ console.log('start painting '+layout.qInfo.qId); console.log($element);}
@@ -489,7 +504,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					articleElement.append($( '<div id="'+sfsglobalCSSid+'" style="display:none;" class="sfsglobalcss"></div>' ));
 				}
 				if( $(".sfsglobalcss").length>1 ){
-					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled');
+					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove another one.');
 				}
 				/*if (pr.clearAllSelOnFirstLoad && globalAllSelectionsCleared == 0){
 					if (debug) console.log('Clear all sel');
@@ -498,8 +513,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}*/
 				var csstxt = '';
 				if (pr.global_bgcolor){
-					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet { background-color:'+pr.global_bgcolor+';}';
+					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet:not(.qv-custom-size), .sheet-list #grid, .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor+';}';
 				}
+				/*if (pr.global_bgcolor2){
+					csstxt += ' .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor2+';}';
+				}*/
 				if (pr.global_bgcss){
 					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+pr.global_bgcss+'}';
 				}
@@ -1178,7 +1196,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				$element.html( html );
 				//context menu actions
 				if (showContextMenu){
-					
 					var sfsrmenu;
 					var contextmenuID = 'sfsrmenu'+layout.qInfo.qId;
 					if (debug) console.log('create context menu '+contextmenuID)
