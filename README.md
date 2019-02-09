@@ -9,7 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Option to clear selections of the field on sheet leave / enter
+- Option to clear selections of the field on sheet leave / enter. This feature with the clear all option was going to be a customer paid option for this extension but that project failed. :( But here is now this great functionality for free to everyone!
 - Add text object to menu bar
 - Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
