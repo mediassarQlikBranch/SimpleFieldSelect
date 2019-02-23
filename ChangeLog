@@ -1,3 +1,6 @@
+1.9.4
+ - Fixes for Qlik Sense 2019 february. Some dropdown menus for setting font sizes and paddings changed to integers with expression options
+ - Global option to hide new "Data, Analysis, Story" menu on main toolbar
 1.9.3
  - Option to clear selections of the current field on first load (on sheet open/arrival) and on sheet exit
  - Fix, clear generated DOM elements on sheet change
