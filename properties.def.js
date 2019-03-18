@@ -307,6 +307,13 @@ define( [], function () {
 					  type: "boolean",
 					  label: "Clear all selections on sheet leave (requires refresh after this setting has been changed)",
 					  defaultValue: false
+					},
+					keepaliver: {
+					  ref: "props.keepaliver",
+					  label: "Keepalive, send message to server in minutes",
+					  type: "integer",
+					  expression:"optional",
+					  defaultValue: 0
 					}
 				}
 
@@ -1293,7 +1300,8 @@ define( [], function () {
 									rightclikcmenu_reverse:{ref: "props.rightclikcmenu_reverse", type: "boolean",label: "Reverse selections",defaultValue: true},
 									rightclikcmenu_possible:{ref: "props.rightclikcmenu_possible", type: "boolean",label: "Select possible",defaultValue: true},
 									rightclikcmenu_random:{ref: "props.rightclikcmenu_random", type: "boolean",label: "Select randomly (why? well...)",defaultValue: false},
-									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true}
+									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true},
+									rightclikcmenu_copy:{ref: "props.rightclikcmenu_copy", type: "boolean",label: "Copy to clipboard",defaultValue: true}
 								}
 							}
 						}
@@ -1307,7 +1315,7 @@ define( [], function () {
 								ref: "props.enablesearch",
 								type: "boolean",
 								label: "Enable search",
-								defaultValue: false,
+								defaultValue: true,
 								show: function ( data ) {
 									return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
 									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch')
@@ -1419,6 +1427,7 @@ define( [], function () {
 							  type: "string",
 							  label: "Whole object background color (CSS color code, like #123 or red)",
 							  defaultValue: '',
+							  component: "color-picker",
 							  expression:"optional",
 							  show: function ( data ) {
 								return data.qListObjectDef && data.props && !data.props.transparentBackground;

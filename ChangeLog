@@ -1,3 +1,9 @@
+1.9.5
+ - Copy to clipboard -context menu option!! Copies selected or possible values to clipboard.
+ - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) Just keep a sheet open with a object having the keep aliver on.
+ - Context menu fix for Qlik styled checkbox and switch visualizations
+ - There was extra space in few visualizations in the beginning of the label. It is now removed.
+ - Search will be enabled as default when new objects are created
 1.9.4
  - Fixes for Qlik Sense 2019 february. Some dropdown menus for setting font sizes and paddings changed to integers with expression options
  - Global option to hide new "Data, Analysis, Story" menu on main toolbar
