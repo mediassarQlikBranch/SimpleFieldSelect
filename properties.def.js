@@ -1427,7 +1427,6 @@ define( [], function () {
 							  type: "string",
 							  label: "Whole object background color (CSS color code, like #123 or red)",
 							  defaultValue: '',
-							  component: "color-picker",
 							  expression:"optional",
 							  show: function ( data ) {
 								return data.qListObjectDef && data.props && !data.props.transparentBackground;
