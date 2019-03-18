@@ -30,9 +30,9 @@ define( ["ng!$q"], function ($q) {
 	var paddingoptions = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},
 									{value: "4",label: "4px"},{value: "6",label: "6px"},{value: "8",label: "8px"},
 									{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "16",label: "16px"}];
-	var paddingoptions2 = [{value: "-",label: "default"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "6",label: "6px"},
-									{value: "8",label: "8px"},	{value: "10",label: "10px"},{value: "14",label: "14px"},{value: "18",label: "18px"},
-									{value: "22",label: "22px"},{value: "26",label: "26px"},{value: "30",label: "30px"},
+	var paddingoptions2 = [{value: "-",label: "default"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "5",label: "5px"},{value: "6",label: "6px"},
+									{value: "8",label: "8px"},	{value: "10",label: "10px"},{value: "14",label: "14px"},{value: "15",label: "15px"},{value: "18",label: "18px"},
+									{value: "20",label: "20px"},{value: "22",label: "22px"},{value: "26",label: "26px"},{value: "30",label: "30px"},
 									{value: "36",label: "36px"},{value: "42",label: "42px"},{value: "50",label: "50px"}];
 	var sortoptions = [	{value: 1,label: "Ascending"},	{value: 0,label: "No"},	{value: -1,label: "Descending"}];
 	var padandheader = {
@@ -196,6 +196,13 @@ define( ["ng!$q"], function ($q) {
 						defaultValue: '',
 						expression:"optional"
 					},
+					/*global_bgcolor2: {
+						type: "string",
+						label: "Sheet background color 2",
+						ref: "props.global_bgcolor2",
+						defaultValue: '',
+						expression:"optional"
+					},*/
 					global_bgcss: {
 						type: "string",
 						label: "Sheet background CSS",
@@ -242,20 +249,9 @@ define( ["ng!$q"], function ($q) {
 					},
 					sheetTitleFontSize: {
 					  ref: "props.sheetTitleFontSize",
-					  component: "dropdown",
-					  label: "Sheet title font size",
-					  type: "number",
-					  options: [
-							{value: -1,label: "default"},
-							{value: 8,label: "8px"},
-							{value: 10,label: "10px"},
-							{value: 12,label: "12px"},
-							{value: 14,label: "14px"},
-							{value: 16,label: "18px"},
-							{value: 22,label: "22px"},
-							{value: 26,label: "26px"},
-							{value: 30,label: "30px"},
-							{value: 36,label: "36px"}],
+					  //component: "dropdown",
+					  label: "Sheet title font size in px (-1 default)",
+					  type: "integer",expression:"optional",
 					  defaultValue: -1,
 					  show: function ( data ) {
 							return data.props  && !data.props.hideSheetTitle;
@@ -263,23 +259,12 @@ define( ["ng!$q"], function ($q) {
 					},
 					sheetTitleheight: {
 					  ref: "props.sheetTitleheight",
-					  component: "dropdown",
-					  label: "Sheet title height",
-					  type: "number",
-					  options: [
-							{value: -1,label: "default"},
-							{value: 12,label: "12px"},
-							{value: 16,label: "16px"},
-							{value: 20,label: "20px"},
-							{value: 24,label: "24px"},
-							{value: 28,label: "28px"},
-							{value: 32,label: "32px"},
-							{value: 36,label: "36px"},
-							{value: 40,label: "40px"},
-							{value: 48,label: "48px"}],
+					  //component: "dropdown",
+					  label: "Sheet title height in px (-1 default)",
+					  type: "integer",expression:"optional",
 					  defaultValue: -1,
 					  show: function ( data ) {
-							return data.props  && !data.props.hideSheetTitle;
+							return !data.props.hideSheetTitle;
 					  }
 					},
 					sheetTitleExtraText: {
@@ -289,7 +274,7 @@ define( ["ng!$q"], function ($q) {
 					  label: "Sheet title extra text element",
 					  defaultValue: '',
 					  show: function ( data ) {
-							return  data.props  && !data.props.hideSheetTitle;
+							return  !data.props.hideSheetTitle;
 					  }
 					}
 				}
@@ -311,6 +296,25 @@ define( ["ng!$q"], function ($q) {
 					  label: "Hide following fields from the selection bar. Separate by ;",
 					  defaultValue: ""
 					},
+					clearAllSelOnFirstLoad: {
+					  ref: "props.clearAllSelOnFirstLoad",
+					  type: "boolean",
+					  label: "Clear all selections on first load / refresh",
+					  defaultValue: false
+					},
+					clearAllSelOnLeave: {
+					  ref: "props.clearAllSelOnLeave",
+					  type: "boolean",
+					  label: "Clear all selections on sheet leave (requires refresh after this setting has been changed)",
+					  defaultValue: false
+					},
+					keepaliver: {
+					  ref: "props.keepaliver",
+					  label: "Keepalive, send message to server in minutes",
+					  type: "integer",
+					  expression:"optional",
+					  defaultValue: 0
+					}
 				}
 
 			},
@@ -387,20 +391,33 @@ define( ["ng!$q"], function ($q) {
 					},
 					toolbarheight: {
 					  ref: "props.toolbarheight",
-					  component: "dropdown",
-					  label: "Toolbar height",
-					  type: "number",
-					  options: [
-							{value: -1,label: "default"},
-							{value: 26,label: "26px"},
-							{value: 30,label: "30px"},
-							{value: 34,label: "36px"},
-							{value: 38,label: "38px"},
-							{value: 42,label: "42px"},
-							{value: 46,label: "46px"}],
+					  //component: "dropdown",
+					  label: "Main toolbar height in px (default -1)",
+					  type: "integer",expression: "optional",
 					  defaultValue: -1,
 					  show: function ( data ) {
-							return  data.props  && !data.props.hideGuiToolbar;
+							return  !data.props.hideGuiToolbar;
+					  }
+					},
+					toolbarTxt: {
+					  ref: "props.toolbarTxt",
+					  expression:"optional",
+					  type: "string",
+					  label: "Main toolbar extra text field",
+					  defaultValue: '',
+					  show: function ( data ) {
+					  	return !data.props.hideGuiToolbar;
+					  }
+					},
+					hideToolbarCenter: {
+					  ref: "props.hideToolbarCenter",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Hide center part of main toolbar? (data, analysis, story)",
+					  defaultValue: false,
+					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+					  show: function ( data ) {
+					  	return !data.props.hideGuiToolbar;
 					  }
 					},
 					hideguitoolbarInfo:{
@@ -529,12 +546,7 @@ define( ["ng!$q"], function ($q) {
 						component: "dropdown",
 						label: "Header bottom padding",
 						ref: "props.headerBpadding_global",
-						options: [
-							{value: "-",label: "default"},
-							{value: "0",label: "0px"},
-							{value: "5",label: "5px"},
-							{value: "15",label: "15px"},
-							{value: "20",label: "20px"}],
+						options: paddingoptions2,
 						defaultValue: "-",
 						show: function ( data ) {
 							return data.props  && !data.props.removeHeaderFromAllObjects;
@@ -1201,6 +1213,24 @@ define( ["ng!$q"], function ($q) {
 									return  !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
 							  }
 							},
+							clearFieldSelOnFirstLoad: {
+							  ref: "props.clearFieldSelOnFirstLoad",
+							  type: "boolean",
+							  label: "Clear field selections on first load / refresh",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return  !(data.props.dimensionIsVariable) ;
+							  }
+							},
+							clearFieldSelOnLeave: {
+							  ref: "props.clearFieldSelOnLeave",
+							  type: "boolean",
+							  label: "Clear field selections on sheet leave",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return  !(data.props.dimensionIsVariable) ;
+							  }
+							},
 							/*ForceSelections: {
 								type: "string",
 								label: "Force/lock these selections, separate by ;",
@@ -1270,7 +1300,8 @@ define( ["ng!$q"], function ($q) {
 									rightclikcmenu_reverse:{ref: "props.rightclikcmenu_reverse", type: "boolean",label: "Reverse selections",defaultValue: true},
 									rightclikcmenu_possible:{ref: "props.rightclikcmenu_possible", type: "boolean",label: "Select possible",defaultValue: true},
 									rightclikcmenu_random:{ref: "props.rightclikcmenu_random", type: "boolean",label: "Select randomly (why? well...)",defaultValue: false},
-									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true}
+									rightclikcmenu_defaults:{ref: "props.rightclikcmenu_defaults", type: "boolean",label: "Select default values",defaultValue: true},
+									rightclikcmenu_copy:{ref: "props.rightclikcmenu_copy", type: "boolean",label: "Copy to clipboard",defaultValue: true}
 								}
 							}
 						}
@@ -1284,7 +1315,7 @@ define( ["ng!$q"], function ($q) {
 								ref: "props.enablesearch",
 								type: "boolean",
 								label: "Enable search",
-								defaultValue: false,
+								defaultValue: true,
 								show: function ( data ) {
 									return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
 									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch')
@@ -1547,7 +1578,7 @@ define( ["ng!$q"], function ($q) {
 								label: "Custom HTML class for every element",
 								defaultValue: '',
 								show: function ( data ) {
-									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
 								}
 							},
 							customStyleCSS: {
