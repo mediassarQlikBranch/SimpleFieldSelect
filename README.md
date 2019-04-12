@@ -9,7 +9,8 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Copy to clipboard with context menu (right click menu).
+- Resize feature on mouseover
+- Copy text to clipboard with context menu (right click menu).
 - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can use for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on. Only one browser tab with this option on is needed to keep Qlik alive. 
 - Gloabl option to hide new "Data, Analysis, Story" for Qlik Sense 2019 February release 
 - Option to clear selections of the field on sheet leave / enter. This feature with the clear all option was going to be a customer paid option for this extension but that project failed. :( But here is now this great functionality for free to everyone!

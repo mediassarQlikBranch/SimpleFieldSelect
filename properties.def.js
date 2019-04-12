@@ -1075,6 +1075,22 @@ define( [], function () {
 								show: function(data){
 									return data.props && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2')
 								}
+							},
+							mouseenterWidthMult: {
+								ref: "props.mouseenterWidthMult",
+								label: "On mouse enter multiply width by",
+								type: "number",
+								expression:"optional",
+								defaultValue: "1",
+								min: "1"
+							},
+							mouseenterHeightMult: {
+								ref: "props.mouseenterHeightMult",
+								label: "On mouse enter multiply height by",
+								type: "number",
+								expression:"optional",
+								defaultValue: "1",
+								min: "1"
 							}
 						}
 					},

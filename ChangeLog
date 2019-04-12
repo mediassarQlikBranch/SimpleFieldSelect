@@ -1,3 +1,6 @@
+1.9.6
+ - On mouse enter, resize object height and width with multiplier
+ - Bugfix: NaN value handling when selecting values
 1.9.5
  - Copy to clipboard -context menu option!! Copies selected or possible values to clipboard.
  - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) Just keep a sheet open with a object having the keep aliver on.

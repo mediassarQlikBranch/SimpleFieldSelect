@@ -4,7 +4,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	/*if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}*/
-	var debug = 0;
+	var debug = 1;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
@@ -145,7 +145,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		//set field
 		} else {
 			if(debug) console.log('set value to index '+value);
-			self.backendApi.selectValues( 0, [value], selectvalueMethod );
+			if(isNaN(value)){
+				self.backendApi.selectValues( 0, [], selectvalueMethod );
+			} else {
+				self.backendApi.selectValues( 0, [value], selectvalueMethod );
+			}
+			
 		}
 	}
 	//select manyvalues at the same time
@@ -219,6 +224,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.enableGlobals && pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
 				$("#qv-toolbar-container").hide();
 			}
+			//remove attributes origW and origH
 			return false;
 		},
 		/*mounted: function( $element){
@@ -569,6 +575,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				if(pr.hideInsightsButton){
 					csstxt += " .qv-insight-toggle-button {display:none!important;}";
+					//$(".qv-insight-toggle-button").css('display','none'); //make sure
 				}
 				if(pr.hideSelectionsTool){
 					csstxt += ' .qv-subtoolbar-button[tid="currentSelections.toggleGlobalSelections"] {display:none!important;}';
@@ -577,10 +584,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					csstxt += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
 				}
 				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-					if($("#qv-toolbar-container").length>0) { 
-						csstxt += ' #qv-toolbar-container {display:none!important;}';//pre 2019 feb
+					if($("#qv-toolbar-container").length>0) {//pre 2019 feb
+						csstxt += ' #qv-toolbar-container {display:none!important;}';
+						//$("#qv-toolbar-container").css('display','none');
 					} else {
 						csstxt += ' .qs-toolbar-container {display:none!important;}';
+						//$(".qs-toolbar-container").css('display','none');
 					}
 					csstxt += '.qv-panel {height:100%;}';
 				}
@@ -1690,6 +1699,33 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						searchIcon.css('right',-scrollleft);
 					});
 				}
+			}
+			//resize
+			if((pr.mouseenterWidthMult || pr.mouseenterHeightMult) && (pr.mouseenterWidthMult > 1 || pr.mouseenterHeightMult > 1) && $(".qv-mode-edit").length==0){
+				var layoutcontainerdiv = articleElement.parent().parent();
+				layoutcontainerdiv.mouseenter(function(){
+					var origW = layoutcontainerdiv.attr('origW');
+					if (!origW){
+						layoutcontainerdiv.attr('origW', layoutcontainerdiv.width());
+						origW = layoutcontainerdiv.attr('origW');
+						layoutcontainerdiv.attr('origH', layoutcontainerdiv.height());
+						layoutcontainerdiv.attr('origZ', layoutcontainerdiv.css('z-index'));
+						layoutcontainerdiv.attr('origstyle', layoutcontainerdiv.attr('style'));
+					}
+					var origH = layoutcontainerdiv.attr('origH');
+					pr.mouseenterWidthMult = pr.mouseenterWidthMult < 1 ? 1 : pr.mouseenterWidthMult;
+					pr.mouseenterHeightMult = pr.mouseenterHeightMult < 1 ? 1 : pr.mouseenterHeightMult;
+					layoutcontainerdiv.css('width', origW*pr.mouseenterWidthMult).css('height', origH*pr.mouseenterHeightMult).css('z-index',101);
+				});
+				layoutcontainerdiv.mouseleave(function(){
+					/*var origH = layoutcontainerdiv.attr('origH');
+					var origW = layoutcontainerdiv.attr('origW');
+					var origZ = layoutcontainerdiv.attr('origZ');
+					layoutcontainerdiv.css('width', origW).css('height', origH).css('z-index',origZ);*/
+					var origstyle = layoutcontainerdiv.attr('origstyle');
+					layoutcontainerdiv.attr('style',origstyle);
+				});
+				
 			}
 
 			//curent selections to url
