@@ -932,6 +932,22 @@ define( [], function () {
 									{value: "125",label: "125%"}],
 								defaultValue: "100"
 							},
+							fixedfontsize:{
+								ref: "props.fixedfontsize",
+								type: "boolean",
+								label: "Fixed font size",
+								defaultValue: false,
+								show: function ( data ) { return !data.props.responsivefontsize;	}
+							},
+							fixedfontsizevalue: {
+								type: "number",
+								label: "Fixed font size value (like 12.1px)",
+								ref: "props.fixedfontsizevalue",
+								expression:"optional",
+								defaultValue: 12,
+								min: 1, max: 1000,
+								show: function ( data ) { return data.props.fixedfontsize;	}
+							},
 							responsivefontsize:{
 								ref: "props.responsivefontsize",
 								type: "boolean",
@@ -955,6 +971,7 @@ define( [], function () {
 								type: "number",
 								label: "Number value (like 1.1)",
 								ref: "props.responsivefontvalue",
+								expression:"optional",
 								defaultValue: 1.0,
 								show: function ( data ) { return data.props.responsivefontsize;	}
 							},
@@ -982,7 +999,7 @@ define( [], function () {
 							hlistMarginBetween: {
 								type: "string",
 								component: "dropdown",
-								label: "Margin between horizontal list elements",
+								label: "Margin between horizontal list elements in px",
 								ref: "props.hlistMarginBetween",
 								options: [
 									{value: "0",label: "0px"},

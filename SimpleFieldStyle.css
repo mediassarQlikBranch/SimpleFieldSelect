@@ -51,17 +51,24 @@
 }
 
 .qv-object-SimpleFieldSelect li.data {
-	padding: 3px;
+	padding-left: 3px;
 	border-bottom: 1px solid #e5e5e5;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.qv-object-SimpleFieldSelect .vlist li {
+	line-height: 30px;
+}
+
 .qv-object-SimpleFieldSelect ul.horizontal li {
 	display:inline-block;
 	border: 1px solid #ddd;
+	padding: 3px;
 	margin-right:1px;
 	padding-left:5px; padding-right:5px;
+
 }
 .qv-object-SimpleFieldSelect ul.ulastable li{
 	display:table-cell;
@@ -82,14 +89,15 @@
 .qv-object-SimpleFieldSelect li.stateO {
 	background-color:#fff;
 }
-
 .qv-object-SimpleFieldSelect li.stateS, .qv-object-SimpleFieldSelect li.stateL, .qv-object-SimpleFieldSelect input.stateS, .qv-object-SimpleFieldSelect input.stateL, .qv-object-SimpleFieldSelect .ddmulti option.stateL, .qv-object-SimpleFieldSelect .ddmulti option.stateS {
-	background-image: linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
-	color: #fff;
+    background-color: #009845;
+    border-bottom-color: #0aaf54;
+    color: #fff;
+}
+.qv-object-SimpleFieldSelect.qv-selections-active li.selected,.qv-object-SimpleFieldSelect.qv-selections-active li.selected, .qv-object-SimpleFieldSelect li.select2-selection__choice {
+	background-color: #009845;
+    border-bottom-color: #0aaf54;
+    color: #fff;
 }
 
 .qv-object-SimpleFieldSelect li.stateX, .qv-object-SimpleFieldSelect li.stateXL, .qv-object-SimpleFieldSelect li.stateXS, .qv-object-SimpleFieldSelect .ddmulti option.stateXS {
@@ -109,14 +117,7 @@
 	color: #000;
 }
 
-.qv-object-SimpleFieldSelect.qv-selections-active li.selected,.qv-object-SimpleFieldSelect.qv-selections-active li.selected, .qv-object-SimpleFieldSelect li.select2-selection__choice {
-	background-image: linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
-	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
-	color: #fff;
-}
+
 .qv-object-SimpleFieldSelect .disableBGimage {
 	background-image: none !important;
 }
@@ -176,7 +177,7 @@
 }
 
 .qv-object-SimpleFieldSelect.sfsrmenu li:hover {
-	background-color: #4dc04d; /*#DEE;*/
+	background-color: #009845; /*#DEE;*/
 	color:#fafafa;
 }
 .qv-object-SimpleFieldSelect .htmlin {
@@ -305,3 +306,23 @@
 	    line-height: 37px;
 
 }
+/* Old Pre february 2019 colors. Uncomment below */
+/*
+.qv-object-SimpleFieldSelect.qv-selections-active li.selected,.qv-object-SimpleFieldSelect.qv-selections-active li.selected, .qv-object-SimpleFieldSelect li.select2-selection__choice {
+	background-image: linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
+	color: #fff;
+}
+
+.qv-object-SimpleFieldSelect li.stateS, .qv-object-SimpleFieldSelect li.stateL, .qv-object-SimpleFieldSelect input.stateS, .qv-object-SimpleFieldSelect input.stateL, .qv-object-SimpleFieldSelect .ddmulti option.stateL, .qv-object-SimpleFieldSelect .ddmulti option.stateS {
+	background-image: linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -o-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -moz-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -webkit-linear-gradient(top, #52cc52, #4dc04d);
+	background-image: -ms-linear-gradient(top, #52cc52, #4dc04d);
+	color: #fff;
+}
+*/

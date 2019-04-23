@@ -9,6 +9,8 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- **Qlik Sense February 2019 default colors. If you need the old ones, uncommnent last lines from extensions SimpleFieldStyle.css.**
+- Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.
 - Resize feature on mouseover
 - Copy text to clipboard with context menu (right click menu).
 - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can use for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on. Only one browser tab with this option on is needed to keep Qlik alive. 

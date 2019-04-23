@@ -703,8 +703,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			var fontsizechanges = '';
 			if (pr.responsivefontsize){
 				fontsizechanges = ' font-size:'+pr.responsivefontvalue + pr.responsivefonttype+';';
-			} else 
-			if (pr.fontsizeChange && pr.fontsizeChange != '' && pr.fontsizeChange != '100'){
+			} else if (pr.fixedfontsize){
+				fontsizechanges = ' font-size:'+pr.fixedfontsizevalue +'px;';
+			} else if (pr.fontsizeChange && pr.fontsizeChange != '' && pr.fontsizeChange != '100'){
 				fontsizechanges = ' font-size:'+pr.fontsizeChange+'%;';
 			}
 			//border color style
@@ -928,9 +929,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				$element.html( html );
 			//not date or html input:
 			} else {
-				var stylechanges = ' style="'+fontsizechanges+fontStyleTxt+containerStyles+'"';
+				var stylechanges = fontsizechanges+fontStyleTxt+containerStyles;
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
-					html += '<div class="sfs_lui '+objectCSSid+'"'+stylechanges;
+					html += '<div class="sfs_lui '+objectCSSid+'" style="'+stylechanges+'"';
 				} else {
 					html += '<div class="checkboxgroup '+objectCSSid+'"';
 				}
@@ -949,8 +950,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					mainobjectstyle += ' width:'+pr.mainobjectwidth;
 				}
 				if (visType=='vlist'){
-					html += '<ul'+stylechanges+'>';
+					html += '<ul style="'+stylechanges+'" class="vlist">';
 				}else if (visType=='hlist'){
+					
 					var roundcornerClass=' rcorners';
 					if (pr.hlistRoundedcorners===false){
 						roundcornerClass='';
@@ -959,13 +961,22 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.hlistMarginBetween >= 0){ //its defined
 						rmarginclass = ' rmargin'+pr.hlistMarginBetween;
 					}
+					/*var rightmargin = 1;
+					if (pr.hlistMarginBetween >= 0){ //its defined
+
+						rightmargin = pr.hlistMarginBetween;
+					}
+					stylechanges += 'margin-right:'+rightmargin+'px;';
+					*/
 					var displayastableClass = '';
 					if (pr.hlistShowAsTable){
-						displayastableClass = ' ulastable'
+						displayastableClass = ' ulastable';
 					}
-					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+'" '+stylechanges+'>';
+					
+					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+'" style="'+stylechanges+'">';
+
 				} else if (visType=='checkbox' || visType=='radio'){
-					html += '<div '+stylechanges+'>';
+					html += '<div style="'+stylechanges+'">';
 				} else if (visType=='dropdown'){
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
@@ -977,13 +988,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+mainobjectstyle+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding/margin
 				} else if (visType=='btn'){
-					html += '<div '+stylechanges+'>';
+					html += '<div style="'+stylechanges+'">';
 				} else if (visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 
 				} else {
 					html += 'Select visualization type';
 				}
-				
 				//print elements
 				var optionsforselect = [];
 				if (pr.dimensionIsVariable){
@@ -1205,8 +1215,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				html += '</div>';
 				
 				if (pr.helptext){
-						html += createhelptextdiv(pr);
-					}
+					html += createhelptextdiv(pr);
+				}
 				if(paddingDivAdded) html += '</div>';
 				var showContextMenu = 0;
 				if (pr.rightclikcmenu && !pr.dimensionIsVariable && (visType=='hlist' || visType=='vlist' || visType=='checkbox' || visType=='luicheckbox' || visType=='luiswitch' || (visTypedropdownOrSelect2 && pr.selectmultiselect) )) {
