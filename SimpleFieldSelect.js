@@ -64,6 +64,108 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 	  }
 	}
+	function createglobalCSS(pr){
+		var gcss = '';
+		if (pr.global_bgcolor){
+			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet:not(.qv-custom-size), .sheet-list #grid, .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor+';}';
+		}
+		/*if (pr.global_bgcolor2){
+			gcss += ' .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor2+';}';
+		}*/
+		if (pr.global_bgcss){
+			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+pr.global_bgcss+'}';
+		}
+		if (pr.global_borderwidth && pr.global_borderwidth != '-'){
+			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+pr.global_borderwidth+'px;}';
+		}
+		if (pr.global_bordercolor){ //tbfixed, border on more than one level
+			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
+		}
+		if (typeof pr.global_bordercolor2 === 'undefined'){ //use nro 1
+			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
+		} else if (pr.global_bordercolor2){ //tbfixed, border on more than one level
+			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) .qv-object { border-color:'+pr.global_bordercolor2+'!important;}';
+		}
+		if(pr.removeHeaderFromTextImageObjects){
+			gcss += " .qv-object-text-image header {display:none!important;}";
+		}
+		if(pr.removeHeaderFromAllObjects){
+			gcss += " .qv-object header {display:none!important;}";
+		}
+		if(pr.headerTpadding_global && pr.headerTpadding_global != '-'){
+			gcss += " .qv-object header h1 {padding-top:"+pr.headerTpadding_global+"px!important;}";
+		}
+		if(pr.headerBpadding_global && pr.headerBpadding_global != '-'){
+			gcss += " .qv-object header  {padding-bottom:"+pr.headerBpadding_global+"px!important;}";
+		}
+		if(pr.headerfontcolor_global && pr.headerfontcolor_global != ''){
+			gcss += " .qv-object header h1 {color:"+pr.headerfontcolor_global+"!important;}";
+		}
+		if(pr.headerbgcolor_global && pr.headerbgcolor_global != ''){
+			gcss += " .qv-object header {background-color:"+pr.headerbgcolor_global+"!important;}";
+		}
+		if(pr.leftpadding_global && pr.leftpadding_global != '-'){
+			gcss += ' .qv-object .qv-inner-object {padding-left:'+pr.leftpadding_global+'px!important;}';
+		}
+		if(pr.rightpadding_global && pr.rightpadding_global != '-'){
+			gcss += ' .qv-object .qv-inner-object {padding-right:'+pr.rightpadding_global+'px!important;}';
+		}
+		if(pr.removeHeaderIfNoText){
+			gcss += ' .qv-object header.thin {display:none!important;}';
+		}
+		if(pr.fontfamily_global && pr.fontfamily_global != ''){
+			gcss += ' .qv-object * {font-family:"'+pr.fontfamily_global+'";}';
+		}
+		if(pr.global_elementbgcolor && pr.global_elementbgcolor != ''){
+			gcss += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+pr.global_elementbgcolor+'!important;}'; //ow element style
+		}
+		if(pr.global_fontcolor && pr.global_fontcolor != ''){
+			gcss += ' .qv-client #qv-stage-container .qvt-sheet {color:'+pr.global_fontcolor+';}';
+			gcss += ' .qvt-visualization-title, .qv-object-SimpleFieldSelect .inlinelabeldiv, .qv-object .qv-media-tool-html {color:'+pr.global_fontcolor+';}';
+		}
+		if(pr.hidepivotTableSelectors){
+			gcss += " .qv-object .left-meta-headers,.qv-object .top-meta {display:none!important;}";
+		}
+		if(pr.hideInsightsButton){
+			gcss += " .qv-insight-toggle-button {display:none!important;}";
+			//$(".qv-insight-toggle-button").css('display','none'); //make sure
+		}
+		if(pr.hideSelectionsTool){
+			gcss += ' .qv-subtoolbar-button[tid="currentSelections.toggleGlobalSelections"] {display:none!important;}';
+		}
+		if(pr.hideSmartSearchButton){
+			gcss += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
+		}
+		if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+			if($("#qv-toolbar-container").length>0) {//pre 2019 feb
+				gcss += ' #qv-toolbar-container {display:none!important;}';
+				//$("#qv-toolbar-container").css('display','none');
+			} else {
+				gcss += ' .qs-toolbar-container {display:none!important;}';
+				//$(".qs-toolbar-container").css('display','none');
+			}
+			gcss += '.qv-panel {height:100%;}';
+		}
+		if (pr.toolbarTxt && !pr.hideGuiToolbar){
+			if ($("#sfstoolbartxt").length==0){
+				if ($(".qui-buttonset-left").length>0){ //pre 2019 feb
+					$(".qui-buttonset-left").append('<div id="sfstoolbartxt"></div>');
+				} else {
+					$(".qs-toolbar__left").append('<div id="sfstoolbartxt"></div>');
+				}
+			}
+			$("#sfstoolbartxt").html(pr.toolbarTxt); //'+pr.toolbarTxt+'
+		}
+		if(pr.hideToolbarCenter && !pr.hideGuiToolbar){
+			if (pr.hideToolbarCenterPerm){
+				$(".qs-toolbar__center").remove();
+			} else {
+				gcss += ' .qs-toolbar__center {display:none!important;}';	
+			}
+			
+		}
+		return gcss;
+	}
 	//not in use yet
 	//var forcedelements = $element.find('.forcedelem');
 	  //if forced, no need to check defaults
@@ -349,6 +451,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//borders and bg
 			var articleInnerElement = headerelement.parent();
 			var articleElement = articleInnerElement.parent();
+			var gridcell = articleElement.closest('.qv-gridcell');
 			if (pr.transparentBackground){
 				articleElement.css('background-color','transparent');
 				articleInnerElement.css('background-color','transparent');
@@ -361,13 +464,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			if (pr.noBorders){
 				articleElement.css('border-width','0');
-				articleElement.parent().parent().css('border-width','0');
+				gridcell.css('border-width','0');
 			} else {
 				if (pr.ownBordercolor2 != ''){
 					articleElement.css('border-color',pr.ownBordercolor2);
 				}
 				if (pr.ownBordercolor != ''){
-					articleElement.parent().parent().css('border-color',pr.ownBordercolor);
+					gridcell.css('border-color',pr.ownBordercolor);
 				}
 			}
 			if (pr.removeYscroll){
@@ -460,10 +563,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
 				//add hide area if needed
-				if ($(".hideselstyles").length>0){
+				if ($(".sfshideselstyles").length>0){
 					
 				} else {
-					$('.qv-selections-pager').append('<div style="display:none;" class=hideselstyles></div>');
+					$('.qv-selections-pager').append('<div style="display:none;" class="sfshideselstyles"></div>');
 				}
 				//hide global
 				if (pr.hideFieldsFromSelectionBar && pr.hideFieldsFromSelectionBar != ''){
@@ -475,7 +578,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							if ($('#hid'+fieldToHideSelector).length>0){
 							//already hidden
 							} else {
-								$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+								$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
 							}
 						}
 					});
@@ -495,7 +598,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						if ($('#hid'+fieldToHideSelector).length>0){
 							//already hidden
 						} else {
-							$('.hideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
 						}
 					}
 				}
@@ -503,110 +606,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//Globals CSS mod
 			if (pr.enableGlobals){
 				if(debug) console.log('enabled globals ' + layout.qInfo.qId);
-				var sfsglobalCSSid = "SFSglobalCSS"+layout.qInfo.qId
+				var sfsglobalCSSid = "SFSglobalCSS"+layout.qInfo.qId;
 				if ($("#"+sfsglobalCSSid).length>0){
-				
 				} else {
 					articleElement.append($( '<div id="'+sfsglobalCSSid+'" style="display:none;" class="sfsglobalcss"></div>' ));
 				}
 				if( $(".sfsglobalcss").length>1 ){
-					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove another one.');
+					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove others.');
 				}
-				var csstxt = '';
-				if (pr.global_bgcolor){
-					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet:not(.qv-custom-size), .sheet-list #grid, .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor+';}';
-				}
-				/*if (pr.global_bgcolor2){
-					csstxt += ' .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor2+';}';
-				}*/
-				if (pr.global_bgcss){
-					csstxt += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+pr.global_bgcss+'}';
-				}
-				if (pr.global_borderwidth && pr.global_borderwidth != '-'){
-					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+pr.global_borderwidth+'px;}';
-				}
-				if (pr.global_bordercolor){ //tbfixed, border on more than one level
-					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
-				}
-				if (typeof pr.global_bordercolor2 === 'undefined'){ //use nro 1
-					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
-				} else if (pr.global_bordercolor2){ //tbfixed, border on more than one level
-					csstxt += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) .qv-object { border-color:'+pr.global_bordercolor2+'!important;}';
-				}
-				if(pr.removeHeaderFromTextImageObjects){
-					csstxt += " .qv-object-text-image header {display:none!important;}";
-				}
-				if(pr.removeHeaderFromAllObjects){
-					csstxt += " .qv-object header {display:none!important;}";
-				}
-				if(pr.headerTpadding_global && pr.headerTpadding_global != '-'){
-					csstxt += " .qv-object header h1 {padding-top:"+pr.headerTpadding_global+"px!important;}";
-				}
-				if(pr.headerBpadding_global && pr.headerBpadding_global != '-'){
-					csstxt += " .qv-object header  {padding-bottom:"+pr.headerBpadding_global+"px!important;}";
-				}
-				if(pr.headerfontcolor_global && pr.headerfontcolor_global != ''){
-					csstxt += " .qv-object header h1 {color:"+pr.headerfontcolor_global+"!important;}";
-				}
-				if(pr.headerbgcolor_global && pr.headerbgcolor_global != ''){
-					csstxt += " .qv-object header {background-color:"+pr.headerbgcolor_global+"!important;}";
-				}
-				if(pr.leftpadding_global && pr.leftpadding_global != '-'){
-					csstxt += ' .qv-object .qv-inner-object {padding-left:'+pr.leftpadding_global+'px!important;}';
-				}
-				if(pr.rightpadding_global && pr.rightpadding_global != '-'){
-					csstxt += ' .qv-object .qv-inner-object {padding-right:'+pr.rightpadding_global+'px!important;}';
-				}
-				if(pr.removeHeaderIfNoText){
-					csstxt += ' .qv-object header.thin {display:none!important;}';
-				}
-				if(pr.fontfamily_global && pr.fontfamily_global != ''){
-					csstxt += ' .qv-object * {font-family:"'+pr.fontfamily_global+'";}';
-				}
-				if(pr.global_elementbgcolor && pr.global_elementbgcolor != ''){
-					csstxt += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+pr.global_elementbgcolor+'!important;}'; //ow element style
-				}
-				if(pr.global_fontcolor && pr.global_fontcolor != ''){
-					csstxt += ' .qv-client #qv-stage-container .qvt-sheet {color:'+pr.global_fontcolor+';}';
-					csstxt += ' .qvt-visualization-title, .qv-object-SimpleFieldSelect .inlinelabeldiv, .qv-object .qv-media-tool-html {color:'+pr.global_fontcolor+';}';
-				}
-				if(pr.hidepivotTableSelectors){
-					csstxt += " .qv-object .left-meta-headers,.qv-object .top-meta {display:none!important;}";
-				}
-				if(pr.hideInsightsButton){
-					csstxt += " .qv-insight-toggle-button {display:none!important;}";
-					//$(".qv-insight-toggle-button").css('display','none'); //make sure
-				}
-				if(pr.hideSelectionsTool){
-					csstxt += ' .qv-subtoolbar-button[tid="currentSelections.toggleGlobalSelections"] {display:none!important;}';
-				}
-				if(pr.hideSmartSearchButton){
-					csstxt += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
-				}
-				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-					if($("#qv-toolbar-container").length>0) {//pre 2019 feb
-						csstxt += ' #qv-toolbar-container {display:none!important;}';
-						//$("#qv-toolbar-container").css('display','none');
-					} else {
-						csstxt += ' .qs-toolbar-container {display:none!important;}';
-						//$(".qs-toolbar-container").css('display','none');
-					}
-					csstxt += '.qv-panel {height:100%;}';
-				}
-				if (pr.toolbarTxt && !pr.hideGuiToolbar){
-					if ($("#sfstoolbartxt").length==0){
-						if ($(".qui-buttonset-left").length>0){ //pre 2019 feb
-							$(".qui-buttonset-left").append('<div id="sfstoolbartxt"></div>');
-						} else {
-							$(".qs-toolbar__left").append('<div id="sfstoolbartxt"></div>');
-						}
-					}
-					$("#sfstoolbartxt").html(pr.toolbarTxt); //'+pr.toolbarTxt+'
-				}
-				if(pr.hideToolbarCenter && !pr.hideGuiToolbar){
-					csstxt += ' .qs-toolbar__center {display:none!important;}';
-				}
-				$("#"+sfsglobalCSSid).html('<style>' + csstxt + '</style>');
+				$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
 				if (pr.hideSheetTitle){
 					$(".sheet-title-container").hide();
 				} else {
@@ -653,7 +661,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if(pr.keepaliver && pr.keepaliver>0){
 					setKeepaliver(self,pr.keepaliver);
 				}
-			}
+			} //globals
 			//get variable value(s)
 			var varvalue = '', varvalues = {};
 			if (pr.dimensionIsVariable){
@@ -1075,7 +1083,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if(pr.removeLabel){
 						row[0].qText = '';
 					}
-					//var elementid = layout.qInfo.qId+''+row[0].qElemNumber;
+					
 					var defaultelementclass = '',checkedstatus = '',dis = '', selectedClass = '', dropselection = '', otherdefaultelementclass = '';
 					if (row[0].qState === 'S') { 
 						checkedstatus = ' checked'; 
@@ -1712,14 +1720,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			//resize
 			if((pr.mouseenterWidthMult || pr.mouseenterHeightMult) && (pr.mouseenterWidthMult > 1 || pr.mouseenterHeightMult > 1) && $(".qv-mode-edit").length==0){
-				var layoutcontainerdiv = articleElement.parent().parent();
+				if (debug) console.log('resize');
+				var layoutcontainerdiv = articleElement.closest('.qv-gridcell');
 				layoutcontainerdiv.mouseenter(function(){
 					var origW = layoutcontainerdiv.attr('origW');
 					if (!origW){
 						layoutcontainerdiv.attr('origW', layoutcontainerdiv.width());
 						origW = layoutcontainerdiv.attr('origW');
 						layoutcontainerdiv.attr('origH', layoutcontainerdiv.height());
-						layoutcontainerdiv.attr('origZ', layoutcontainerdiv.css('z-index'));
+						//layoutcontainerdiv.attr('origZ', layoutcontainerdiv.css('z-index'));
 						layoutcontainerdiv.attr('origstyle', layoutcontainerdiv.attr('style'));
 					}
 					var origH = layoutcontainerdiv.attr('origH');
@@ -1734,6 +1743,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					layoutcontainerdiv.css('width', origW).css('height', origH).css('z-index',origZ);*/
 					var origstyle = layoutcontainerdiv.attr('origstyle');
 					layoutcontainerdiv.attr('style',origstyle);
+					if (debug) console.log('return');
 				});
 				
 			}

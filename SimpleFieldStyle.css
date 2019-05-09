@@ -304,7 +304,11 @@
 	    font-weight: 700;
 	    white-space: nowrap;
 	    line-height: 37px;
-
+}
+#sfstoolbartxt {
+	height: 30px;
+    overflow: auto;
+    width:100%;
 }
 /* Old Pre february 2019 colors. Uncomment below */
 /*

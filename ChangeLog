@@ -1,3 +1,7 @@
+1.9.8
+ - Toolbar text visualization improvement
+ - Option to make "Data, Analysis, Story" menu hiding permanent on first load so that it doesn't have to be done again on every sheet and wait for all the objects to load before hiding happens. Note that every landing sheet should have this option enabled.
+ - Fix for Aprile 2019 release, borders and mouseover resize functionality
 1.9.7
  - Qlik Sense February 2019 colors. If you need the old ones, uncommnent last lines from extensions SimpleFieldStyle.css.
  - Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.

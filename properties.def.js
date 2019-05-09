@@ -420,6 +420,15 @@ define( [], function () {
 					  	return !data.props.hideGuiToolbar;
 					  }
 					},
+					hideToolbarCenterPerm: {
+					  ref: "props.hideToolbarCenterPerm",
+					  type: "boolean",
+					  label: "Hide center permanently (deletes element, first seen -> removed, appears on page refresh or if landing sheet without this option)",
+					  defaultValue: false,
+					  show: function ( data ) {
+							return data.props.hideToolbarCenter && !data.props.hideGuiToolbar;
+					  }
+					},
 					hideguitoolbarInfo:{
 						component: "text",
 						label: "When main toolbar is hidden you cannot access Edit mode. You have to change last part of the url to /state/edit . Toolbar will be hidden only when not in Edit mode.",
@@ -907,7 +916,37 @@ define( [], function () {
 								options: sortoptions,
 								defaultValue: 0
 								
-							}
+							},
+							/*qSortByExpression: {
+								type: "numeric", component: "dropdown",
+								label: "Sort by expression",
+								ref: "qListObjectDef.qDef.qSortCriterias.0.qSortByExpression",
+								options: sortoptions,
+								defaultValue: 0,
+								change: function(item){
+									item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression;
+								}
+							},
+							qExpression: {
+								type: "string",
+								label: "Sort by expression",
+								ref: "qListObjectDef.qDef.qExpression.qv",
+								defaultValue: " ",expression:"always",component: "expression",
+								show: function(data) {
+									if(data.qListObjectDef.qDef.qSortCriterias[0].qExpression){
+										data.qListObjectDef.qDef.qExpression = data.qListObjectDef.qDef.qExpression ? data.qListObjectDef.qDef.qExpression : {qv: ''};
+										data.qListObjectDef.qDef.qExpression.qv = data.qListObjectDef.qDef.qSortCriterias[0].qExpression.qv;
+									}
+									
+									//data.qDef.qExpression = data.qDef.qExpression ? data.qDef.qExpression : {qv: ''};
+									return data.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression != 0;
+								},
+								change: function(item){
+									var expr = item.qListObjectDef.qDef.qExpression.qv.qStringExpression ? item.qListObjectDef.qDef.qExpression.qv.qStringExpression.qExpr : item.qListObjectDef.qDef.qExpression.qv;
+									item.qListObjectDef.qDef.qSortCriterias[0].qExpression.qv = expr.qv;
+									item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression || 1;
+								}
+							}*/
 						}
 					},
 					padandheader: padandheader,

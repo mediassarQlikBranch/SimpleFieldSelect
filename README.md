@@ -12,7 +12,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - **Qlik Sense February 2019 default colors. If you need the old ones, uncommnent last lines from extensions SimpleFieldStyle.css.**
 - Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.
 - Resize feature on mouseover
-- Copy text to clipboard with context menu (right click menu).
+- Copy text to clipboard with context menu (right click menu). It will copy selected or available values to clipboard.
 - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can use for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on. Only one browser tab with this option on is needed to keep Qlik alive. 
 - Gloabl option to hide new "Data, Analysis, Story" for Qlik Sense 2019 February release 
 - Option to clear selections of the field on sheet leave / enter. This feature with the clear all option was going to be a customer paid option for this extension but that project failed. :( But here is now this great functionality for free to everyone!
@@ -33,7 +33,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox, standard radio button or drop down selector.
 - for variable control there is now almost every HTML5 standard input
-  - for example slider
+  - HTML5 input types: range slider, color picker (color input), date, password, number, time, week, month
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
 - can set variable value from predefined list or via **date picker**
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
