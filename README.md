@@ -32,12 +32,11 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - has a context menu (right click menu) for _select all_, _clear selections_, _reverse selection_, _select possible_, _select default values_, _copy to clipboard_ and _select randomly_ (Just came to my mind, for fun maybe). You can select which options are shown on the menu.
 - will fit on one line - you can disable Qlik Sense default header, paddings, margins and do other tricks to enhance standard visualization
 - renders as a list, button row, checkbox, standard radio button or drop down selector.
-- for variable control there is now almost every HTML5 standard input
-  - HTML5 input types: range slider, color picker (color input), date, password, number, time, week, month
 - custom text fields: label text, tooltip for mouse hovering and help text below the element
-- can set variable value from predefined list or via **date picker**
+- can set variable value from predefined list, HTML5 standard inputs or via **date picker**
   - two variables can be set at the same selection (if you need a value for UI and value for other usage)
   - date picker can limit to min and max date
+  - HTML5 input types: range slider, color picker (color input), date, password, number, time, week, month
 - mobile zoom effect can be disabled. No need for three clicks if you want to select something. **Only one click is enough!!**
 - several posibilities for visual changes like colors, borders etc. Custom CSS classes, HTML attributes can be applied to rendering. In this way you can use for example CSS classes from other libraries to render elements.
   - Show only selected
