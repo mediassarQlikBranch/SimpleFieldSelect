@@ -1,3 +1,11 @@
+1.9.9 
+Teppo O from QlikTech Finland made _again_ few brilliant feature requests for this extension
+ - Global background color can be now targetted to specific objects only
+ - Global option for native Qlik list object coloring (filter pane) and current selection panel.
+ - Global option for custom CSS style for every or selected types of objects
+ - Improved variable handling - still missing select for existing variables but now it is more stable anyway
+ - Flexbox layout - same width to all elements
+ - Custom width and height of element
 1.9.8
  - Toolbar text visualization improvement
  - Option to make "Data, Analysis, Story" menu hiding permanent on first load so that it doesn't have to be done again on every sheet and wait for all the objects to load before hiding happens. Note that every landing sheet should have this option enabled.

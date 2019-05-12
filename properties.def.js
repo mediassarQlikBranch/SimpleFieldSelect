@@ -5,10 +5,17 @@ define( [], function () {
 	//calc variable name IF this is variable selection - should be removed and changed
 	function findVariableName(listobject,props){
 		props.variableName = listobject.qDef.qFieldDefs[0];
+		if (typeof props.variableName == 'object'){
+			if(debug) console.log('set from expr');
+			if ((listobject.qDef.qFieldDefs[0].qStringExpression.qExpr)){
+				props.variableName = listobject.qDef.qFieldDefs[0].qStringExpression.qExpr;
+			} else {
+				props.variableName ='';
+			}
+		}
+		if (debug) console.log('Var type:'+ typeof props.variableName);
 		if (typeof props.variableName == 'string' && props.variableName){
-			if (debug) console.log(typeof props.variableName);
 			props.variableName = props.variableName.replace("=",'');
-
 		} else {
 			props.variableName = '';
 		}
@@ -16,8 +23,7 @@ define( [], function () {
 		if (props.hideFromSelectionRealField && props.hideFromSelectionRealField != ''){
 			props.variableName = props.hideFromSelectionRealField;
 		}
-		if (props.variableName == '' || !props.variableName){
-			//listobject.variableName = listobject.qDimensionInfo.qGroupFieldDefs[0]; //try this one if not defined.
+		/*if (props.variableName == '' || !props.variableName){
 			props.variableName = listobject.qDef.qFieldDefs[0];
 			if(debug){ console.log(typeof props.variableName); }
 			if (typeof props.variableName !== 'undefined' && typeof props.variableName !== 'object'){
@@ -25,7 +31,18 @@ define( [], function () {
 			} else {
 				props.variableName = '';
 			}
+		}*/
+		props.variableName = props.variableName.trim();
+		listobject.qDef.qFieldDefs[0] = props.variableName; //set back
+	}
+	function findVariableValue(data){
+		data.variableValue = data.variableValue || {};
+		if (data.props.variableName && typeof data.props.variableName !== 'object'){
+			data.variableValue.qStringExpression = '="' + data.props.variableName+'"';
+		} else {
+			data.variableValue.qStringExpression = '';
 		}
+		if(debug){ console.log('variable name is '+data.props.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); console.log(data);}
 	}
 	var paddingoptions = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},
 									{value: "4",label: "4px"},{value: "6",label: "6px"},{value: "8",label: "8px"},
@@ -318,6 +335,43 @@ define( [], function () {
 				}
 
 			},
+			globalselections: {
+				type: "items",
+				label: "Qlik native selections",
+				show: function ( data ) {
+					return  data.props && data.props.enableGlobals ;
+				},
+				items: {
+					global_qnseltxt: { //cannot be shown when editing masterobject
+						component: "text",
+						label: "Qlik native filter and current selections color settings",
+						show: function(){
+							return $(".sfsglobalcss").length>1;
+						}
+					},
+					global_selectBGcolor:{
+						type: "string",
+						label: "Background color (red, #123455, rgb(1,2,3))",
+						ref: "props.global_selectBGcolor",
+						defaultValue: '',
+						expression:"optional"
+					},
+					global_selectFontcolor:{
+						type: "string",
+						label: "Text color",
+						ref: "props.global_selectFontcolor",
+						defaultValue: '',
+						expression:"optional"
+					},
+					global_selectBordercolor:{
+						type: "string",
+						label: "Border color",
+						ref: "props.global_selectBordercolor",
+						defaultValue: '',
+						expression:"optional"
+					},
+				}
+			},
 			selectionandcontrol: {
 				type: "items",
 				label: "Selection bar and controls",
@@ -449,6 +503,13 @@ define( [], function () {
 						component: "text",
 						label: "Global object related modifications which will be applied to all objects on the sheet:"
 					},
+					global_customselector:{
+						type: "string",
+						label: "Custom selector, separate with ; (barchart, piechart, scatterplot, gauge, text-image)",
+						ref: "props.global_customselector",
+						defaultValue: '',
+						expression:"optional"
+					},
 					global_elementbgcolor:{
 						type: "string",
 						label: "Object background color",
@@ -456,6 +517,18 @@ define( [], function () {
 						defaultValue: '',
 						expression:"optional"
 					},
+					global_customObjCSS:{
+						type: "string",
+						label: "Custom CSS style for every object",
+						ref: "props.global_customObjCSS",
+						defaultValue: '',
+						expression:"optional"
+					},
+					globalobjectgeneral2:{
+						component: "text",
+						label: "Following will apply to all"
+					},
+					
 					global_bordercolor: {
 						type: "string",
 						label: "Border color",
@@ -604,33 +677,12 @@ define( [], function () {
 						change: function(data) {
 							if (data.props.dimensionIsVariable){
 								findVariableName(data.qListObjectDef,data.props);
-								data.variableValue = data.variableValue || {};
-								if (data.props.variableName && typeof data.props.variableName !== 'object'){
-									data.variableValue.qStringExpression = '=' + data.props.variableName;
-								} else {
-									data.variableValue.qStringExpression = '';
-								}
-								if(debug){ console.log('variable name is '+data.qListObjectDef.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); console.log(data);}
+								findVariableValue(data);
+								
 							}
                         }
 					},
 					
-					/*disableDimensionSelection: {
-							ref: "qListObjectDef.qDef.qExpressions.0.qExpr",
-							label: "Disable dimension selection",
-							type: "string",
-							expression: 'optional',
-							defaultValue: '=count(1)'
-					},
-					bgcolor: {
-							type: "string",
-							component: 'expression',
-							expression: "optional",
-							label: "Background color (css string)",
-							//expression: "always",
-							ref: 'qListObjectDef.qDef.qAttributeExpression.0.qExpression',
-							defaultValue: ''
-						},*/
 					dimensionIsVariable: {
 					  ref: "props.dimensionIsVariable",
 					  type: "boolean",
@@ -639,10 +691,11 @@ define( [], function () {
 					  change: function(data) {
 						if (data.props.dimensionIsVariable){
 							findVariableName(data.qListObjectDef,data.props);
+							findVariableValue(data);
 							//data.props.variableName = data.props.variableName.replace("=",''); //remove mark if exists.
-							data.variableValue = data.variableValue || {};
+							/*data.variableValue = data.variableValue || {};
 							data.variableValue.qStringExpression = '=' + data.props.variableName; //.qDef.qFieldDefs[0];
-							if(debug) console.log('variable expression is =' + data.props.variableName);
+							if(debug) console.log('variable expression is =' + data.props.variableName);*/
 						}
                       }
                     },
@@ -697,6 +750,18 @@ define( [], function () {
 						expression:"optional",
 						ref: "props.textareaonlytext",
 						maxlength: 2000,
+						show: function ( data ) {
+							return data.props.visualizationType=='txtonly';
+						}
+					},
+					textareaonlyCSS: {
+						component: "textarea",
+						rows: 5,
+						label: "CSS style for the container of the textarea",
+						expression:"optional",
+						ref: "props.textareaonlyCSS",
+						maxlength: 2000,
+						defaultValue: 'height:100%;',
 						show: function ( data ) {
 							return data.props.visualizationType=='txtonly';
 						}
@@ -1032,7 +1097,7 @@ define( [], function () {
 							  label: "Rounded corners in horizontal list?",
 							  defaultValue: true,
 							  show: function ( data ) {
-								return data.qListObjectDef && data.props &&  data.props.visualizationType=='hlist' && !data.props.variableIsDate;
+								return  data.props.visualizationType=='hlist' && !data.props.variableIsDate;
 							  }
 							},
 							hlistMarginBetween: {
@@ -1052,7 +1117,7 @@ define( [], function () {
 									{value: "8",label: "8px"}],
 								defaultValue: "1",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.visualizationType=='hlist' && !data.props.variableIsDate;
+									return data.props.visualizationType=='hlist' && !data.props.variableIsDate;
 								}
 							},
 							hlistShowAsTable: {
@@ -1061,8 +1126,34 @@ define( [], function () {
 							  label: "Show as \"table \"?",
 							  defaultValue: false,
 							  show: function ( data ) {
-								return data.qListObjectDef && data.props &&  data.props.visualizationType=='hlist' && !data.props.variableIsDate;
+								return  data.props.visualizationType=='hlist' && !data.props.variableIsDate;
 							  }
+							},
+							displayFlexBox: {
+								ref: "props.displayFlexBox",
+								type: "boolean",
+								label: "Show as flexbox? (fixed width elements)",
+								defaultValue: false,
+								show: function ( data ) {
+									return  !data.props.variableIsDate;
+								}
+							},
+							displayFlexBoxWidth: {
+								ref: "props.displayFlexBoxWidth",
+								type: "string",
+								label: "Flex-box element width (10% or 50px or 5rem or remove default padding calc(50% - 13px))",
+								defaultValue: '',
+								expression:"optional",
+								show: function(d){
+									return d.props.displayFlexBox && !d.props.variableIsDate;
+								}
+
+							},
+							elHeight: {
+								ref: "props.elHeight",type: "string",label: "Element special height (10% or 50px or 5rem or calc(50% - 20px))",defaultValue: '',expression:"optional"
+							},
+							elWidth: {
+								ref: "props.elWidth",type: "string",label: "Element special width",defaultValue: '',expression:"optional",
 							},
 							useMaxHeight: {
 							  ref: "props.useMaxHeight",
@@ -1070,7 +1161,7 @@ define( [], function () {
 							  label: "Use maximum height for the elements",
 							  defaultValue: false,
 							  show: function ( data ) {
-								return data.qListObjectDef && data.props && !data.props.variableIsDate;
+								return !data.props.variableIsDate;
 							  }
 							},
 							textHAlign: {
@@ -1686,7 +1777,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.9 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

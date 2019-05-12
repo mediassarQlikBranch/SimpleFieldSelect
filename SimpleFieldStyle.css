@@ -274,8 +274,19 @@
 	white-space: nowrap;
 }
 .qv-object-SimpleFieldSelect .txtonly {
-	/*height:100%;*/
+	
 }
+
+.qv-object-SimpleFieldSelect .flexboxcont {
+	display:flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	justify-content: space-between;
+}
+.qv-object-SimpleFieldSelect .flexboxcont .sfe {
+	margin-bottom: 2px;
+}
+
 #sfsgetselurl {
 	display: none;
 	width:50%;

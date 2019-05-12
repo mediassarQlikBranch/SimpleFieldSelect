@@ -64,27 +64,73 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 	  }
 	}
+	function checkUserCSSstyle2(css, checkquote){
+		if (css){
+			css.trim();
+			if (css != '' && css.slice(-1) != ';'){
+				css += ';';
+			}
+			if (checkquote){
+				css = css.replace(/"/g, "'"); //replace " to '
+			}
+		} else {
+			css = '';
+		}
+		return css;
+	}
 	function createglobalCSS(pr){
 		var gcss = '';
 		if (pr.global_bgcolor){
 			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet:not(.qv-custom-size), .sheet-list #grid, .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor+';}';
 		}
-		/*if (pr.global_bgcolor2){
-			gcss += ' .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor2+';}';
-		}*/
+		var customObjectSelector = '';//, customParentObjectSelector = '';
+		
+		if (pr.global_customselector){
+			var sArray = [];
+			var selectors = pr.global_customselector.split(";");
+			selectors.forEach(function(i){
+				sArray.push('.qv-object-'+i);
+				//selectors3.push('.qv-gridcell:not(.qv-gridcell-empty):has(> .qv-object-'+i+')');
+			});
+			customObjectSelector = ' '+sArray.join(',');
+			//customParentObjectSelector = ' '+selectors3.join(',');
+		}
 		if (pr.global_bgcss){
 			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+pr.global_bgcss+'}';
 		}
 		if (pr.global_borderwidth && pr.global_borderwidth != '-'){
-			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid :not(.library-dragging)#grid .qv-gridcell.active { border-width:'+pr.global_borderwidth+'px;}';
+			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid:not(.library-dragging)#grid .qv-gridcell.active { border-width:'+pr.global_borderwidth+'px;}';
 		}
 		if (pr.global_bordercolor){ //tbfixed, border on more than one level
+			/*if (customObjectSelector){
+				gcss += customParentObjectSelector+' { border-color:'+pr.global_bordercolor+';}';
+			} else {
+
+				gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
+			}*/
 			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
 		}
 		if (typeof pr.global_bordercolor2 === 'undefined'){ //use nro 1
+			
 			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) { border-color:'+pr.global_bordercolor+';}';
 		} else if (pr.global_bordercolor2){ //tbfixed, border on more than one level
+			
 			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty) .qv-object { border-color:'+pr.global_bordercolor2+'!important;}';
+		}
+		if(pr.global_elementbgcolor && pr.global_elementbgcolor != ''){
+			if (customObjectSelector){
+				gcss += customObjectSelector+' {background-color:'+pr.global_elementbgcolor+'!important;}';
+			} else {
+				gcss += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+pr.global_elementbgcolor+'!important;}'; //ow element style
+			}
+			
+		}
+		if(pr.global_customObjCSS){
+			if (customObjectSelector){
+				gcss += customObjectSelector+' {'+checkUserCSSstyle2(pr.global_customObjCSS,1)+'}';
+			} else {
+				gcss += ' .qv-object {'+ checkUserCSSstyle2(pr.global_customObjCSS,1) +'}';
+			}
 		}
 		if(pr.removeHeaderFromTextImageObjects){
 			gcss += " .qv-object-text-image header {display:none!important;}";
@@ -116,9 +162,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		if(pr.fontfamily_global && pr.fontfamily_global != ''){
 			gcss += ' .qv-object * {font-family:"'+pr.fontfamily_global+'";}';
 		}
-		if(pr.global_elementbgcolor && pr.global_elementbgcolor != ''){
-			gcss += ' .qv-client #qv-stage-container #grid .qv-object-wrapper .qv-inner-object, .qv-client.qv-card #qv-stage-container #grid .qv-object-wrapper .qv-inner-object {background-color:'+pr.global_elementbgcolor+'!important;}'; //ow element style
-		}
+		
 		if(pr.global_fontcolor && pr.global_fontcolor != ''){
 			gcss += ' .qv-client #qv-stage-container .qvt-sheet {color:'+pr.global_fontcolor+';}';
 			gcss += ' .qvt-visualization-title, .qv-object-SimpleFieldSelect .inlinelabeldiv, .qv-object .qv-media-tool-html {color:'+pr.global_fontcolor+';}';
@@ -163,6 +207,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				gcss += ' .qs-toolbar__center {display:none!important;}';	
 			}
 			
+		}
+		if(pr.global_selectBGcolor){
+			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
+			gcss += '.qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}'
+		}
+		if(pr.global_selectBordercolor){
+			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
+		}
+		if(pr.global_selectFontcolor){
+			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { color: '+pr.global_selectFontcolor+';}';
 		}
 		return gcss;
 	}
@@ -485,6 +539,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					extraStyle += ' .'+objectCSSid + ' .lui-radiobutton {padding-right:5px;}'
 				}
 			}
+			if (pr.elWidth){
+				extraStyle += ' .'+objectCSSid +' .sfe {width:'+checkUserCSSstyle2(pr.elWidth,0)+'}';
+			}
+			if (pr.elHeight){
+				extraStyle += ' .'+objectCSSid +' .sfe {height:'+checkUserCSSstyle2(pr.elHeight,0)+'}';
+			}
+			if (pr.displayFlexBox && pr.displayFlexBoxWidth){
+				extraStyle += ' .'+objectCSSid +' .sfe {flex-basis:'+checkUserCSSstyle2(pr.displayFlexBoxWidth,0)+'}';
+			}
 			/*if (layout.props.specialFontcolor){
 				articleElement.css('color',layout.props.specialFontcolor);
 			} else {
@@ -503,6 +566,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (extraStyle){
 				html += '<style>'+extraStyle+'</style>';
 			}
+
 			//padding
 			var paddingDivAdded = 1;
 			var containerDivHeight_reduce = 0;
@@ -679,11 +743,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				fontStyleTxt += ' font:'+checkUserCSSstyle2(pr.customFontCSS, 1);
 			}
 			if (pr.customFontFamilyCSS && pr.customFontFamilyCSS != ''){
-				fontStyleTxt += ' font-family:'+checkUserCSSstyle2(pr.customFontFamilyCSS);
+				fontStyleTxt += ' font-family:'+checkUserCSSstyle2(pr.customFontFamilyCSS,1);
 			}
 			var elementStyleCSS = '';
 			if (pr.customStyleCSS && pr.customStyleCSS != ''){
-				elementStyleCSS = ' '+checkUserCSSstyle2(pr.customStyleCSS);
+				elementStyleCSS = ' '+checkUserCSSstyle2(pr.customStyleCSS,1);
 			}
 			var containerStyles = '';
 			if (pr.useMaxHeight){
@@ -729,6 +793,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.elementmargin && pr.elementmargin != '' && pr.elementmargin != '-'){
 				elementmargin = ' margin:'+pr.elementmargin+'px;';
 			}
+			
 			var titletext = '';
 			if (pr.hovertitletext && pr.hovertitletext != ''){
 				titletext += pr.hovertitletext.replace(/\"/g,'&quot;');
@@ -924,7 +989,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
-				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+'"' +elementExtraAttribute+'>';
+				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+checkUserCSSstyle2(pr.textareaonlyCSS,1)+'"' +elementExtraAttribute+'>';
 				if (pr.textareaonlytext) html += pr.textareaonlytext;
 				if (pr.textareaonlytext2) html += pr.textareaonlytext2;
 				if (pr.helptext){
@@ -957,6 +1022,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.mainobjectwidth){
 					mainobjectstyle += ' width:'+pr.mainobjectwidth;
 				}
+				var displayFlexBoxClass = '';
+				if (pr.displayFlexBox){
+					displayFlexBoxClass = ' flexboxcont';
+				}
 				if (visType=='vlist'){
 					html += '<ul style="'+stylechanges+'" class="vlist">';
 				}else if (visType=='hlist'){
@@ -969,22 +1038,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.hlistMarginBetween >= 0){ //its defined
 						rmarginclass = ' rmargin'+pr.hlistMarginBetween;
 					}
-					/*var rightmargin = 1;
-					if (pr.hlistMarginBetween >= 0){ //its defined
-
-						rightmargin = pr.hlistMarginBetween;
-					}
-					stylechanges += 'margin-right:'+rightmargin+'px;';
-					*/
 					var displayastableClass = '';
 					if (pr.hlistShowAsTable){
 						displayastableClass = ' ulastable';
 					}
 					
-					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+'" style="'+stylechanges+'">';
+					
+					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+displayFlexBoxClass+'" style="'+stylechanges+'">';
 
 				} else if (visType=='checkbox' || visType=='radio'){
-					html += '<div style="'+stylechanges+'">';
+					html += '<div class="'+displayFlexBoxClass+'" style="'+stylechanges+'">';
 				} else if (visType=='dropdown'){
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
@@ -996,7 +1059,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+mainobjectstyle+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding/margin
 				} else if (visType=='btn'){
-					html += '<div style="'+stylechanges+'">';
+					html += '<div class="'+displayFlexBoxClass+'" style="'+stylechanges+'">';
 				} else if (visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 
 				} else {
@@ -1769,20 +1832,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				a += '>'+ pr.helptext + '</div>';
 				return a;
 			}
-			function checkUserCSSstyle2(css, checkquote){
-				if (css){
-					css.trim();
-					if (css != '' && css.slice(-1) != ';'){
-						css += ';';
-					}
-					if (checkquote){
-						css = css.replace(/"/g, "'"); //replace " to '
-					}
-				} else {
-					css = '';
-				}
-				return css;
-			}
+			
 			function setKeepaliver(self,delay){
 				if (keepaliverTimer){
 					clearInterval(keepaliverTimer);

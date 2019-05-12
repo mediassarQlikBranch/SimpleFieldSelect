@@ -9,6 +9,10 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Improved variable handling from version 1.9.9
+- Flexbox layout - same width to all elements
+- Custom width and height of element
+- Global option for native Qlik list object coloring (filter pane) and current selection panel.
 - **Qlik Sense February 2019 default colors. If you need the old ones, uncommnent last lines from extensions SimpleFieldStyle.css.**
 - Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.
 - Resize feature on mouseover
@@ -20,7 +24,6 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
 - Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.
-- Option to select many values into one variable
 - Note! Change to export mode handling in 1.8.6, see release notes
 
 
@@ -51,15 +54,16 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Select2 plugin has been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 - custom HTML pre/post every element
 - Option to clear selection on sheet enter or leave.
-- Responsive font size options
+- Responsive and fixed font size options
 - Menu icon styled right click menu trigger - if export mode is used, right click menu won't work
+- Option to select many values into one variable
 
 
 ## Global sheet level settings
-All following global settings are sheet specific. You can use for example master items if you wan't to have the same settings on same element on every sheet.
+All following global settings are sheet specific. You can use for example master items for one SimpleFieldSelect if you wan't to have the same settings on every sheet.
 
 - Global parameters for a sheet:
-  - Modify background color of the sheet and all objects.
+  - Modify background color of the sheet and all objects (or objects of type).
   - Change border style for all objects on the sheet.
   - Hide any field(s) from the selection bar.
   - Hide sheet title or modify it's size and font-size
@@ -73,7 +77,10 @@ All following global settings are sheet specific. You can use for example master
   - Hide pivot table filter boxes for extra space
   - Hide Smart search, Selections tool and Insights buttons
   - Clear all selections when arriving to sheet and when leaving a sheet
-  - Keep Qlik alive -timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can set time for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on and others don't. Only one browser tab with this option on is needed to keep Qlik alive. 
+  - Keep Qlik alive -timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can set time for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on and others don't. Only one browser tab with this option on is needed to keep Qlik alive.
+  - Remove "Data, Analysis, Story"
+  - Change selection colors for filter pane and selection bar
+
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
 ** Note: To allow extent modification possibilities in this extension some text fields allow Qlik developer to write Javascript, HTML and CSS and this might cause issues if user written code is broken or does unwanted things. **
@@ -84,7 +91,7 @@ This extension is supposed to be very light weight. It has no big libraries atta
 ## Screenshots
 ![Examples](/docs/img/select2demo.PNG?raw=true "Header and Select2 demo" )
 
-![Examples](/docs/img/SFSdemo.JPG?raw=true "Examples" )
+![Examples2](/docs/img/SFSdemo.JPG?raw=true "Examples" )
 
 ![Settings](/docs/img/SFSselections3.PNG "Visual example" )
 
@@ -92,7 +99,17 @@ And context menu for the "missing features":
 
 ![Context menu](/docs/img/contextmenu.PNG "Context menu" )
 
-![Context menu](/docs/img/luidemo.png "Switch and checkbox Qlik style" )
+![Switch](/docs/img/luidemo.png "Switch and checkbox Qlik style" )
+
+![Changesel](/docs/img/SFSselections4.JPG "Change selections default colors" )
+
+![Extratitle](/docs/img/SFSextraTitle.JPG "Extra title text and hide data, analysis and story" )
+
+![SFScustomWH](/docs/img/SFScustomWH.JPG "Custom width and height" )
+
+![SFSflex](/docs/img/SFSflex.JPG "Flexbox" )
+
+
 
 HTML inputs:
 
