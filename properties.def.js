@@ -1422,6 +1422,15 @@ define( [], function () {
 									return !(data.props.dimensionIsVariable);
 							  }
 							},
+							showOnlySelectedItemsShowPossible: {
+							  ref: "props.showOnlySelectedItemsShowPossible",
+							  type: "boolean",
+							  label: "- If nothing is selected, show possible",
+							  defaultValue: false,
+							  show: function ( data ) {
+									return !(data.props.dimensionIsVariable) && data.props.showOnlySelectedItems;
+							  }
+							},
 							rightclikcmenu:{
 								ref: "props.rightclikcmenu",
 								type: "boolean",
@@ -1777,7 +1786,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.9 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.10 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

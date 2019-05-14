@@ -4,7 +4,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	/*if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}*/
-	var debug = false;
+	var debug = 1;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
@@ -585,7 +585,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				html += '"';
 				if (pr.inlinelabelcss){
-					html = ' style="'+checkUserCSSstyle2(pr.inlinelabelcss,1)+'"'
+					html += ' style="'+checkUserCSSstyle2(pr.inlinelabelcss,1)+'"'
 				}
 				html += '>'+pr.inlinelabeltext+'</div> ';
 				html += '</label>';
@@ -793,10 +793,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.elementmargin && pr.elementmargin != '' && pr.elementmargin != '-'){
 				elementmargin = ' margin:'+pr.elementmargin+'px;';
 			}
-			
 			var titletext = '';
 			if (pr.hovertitletext && pr.hovertitletext != ''){
 				titletext += pr.hovertitletext.replace(/\"/g,'&quot;');
+			}
+			var displayFlexBoxClass = '';
+			if (pr.displayFlexBox){
+				displayFlexBoxClass = ' flexboxcont';
 			}
 			//if date select to variable
 			if (pr.variableIsDate && pr.dimensionIsVariable){
@@ -985,7 +988,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.preElemHtml){
 					html += pr.preElemHtml;
 				}
-				html += '<div class="'+objectCSSid+' sfe txtonly '+elementExtraClass+'"';
+				html += '<div class="'+objectCSSid+' sfe txtonly '+elementExtraClass+displayFlexBoxClass+'"';
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
@@ -1004,7 +1007,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			} else {
 				var stylechanges = fontsizechanges+fontStyleTxt+containerStyles;
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
-					html += '<div class="sfs_lui '+objectCSSid+'" style="'+stylechanges+'"';
+					html += '<div class="sfs_lui '+objectCSSid+displayFlexBoxClass+'" style="'+stylechanges+'"';
 				} else {
 					html += '<div class="checkboxgroup '+objectCSSid+'"';
 				}
@@ -1022,10 +1025,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.mainobjectwidth){
 					mainobjectstyle += ' width:'+pr.mainobjectwidth;
 				}
-				var displayFlexBoxClass = '';
-				if (pr.displayFlexBox){
-					displayFlexBoxClass = ' flexboxcont';
-				}
+				
 				if (visType=='vlist'){
 					html += '<ul style="'+stylechanges+'" class="vlist">';
 				}else if (visType=='hlist'){
@@ -1135,13 +1135,31 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.ForceSelections && pr.ForceSelections != ''){
 					forcedValues = pr.ForceSelections.split(";");
 				}
+				
+				//special case, calc selected
+				var calcSelected = 0;
+				if (pr.showOnlySelectedItems && pr.showOnlySelectedItemsShowPossible){
+					if (debug) console.log('calc selected');
+					optionsforselect.forEach( function ( row ) {
+						if (row[0].qState === 'S'){
+							calcSelected = calcSelected+1;
+						}
+					});
+				}
+
 				//paint options
 				optionsforselect.forEach( function ( row ) {
 					if (pr.hidePassiveItems && !pr.dimensionIsVariable && row[0].qState === 'X'){ //if passive hiding enabled
 						return; //exit current function
 					}
-					if (pr.showOnlySelectedItems && !pr.dimensionIsVariable && row[0].qState !== 'S'){
-						return;
+					if (pr.showOnlySelectedItems && !pr.dimensionIsVariable){
+						if (pr.showOnlySelectedItemsShowPossible && calcSelected ==0){
+							//ok, some selected, do not show
+						} else {
+							if(row[0].qState !== 'S'){
+								return;
+							}
+						}
 					}
 					if(pr.removeLabel){
 						row[0].qText = '';
