@@ -1,3 +1,5 @@
+1.9.11
+ - bug fix
 1.9.10
  - Inline label CSS and flex layout fix
  - Extra option for show only possible values: If nothing is selected, show all

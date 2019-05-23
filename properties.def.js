@@ -140,7 +140,7 @@ define( [], function () {
 				type: "items",
 				items: {
 					objectlvltxt: {
-						component: "text",label: "Object level settings"
+						component: "text",label: "Element level settings"
 					},
 					elementpadding: {
 						type:"number",
@@ -1786,7 +1786,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.10 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.11 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

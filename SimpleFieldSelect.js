@@ -1155,6 +1155,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.showOnlySelectedItems && !pr.dimensionIsVariable){
 						if (pr.showOnlySelectedItemsShowPossible && calcSelected ==0){
 							//ok, some selected, do not show
+							if(row[0].qState !== 'O'){
+								return;
+							}
 						} else {
 							if(row[0].qState !== 'S'){
 								return;
