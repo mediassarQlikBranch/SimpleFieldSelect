@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Set font and background colors or custom CSS when mouse hovers on an element.
 - Improved variable handling from version 1.9.9
 - Flexbox layout - same width to all elements
 - Custom width and height of element
