@@ -3,49 +3,51 @@
   display: inline-block;
   margin: 0;
   position: relative;
-  vertical-align: middle; }
-  .qv-object-SimpleFieldSelect .select2-container .select2-selection--single {
-    box-sizing: border-box;
-    cursor: pointer;
-    display: block;
-    height: 28px;
-    user-select: none;
-    -webkit-user-select: none; }
-    .qv-object-SimpleFieldSelect .select2-container .select2-selection--single .select2-selection__rendered {
-      display: block;
-      padding-left: 8px;
-      padding-right: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap; }
-    .qv-object-SimpleFieldSelect .select2-container .select2-selection--single .select2-selection__clear {
-      position: relative; }
-  .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
-    padding-right: 8px;
-    padding-left: 20px; }
-  .qv-object-SimpleFieldSelect .select2-container .select2-selection--multiple {
-    box-sizing: border-box;
-    cursor: pointer;
-    display: block;
-    min-height: 32px;
-    user-select: none;
-    -webkit-user-select: none; }
-    .qv-object-SimpleFieldSelect .select2-container .select2-selection--multiple .select2-selection__rendered {
-      display: inline-block;
-      overflow: hidden;
-      padding-left: 8px;
-      text-overflow: ellipsis;
-      white-space: nowrap; }
-  .qv-object-SimpleFieldSelect .select2-container .select2-search--inline {
-    float: left; }
-    .qv-object-SimpleFieldSelect .select2-container .select2-search--inline .select2-search__field {
-      box-sizing: border-box;
-      border: none;
-      font-size: 100%;
-      margin-top: 5px;
-      padding: 0; }
-      .qv-object-SimpleFieldSelect .select2-container .select2-search--inline .select2-search__field::-webkit-search-cancel-button {
-        -webkit-appearance: none; }
+  vertical-align: middle;
+}
+.qv-object-SimpleFieldSelect .select2-container .select2-selection--single {
+box-sizing: border-box;
+cursor: pointer;
+display: block;
+height: 28px;
+user-select: none;
+-webkit-user-select: none; }
+.qv-object-SimpleFieldSelect .select2-container .select2-selection--single .select2-selection__rendered {
+  display: block;
+  padding-left: 8px;
+  padding-right: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.qv-object-SimpleFieldSelect .select2-container .select2-selection--single .select2-selection__clear {
+  position: relative; }
+.select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
+padding-right: 8px;
+padding-left: 20px; }
+.qv-object-SimpleFieldSelect .select2-container .select2-selection--multiple {
+box-sizing: border-box;
+cursor: pointer;
+display: block;
+min-height: 32px;
+user-select: none;
+-webkit-user-select: none; }
+.qv-object-SimpleFieldSelect .select2-container .select2-selection--multiple .select2-selection__rendered {
+  display: inline-block;
+  overflow: hidden;
+  padding-left: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+.qv-object-SimpleFieldSelect .select2-container .select2-search--inline {
+float: left; }
+.qv-object-SimpleFieldSelect .select2-container .select2-search--inline .select2-search__field {
+  box-sizing: border-box;
+  border: none;
+  font-size: 100%;
+  margin-top: 5px;
+  padding: 0; }
+  .qv-object-SimpleFieldSelect .select2-container .select2-search--inline .select2-search__field::-webkit-search-cancel-button {
+    -webkit-appearance: none; }
 
 .qv-object-SimpleFieldSelect .select2-dropdown {
   background-color: white;
@@ -95,7 +97,7 @@
     box-sizing: border-box; }
     .qv-object-SimpleFieldSelect .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
       -webkit-appearance: none; }
-  .qv-object-SimpleFieldSelect .select2-search--dropdown.select2-search--hide {
+ .qv-object-SimpleFieldSelect .select2-search--dropdown.select2-search--hide {
     display: none; }
 
 .qv-object-SimpleFieldSelect .select2-close-mask {
@@ -212,7 +214,7 @@ display: inline-block;
 font-weight: bold;
 margin-right: 2px; }
 .qv-object-SimpleFieldSelect .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-  color: #333; }
+  color: #333;}
 
 .qv-object-SimpleFieldSelect .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__choice, .qv-object-SimpleFieldSelect .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__placeholder, .qv-object-SimpleFieldSelect .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-search--inline {
   float: right; }
