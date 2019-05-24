@@ -1,3 +1,7 @@
+1.9.12
+ - Hover (when mouse is over an element) font color, background color and custom CSS for hover
+ - Select2 hover color can be now changed
+ - It is now possible to add expressions to advanced CSS section and color settings
 1.9.11
  - bug fix
 1.9.10

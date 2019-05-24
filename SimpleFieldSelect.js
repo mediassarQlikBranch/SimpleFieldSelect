@@ -563,6 +563,23 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.bottompadding && pr.bottompadding != '-'){
 				articleInnerElement.css('padding-bottom',pr.bottompadding+'px');
 			}
+			if (visType=='select2'){
+				if (pr.select2hoverBGcolor){
+					extraStyle += ' .select2-results__option--highlighted[aria-selected] { background-color: '+pr.select2hoverBGcolor+'!important;}';
+				}
+				if (pr.select2hoverFontcolor){
+					extraStyle += ' .select2-results__option--highlighted[aria-selected] { color: '+pr.select2hoverFontcolor+'!important; }';
+				}
+			}
+			if (pr.color_hoverFont){
+				extraStyle += '.'+objectCSSid + ' .sfe:hover {color:'+pr.color_hoverFont+'!important; transition: 0.2s;}';
+			}
+			if (pr.color_hoverBG){
+				extraStyle += '.'+objectCSSid + ' .sfe:hover {background-color:'+pr.color_hoverBG+'!important; transition: 0.2s;}';
+			}
+			if (pr.customHoverCSS){
+				extraStyle += '.'+objectCSSid + ' .sfe:hover {'+checkUserCSSstyle2(pr.customHoverCSS)+'}';
+			}
 			if (extraStyle){
 				html += '<style>'+extraStyle+'</style>';
 			}
@@ -1207,8 +1224,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					
 					var colorclasses = '', elementstyle = '';
-					//if ((visType!='dropdown' && visType!='select2') || pr.selectmultiselect ){
-					
 					//color selections
 					if (row[0].qState === 'S'){
 						//set special color if set
@@ -1624,8 +1639,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						  //remove check from box
 						  } else {
 							  //deselect
-							  if (debug) console.log('deseelct');
-							  //var value = parseInt( $(this).attr( "dval" ), 10 );
+							  if (debug) console.log('deselect');
 							  clicktarget.prop('checked',false).removeClass('selected');
 							  if (debug) console.log(clicktarget.attr("dval"));
 							  selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);

@@ -855,22 +855,19 @@ define( [], function () {
 								type: "string",
 								label: "Min value (optional)",
 								ref: "props.visInputNumberMin",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							visInputNumberMax: {
 								type: "string",
 								label: "Max value (optional)",
 								ref: "props.visInputNumberMax",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							visInputNumberStep: {
 								type: "string",
 								label: "Step ('any' or positive float)",
 								ref: "props.visInputNumberStep",
-								defaultValue: '',
-								expression:"optional",
+								defaultValue: '',expression:"optional",
 								show: function ( data ) {
 									return !data.props.variableIsDate;
 								}
@@ -923,6 +920,18 @@ define( [], function () {
 								show: function ( data ) {
 									return !data.props.dimensionIsVariable && !data.props.selectmultiselect;
 								}
+							},
+							select2hoverBGcolor: {
+								type: "string",
+								label: "Hover background color (red, #fff)",
+								ref: "props.select2hoverBGcolor",
+								defaultValue: '',expression:"optional"
+							},
+							select2hoverFontcolor: {
+								type: "string",
+								label: "Hover font color (red, #fff)",
+								ref: "props.select2hoverFontcolor",
+								defaultValue: '',expression:"optional"
 							}
 						}
 					},
@@ -1142,8 +1151,7 @@ define( [], function () {
 								ref: "props.displayFlexBoxWidth",
 								type: "string",
 								label: "Flex-box element width (10% or 50px or 5rem or remove default padding calc(50% - 13px))",
-								defaultValue: '',
-								expression:"optional",
+								defaultValue: '',expression:"optional",
 								show: function(d){
 									return d.props.displayFlexBox && !d.props.variableIsDate;
 								}
@@ -1538,8 +1546,7 @@ define( [], function () {
 								type: "string",
 								label: "Label text",
 								ref: "props.inlinelabeltext",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							setlabelInline: {
 								ref: "props.inlinelabelSetinline",
@@ -1551,22 +1558,19 @@ define( [], function () {
 								type: "string",
 								label: "Label text CSS",
 								ref: "props.inlinelabelcss",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							helptext: {
 								type: "string",
 								label: "Help text",
 								ref: "props.helptext",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							helptextcss: {
 								type: "string",
 								label: "Help text CSS style",
 								ref: "props.helptextcss",
-								defaultValue: '',
-								expression:"optional",
+								defaultValue: '',expression:"optional",
 								show: function ( data ) {
 									return  data.props.helptext;
 							  }
@@ -1575,8 +1579,7 @@ define( [], function () {
 								type: "string",
 								label: "Text on mouse hover",
 								ref: "props.hovertitletext",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							}
 						}
 					},
@@ -1638,31 +1641,27 @@ define( [], function () {
 							},
 							color_stateS_bg: {
 								type: "string",
-								label: "Selected background",
+								label: "Selected background (Qlik green: #009845)",
 								ref: "props.color_stateS_bg",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateN_bg: {
 								type: "string",
 								label: "Possible selection background",
 								ref: "props.color_stateO_bg",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateA_bg: {
 								type: "string",
 								label: "Alternative selection background",
 								ref: "props.color_stateA_bg",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateX_bg: {
 								type: "string",
 								label: "Excluded selection background",
 								ref: "props.color_stateX_bg",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							fontcolors:{
 								component: "text",
@@ -1672,29 +1671,25 @@ define( [], function () {
 								type: "string",
 								label: "Selected text color",
 								ref: "props.color_stateS_fo",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateN_fo: {
 								type: "string",
 								label: "Possible selection text color",
 								ref: "props.color_stateO_fo",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateA_fo: {
 								type: "string",
 								label: "Alternative selection text color",
 								ref: "props.color_stateA_fo",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							color_stateX_fo: {
 								type: "string",
 								label: "Excluded selection text color",
 								ref: "props.color_stateX_fo",
-								defaultValue: '',
-								expression:"optional"
+								defaultValue: '',expression:"optional"
 							},
 							othercolors:{
 								component: "text",
@@ -1704,16 +1699,26 @@ define( [], function () {
 								type: "string",
 								label: "Border color of an input",
 								ref: "props.color_border",
-								defaultValue: '',
-								expression:"optional"
-							}/*,
-							color_specialFontcolor:{
+								defaultValue: '', expression:"optional"
+							},
+							color_hoverBG:{
 								type: "string",
-								label: "Font color (for the whole object)",
-								ref: "props.specialFontcolor",
-								defaultValue: '',
-								expression:"optional"
-							}*/
+								label: "Hover backgroung color",
+								ref: "props.color_hoverBG",
+								defaultValue: '', expression:"optional",
+								show: function ( data ) {
+									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  	}
+							},
+							color_hoverFont:{
+								type: "string",
+								label: "Hover font color",
+								ref: "props.color_hoverFont",
+								defaultValue: '', expression:"optional",
+								show: function ( data ) {
+									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  	}
+							}
 						}
 					},
 					advancedCSS:{
@@ -1727,19 +1732,19 @@ define( [], function () {
 							  ref: "props.customFontCSS",
 							  type: "string",
 							  label: "Custom \"font:\" css string",
-							  defaultValue: ''
+							  defaultValue: '',expression:"optional"
 							},
 							customFontFamilyCSS: {
 							  ref: "props.customFontFamilyCSS",
 							  type: "string",
 							  label: "Custom \"font-family:\" css string",
-							  defaultValue: ''
+							  defaultValue: '',expression:"optional"
 							},
 							customElementAttribute: {
 							  ref: "props.customElementAttribute",
 							  type: "string",
 							  label: "Custom HTML attribute for every element",
-							  defaultValue: '',
+							  defaultValue: '',expression:"optional",
 							  show: function ( data ) {
 								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
 							  }
@@ -1748,7 +1753,7 @@ define( [], function () {
 							  ref: "props.customElementClass",
 							  type: "string",
 							  label: "Custom HTML class for every element",
-							  defaultValue: '',
+							  defaultValue: '',expression:"optional",
 							  show: function ( data ) {
 								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
 							  }
@@ -1757,19 +1762,28 @@ define( [], function () {
 							  ref: "props.customStyleCSS",
 							  type: "string",
 							  label: "Custom CSS style for every element",
-							  defaultValue: ''
+							  defaultValue: '',expression:"optional"
+							},
+							customHoverCSS: {
+							  ref: "props.customHoverCSS",
+							  type: "string",
+							  label: "Custom hover CSS style for every element",
+							  defaultValue: '',expression:"optional",
+							  show: function ( data ) {
+								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+							  }
 							},
 							preElemHtml: {
 								ref: "props.preElemHtml",
 								type: "string",
 								label: "HTML before every element",
-								defaultValue: ''
+								defaultValue: '',expression:"optional"
 							},
 							postElemHtml: {
 								ref: "props.postElemHtml",
 								type: "string",
 								label: "HTML after every element",
-								defaultValue: ''
+								defaultValue: '',expression:"optional"
 							}
 						}
 					}
@@ -1786,7 +1800,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.11 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.12 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}
