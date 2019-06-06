@@ -9,8 +9,9 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Default colors of Select2 visualization changed to Qlik colors
 - Set font and background colors or custom CSS when mouse hovers on an element.
-- Improved variable handling from version 1.9.9
+- Improved variable handling from version 1.9.9 - more stable and easier to use
 - Flexbox layout - same width to all elements
 - Custom width and height of element
 - Global option for native Qlik list object coloring (filter pane) and current selection panel.

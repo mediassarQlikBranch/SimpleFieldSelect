@@ -1,3 +1,6 @@
+1.9.13
+ - Select2 imporovement, should be stable even with many instances. Clean up on sheet leave. Select2 library upgraded to 4.0.7
+ - Select2 default colors are more Qlik now.
 1.9.12
  - Hover (when mouse is over an element) font color, background color and custom CSS for hover
  - Select2 hover color can be now changed

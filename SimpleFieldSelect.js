@@ -414,8 +414,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				});
 			}
 			$scope.$on('$destroy', function (ev) {
-				var contextmenuID = 'sfsrmenu'+$scope.layout.qInfo.qId;
-				$("."+contextmenuID).remove(); //removes if exists
+				var contextmenuID = 'sfsrmenu';//+$scope.layout.qInfo.qId;
+				$("."+contextmenuID+",.sfssel2c,#sfsselect2").remove(); //removes if exists
 			});
 			
 		}],
@@ -1022,6 +1022,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				$element.html( html );
 			//not date or html input:
 			} else {
+				var visTypedropdownOrSelect2 = visType=='dropdown' || visType=='select2';
 				var stylechanges = fontsizechanges+fontStyleTxt+containerStyles;
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 					html += '<div class="sfs_lui '+objectCSSid+displayFlexBoxClass+'" style="'+stylechanges+'"';
@@ -1034,7 +1035,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				html += '>';
 				var countselected = 0;
 				var multiselect = ''; //dropdown multi
-				if (pr.selectmultiselect && !(pr.dimensionIsVariable && !pr.varMultiselectAllow)) {
+				if (visTypedropdownOrSelect2 && pr.selectmultiselect && !(pr.dimensionIsVariable && !pr.varMultiselectAllow)) {
 					multiselect = ' multiple="multiple"';
 					elementExtraClass = ' ddmulti '+elementExtraClass;
 				}
@@ -1046,7 +1047,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (visType=='vlist'){
 					html += '<ul style="'+stylechanges+'" class="vlist">';
 				}else if (visType=='hlist'){
-					
 					var roundcornerClass=' rcorners';
 					if (pr.hlistRoundedcorners===false){
 						roundcornerClass='';
@@ -1059,10 +1059,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.hlistShowAsTable){
 						displayastableClass = ' ulastable';
 					}
-					
-					
 					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+displayFlexBoxClass+'" style="'+stylechanges+'">';
-
 				} else if (visType=='checkbox' || visType=='radio'){
 					html += '<div class="'+displayFlexBoxClass+'" style="'+stylechanges+'">';
 				} else if (visType=='dropdown'){
@@ -1135,7 +1132,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					optionsforselect = matrixdata;
 				}
 				//dropdown default option
-				var visTypedropdownOrSelect2 = visType=='dropdown' || visType=='select2';
 				if ((visTypedropdownOrSelect2) && !pr.selectmultiselect && pr.dropdownValueForNoSelect && pr.dropdownValueForNoSelect != ''){
 					html += '<option class="state0" dval="" value="">' + pr.dropdownValueForNoSelect;
 					html += '</option>';
@@ -1691,20 +1687,21 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//select2 init
 			if (visType=='select2'){
 				if(debug) console.log('init select2')
-				if ($("#sfsselect2").length>0){
-					//ok
-				} else {
+				if (!$("#sfsselect2").length>0){
 					$( "<style id=sfsselect2>" ).html( select2css ).appendTo( "head" ); //add css.
-					$( "<div id=sfsselect2c class=qv-object-SimpleFieldSelect>" ).html( "" ).appendTo( "body" ); //add css.
+				}
+				var dropdownparent = "sfssel2c"+layout.qInfo.qId;
+				if (!$("#"+dropdownparent).length>0){
+					$( '<div id="'+dropdownparent+'" class="qv-object-SimpleFieldSelect sfssel2c">' ).html( "" ).appendTo( "body" );
 				}
 				var minimumSearchResults = Infinity;
 				if (layout.props.select2enableSerach){
 					minimumSearchResults = 0;
 				}
-				$("#sfsselect2c").html(""); //clear area, select2 may not
+				$("#"+dropdownparent).html(""); //clear area, select2 may not
 				var selectElement = $element.find( '.dropdownsel' );
 				selectElement.select2({
-					'dropdownParent': $("#sfsselect2c"),
+					'dropdownParent': $("#"+dropdownparent),
 					'allowClear': layout.props.select2allowClear,
 					'placeholder': layout.props.visInputPlaceholdertxt,
 					'minimumResultsForSearch': minimumSearchResults,
