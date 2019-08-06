@@ -1,3 +1,5 @@
+1.9.14
+ - Hide Full screen button -option
 1.9.13
  - Select2 imporovement, should be stable even with many instances. Clean up on sheet leave. Select2 library upgraded to 4.0.7
  - Select2 default colors are more Qlik now.

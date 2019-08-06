@@ -1094,6 +1094,12 @@ define( [], function () {
 							  label: "Disable mobile zoom effect? (less clicking)",
 							  defaultValue: true
 							},
+							removeFullScrnBtn: {
+							  ref: "props.removeFullScrnBtn",
+							  type: "boolean",
+							  label: "Remove full screen button",
+							  defaultValue: false
+							},
 							mobileContainerHeight: {
 							  ref: "props.mobileCustomHeightCSS",
 							  type: "string",
@@ -1800,7 +1806,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.12 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.14 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

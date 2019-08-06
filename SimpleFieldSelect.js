@@ -376,9 +376,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (debug) console.log('resize paint');
 				this.paint( $element,layout);
 			}
-			//when exiting edit mode.
-			if(pr.enableGlobals && pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-				$("#qv-toolbar-container").hide();
+			
+			if(pr.enableGlobals){
+				//when exiting edit mode.
+				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+					$("#qv-toolbar-container").hide();
+				}
+				//reset keepaliver
+				if(pr.keepaliver && pr.keepaliver>0){
+					setKeepaliver(self,pr.keepaliver);
+				}
 			}
 			//remove attributes origW and origH
 			return false;
@@ -640,6 +647,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				} else {
 					parent.css('height','65px');
 				}
+			}
+			if(pr.removeFullScrnBtn){
+				var objectwrapper = articleElement.parent().parent();
+				objectwrapper.find('a.lui-icon--expand').remove();
 			}
 			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
