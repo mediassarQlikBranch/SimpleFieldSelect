@@ -203,16 +203,23 @@
 }
 .qv-object-SimpleFieldSelect .sfssearchdiv {
 	display:none;
+	width:100%;
 }
 .qv-object-SimpleFieldSelect .sfssearchIcon {
 	position:absolute;
-	top:0px;
+	top:3px;
 	right:5px;
 	border-radius:3px;
 	padding:4px;
 	z-index: 101;
 	opacity: 0.6;
 	filter: alpha(opacity=60);
+}
+.qv-object-SimpleFieldSelect .sfssearchIconWfullscrn {
+	right:35px;
+}
+.qv-object-SimpleFieldSelect .sfssearchDivWfullscrn {
+	width:calc(100% - 30px);
 }
 .qv-object-SimpleFieldSelect .sfssearchIcon:hover, .qv-object-SimpleFieldSelect .sfssearchinput_clear:hover{
 	cursor:pointer;

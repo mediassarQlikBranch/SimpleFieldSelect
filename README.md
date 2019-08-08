@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Fix for search icon. Since latest(s) Qlik Sense versions Full screen icon was overlapping search icon. This is first quick fix for this issue.
 - Default colors of Select2 visualization changed to Qlik colors
 - Set font and background colors or custom CSS when mouse hovers on an element.
 - Improved variable handling from version 1.9.9 - more stable and easier to use
@@ -25,7 +26,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Add text object to menu bar
 - Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
-- Qlik Sense November's native feature for Always one selected doesn't allow selection through API as before.
+- **Qlik Sense November's (and lataer) native feature for Always one selected doesn't allow selection through API as before.**
 - Note! Change to export mode handling in 1.8.6, see release notes
 
 

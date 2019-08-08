@@ -617,14 +617,23 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			if(pr.enablesearch){
 				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
-				var searchId = 'se'+layout.qInfo.qId;
-				html += '<div class="sfssearchdiv">';
-				html += '<div class="lui-search">';
-				html += '<span class="lui-icon lui-search__search-icon"></span>';
-				html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" maxlength="255" spellcheck="false" type="text" placeholder="Search"/>';
-				html += '<span id="cl'+searchId+'" class="lui-icon lui-search__clear-icon sfssearchinput_clear" title="clear search"></span>';
-				html += '</div></div>';
-				html += '<div class="sfssearchIcon"><span class="lui-icon lui-icon--search"></span></div>';
+					var searchId = 'se'+layout.qInfo.qId;
+					if(pr.removeFullScrnBtn || pr.showHeader){
+						html += '<div class="sfssearchdiv">';
+					} else {
+						html += '<div class="sfssearchdiv sfssearchDivWfullscrn">';
+					}
+					html += '<div class="lui-search">';
+					html += '<span class="lui-icon lui-icon--search"></span>';
+					html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" maxlength="255" spellcheck="false" type="text" placeholder="Search"/>';
+					html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchinput_clear" title="clear search"></span>';
+					html += '</div></div>';
+					if(pr.removeFullScrnBtn || pr.showHeader){
+
+						html += '<div class="sfssearchIcon"><span class="lui-icon lui-icon--search"></span></div>';
+					} else {
+						html += '<div class="sfssearchIcon sfssearchIconWfullscrn"><span class="lui-icon lui-icon--search"></span></div>';
+					}
 				}
 			}
 			//content heigth
