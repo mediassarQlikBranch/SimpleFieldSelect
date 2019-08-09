@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Bugfix: In a mashup variable values may have not been set correctly with latest Qlik Sense versions
 - Fix for search icon. Since latest(s) Qlik Sense versions Full screen icon was overlapping search icon. This is first quick fix for this issue.
 - Default colors of Select2 visualization changed to Qlik colors
 - Set font and background colors or custom CSS when mouse hovers on an element.

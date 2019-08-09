@@ -4,7 +4,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	/*if (!$("#sfscss").length>0){
 		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
 	}*/
-	var debug = false;
+	var debug = 1;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
@@ -279,7 +279,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			if(debug) console.log(' means '+valueTxt+' to variable ' +layout.props.variableName);
 			//set variable
-			app.variable.setStringValue(layout.props.variableName, valueTxt);
+			
+			qlik.currApp(self).variable.setStringValue(layout.props.variableName, valueTxt);
+			//app.variable.setStringValue(layout.props.variableName, valueTxt);
 			//set key value too if defined
 			if (sfssettings.variableOptionsForKeysArray != [] && layout.props.variableNameForKey && sfssettings.variableOptionsForKeysArray[ value ]){
 				var keyTxt = '';
@@ -296,7 +298,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (clearingSelection){ //if main value is being set to empty, set key also.
 					keyTxt = '';
 				}
-				app.variable.setStringValue(layout.props.variableNameForKey, keyTxt);
+				qlik.currApp(self).variable.setStringValue(layout.props.variableNameForKey, keyTxt);
 			}
 		//set field
 		} else {
@@ -907,7 +909,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					$element.find( '.pickdate' ).on( 'change', function () {
 						var newval = $(this).val();
 						if(debug) console.log('NEW '+newval + ' to '+pr.variableName);
-						app.variable.setStringValue(pr.variableName, newval);
+						qlik.currApp(self).variable.setStringValue(pr.variableName, newval);
 					});
 				}
 			//html input for variable
@@ -990,7 +992,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					var newval = $(this).val();
 					if (newval != layout.variableValue){
 						if(debug) console.log('NEW '+newval + ' to '+pr.variableName);
-						app.variable.setStringValue(pr.variableName, newval);
+						qlik.currApp(self).variable.setStringValue(pr.variableName, newval);
 					}
 				});
 				//range actions
@@ -1747,7 +1749,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				select2container.attr('style', select2container.attr('style') +' '+ selectElement.attr('style')); //copy style
 			}
 			//search action:
-			if(layout.props.enablesearch){
+			if(pr.enablesearch){
 				var searchField = $element.find('#'+searchId);
 				var searchIcon = $element.find('.sfssearchIcon');
 				var searchSelectionMethod = 1;

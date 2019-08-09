@@ -1,3 +1,5 @@
+1.9.16
+ - In Mashups variable might not have been updated correctly with latest Qlik Sense versions
 1.9.15
  - Fix for search icon. Since latest Qlik Sense versions Full screen icon was overlapping search icon. This is first quick fix for this issue.
 1.9.14
