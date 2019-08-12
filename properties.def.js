@@ -1806,7 +1806,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.16 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.17 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

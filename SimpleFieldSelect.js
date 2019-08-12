@@ -36,7 +36,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (layout.props.visualizationType=='dropdown'){
 				if (layout.props.dimensionIsVariable){
 					defaulttoselect.addClass('selected');
-					selectValueInQlik(self, defaulttoselect.html() ,layout,app,true,$element,sfssettings); //select here, no other defaults
+					selectValueInQlik(self, parseInt(defaulttoselect.val(),10) ,layout,app,true,$element,sfssettings); //select here, no other defaults
 				} else {
 					selectValueInQlik(self, parseInt(defaulttoselect.val(),10) ,layout,app,true,$element,sfssettings); //select here, no other defaults
 				}
@@ -45,7 +45,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			} else {
 			  if (layout.props.dimensionIsVariable){
 			  	defaulttoselect.addClass('selected');
-			  	valuesToSelect.push( defaulttoselect.html() );
+			  	//valuesToSelect.push( defaulttoselect.html() );
+			  	valuesToSelect.push( parseInt(defaulttoselect.attr( "dval" ),10) );
 			  } else {
 			  	valuesToSelect.push( parseInt(defaulttoselect.attr( "dval" ),10) );
 			  }
@@ -249,6 +250,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				return;	
 			}
 			var valueTxt = '';
+			var clearingSelection = 0;
 			if ( layout.props.varMultiselectAllow){
 				var varvaluelist = [], varvalueSelectedIndexes = [];
 				 $element.find('.selected').each(function(sel){
@@ -266,8 +268,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 			} else {
 				valueTxt = sfssettings.variableOptionsForValuesArray[ value ];
+				if (debug) console.log('Picked variable '+value+' '+valueTxt);
 				//if value is not defined, forexample nothing is selected for variable.
-				var clearingSelection = 0;
+				
 				if (typeof valueTxt == 'undefined' ){
 					valueTxt = '';
 					clearingSelection = 1;
