@@ -1,3 +1,6 @@
+1.9.18
+ - Hide items with a list - define list of item values which you don't want to be shown
+ - Fix: If sheet title height is changed, the title image will be also changed to same setting. Image used to overflow otherwise.
 1.9.17
  - Bug fix: If default value with variable is used it might cause infinite loop and flickering.  Tip: Do not use variable default, set variale value hard coeded instead.
 1.9.16

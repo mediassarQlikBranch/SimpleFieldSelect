@@ -1427,6 +1427,13 @@ define( [], function () {
 									return !(data.props.dimensionIsVariable);
 							  }
 							},
+							hideItems: {
+								type: "string",
+								label: "Hide items by value, separate by ;",
+								ref: "props.hideItems",
+								defaultValue: "",
+								expression:"optional"
+							},
 							showOnlySelectedItems: {
 							  ref: "props.showOnlySelectedItems",
 							  type: "boolean",
@@ -1806,7 +1813,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.17 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.18 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

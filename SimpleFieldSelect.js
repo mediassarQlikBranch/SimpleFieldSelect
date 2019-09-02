@@ -348,6 +348,19 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 		return '';
 	}
+	function setSmallDeviceStuff($element,pr){
+		var parent = $element.closest('.qv-gridcell');
+		//console.log(parent.html());
+		if(pr.mobileRemoveZoom){
+			parent.find('.transparent-overlay').remove(); //remove mobile zoom haveto
+		}
+		//set height, default is too high
+		if(pr.mobileCustomHeightCSS && pr.mobileCustomHeightCSS != ''){
+			parent.css('height',pr.mobileCustomHeightCSS);
+		} else {
+			parent.css('height','65px');
+		}
+	}
 	return {
 		initialProperties: {
 			qListObjectDef: {
@@ -392,7 +405,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					setKeepaliver(self,pr.keepaliver);
 				}
 			}
-			//remove attributes origW and origH
+			if ($('.smallDevice').length >0){ //if changed with inspector
+				setSmallDeviceStuff($element,pr);
+			}
 			return false;
 		},
 		/*mounted: function( $element){
@@ -650,17 +665,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			//change for mobile
 			if ($('.smallDevice').length >0){ //$(window).width()<600
-				var parent = $element.closest('.qv-gridcell');
-				//console.log(parent.html());
-				if(pr.mobileRemoveZoom){
-					parent.find('.transparent-overlay').remove(); //remove mobile zoom haveto
-				}
-				//set height, default is too high
-				if(pr.mobileCustomHeightCSS && pr.mobileCustomHeightCSS != ''){
-					parent.css('height',pr.mobileCustomHeightCSS);
-				} else {
-					parent.css('height','65px');
-				}
+				setSmallDeviceStuff($element,pr);
 			}
 			if(pr.removeFullScrnBtn){
 				var objectwrapper = articleElement.parent().parent();
@@ -730,6 +735,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if(pr.sheetTitleheight && pr.sheetTitleheight != -1){
 						$(".sheet-title-container").css('height',pr.sheetTitleheight +'px');
 						$("#sheet-title").css('height',pr.sheetTitleheight +'px');
+						$("#sheet-title .sheet-title-logo-img img").css('max-height',pr.sheetTitleheight+'px');
 					}
 					if(pr.sheetTitleFontSize && pr.sheetTitleFontSize != -1){
 						$("#sheet-title").css('font-size',pr.sheetTitleFontSize +'px');
@@ -1173,7 +1179,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.ForceSelections && pr.ForceSelections != ''){
 					forcedValues = pr.ForceSelections.split(";");
 				}
-				
+				//hide
+				var hideItems = [];
+				if(pr.hideItems && pr.hideItems != ''){
+
+					hideItems = pr.hideItems.split(";");
+					if (debug) {console.log('hide:'); console.log(hideItems);}
+				}
 				//special case, calc selected
 				var calcSelected = 0;
 				if (pr.showOnlySelectedItems && pr.showOnlySelectedItemsShowPossible){
@@ -1200,6 +1212,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							if(row[0].qState !== 'S'){
 								return;
 							}
+						}
+					}
+					if (hideItems.length>0){ //if items to hide
+						if (hideItems.indexOf(row[0].qText) > -1 ){
+							if (debug) console.log('hide: '+row[0].qText);
+							return;
 						}
 					}
 					if(pr.removeLabel){
