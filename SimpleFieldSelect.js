@@ -210,14 +210,17 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			
 		}
 		if(pr.global_selectBGcolor){
-			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
+			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
 			gcss += '.qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}'
 		}
 		if(pr.global_selectBordercolor){
-			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
+			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
 		}
 		if(pr.global_selectFontcolor){
 			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { color: '+pr.global_selectFontcolor+';}';
+		}
+		if(!pr.hideSheetTitle && pr.sheetTitleCSS && pr.sheetTitleCSS != ''){
+			gcss += '.qv-panel-sheet .sheet-title-container {'+checkUserCSSstyle2(pr.sheetTitleCSS)+'}';
 		}
 		return gcss;
 	}
@@ -617,7 +620,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.helptext){
 				containerDivHeight_reduce += 19; //approximantion px amount of help text size
 			}
-			
+			if(pr.enableoverlay==1){
+				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
+				obgcolor = obgcolor ? obgcolor : '#ababab';
+				html += '<div class="sfsoverlay" style="background-color:'+obgcolor+'">'+pr.overlaytext+'</div>';
+			}
 			//extra label
 			if(pr.inlinelabeltext){
 				html += '<label class=inlinelabel><div class="inlinelabeldiv';
@@ -631,7 +638,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.inlinelabelcss){
 					html += ' style="'+checkUserCSSstyle2(pr.inlinelabelcss,1)+'"'
 				}
-				html += '>'+pr.inlinelabeltext+'</div> ';
+				html += ' title="'+pr.inlinelabeltext+'">'+pr.inlinelabeltext+'</div> ';
 				html += '</label>';
 				
 			}
@@ -727,7 +734,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
 				if (pr.hideSheetTitle){
-					$(".sheet-title-container").hide();
+					//$(".sheet-title-container").hide();
+					document.getElementByClass( 'sheet-title-container' ).style.display = 'none';
 				} else {
 					if(pr.removeSheetTitlePadding){
 						$(".sheet-title-container").css('padding','0');
@@ -746,6 +754,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						}
 						$("#sfsSheetTitleTxt").html(pr.sheetTitleExtraText);
 					}
+					
 				}
 				if (pr.hideSelectionBar){
 					$(".qvt-selections").hide();

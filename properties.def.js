@@ -293,6 +293,16 @@ define( [], function () {
 					  show: function ( data ) {
 							return  !data.props.hideSheetTitle;
 					  }
+					},
+					sheetTitleCSS: {
+					  ref: "props.sheetTitleCSS",
+					  expression:"optional",
+					  type: "string",
+					  label: "Custom sheet title CSS (example: height:100px;)",
+					  defaultValue: '',
+					  show: function ( data ) {
+							return  !data.props.hideSheetTitle;
+					  }
 					}
 				}
 			},
@@ -1520,6 +1530,38 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Enable export support (if enabled right click menu not working)",
 							  defaultValue: false
+							},
+							overlay: {
+								ref: "props.enableoverlay",
+								type:"integer",
+								label:"Show overlay (1 to enable)",
+								defaultValue: 0,
+								expression: 'optional'
+							},
+							overlaysettings: {
+								type: "items",
+								label: "Overlaysettings",
+								show: function ( data ) {
+									return data.qListObjectDef && data.props && data.props.enableoverlay==1;
+								},
+								items: {
+									overlaytext: {
+									  ref: "props.overlaytext",
+									  type: "string",
+									  label: "Overlay text",
+									  defaultValue: '',
+									  expression: 'optional'
+
+									},
+									overlaybgcolor: {
+									  ref: "props.overlaybgcolor",
+									  type: "string",
+									  label: "Overlay background-color",
+									  defaultValue: '#ababab',
+									  expression: 'optional'
+
+									},
+								}
 							}
 						}
 					},

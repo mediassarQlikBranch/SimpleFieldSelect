@@ -1,8 +1,12 @@
+1.9.19
+ - Inline label will be shown in tooltip
+ - Global Native selection background color fix for older Sense releases
+ - Custom CSS for sheet title area
 1.9.18
  - Hide items with a list - define list of item values which you don't want to be shown
  - Fix: If sheet title height is changed, the title image will be also changed to same setting. Image used to overflow otherwise.
 1.9.17
- - Bug fix: If default value with variable is used it might cause infinite loop and flickering.  Tip: Do not use variable default, set variale value hard coeded instead.
+ - Bug fix: If default value with variable is used it might cause infinite loop and flickering.  Tip: Do not use variable default, set variale value hard coded instead.
 1.9.16
  - In Mashups variable might not have been updated correctly with latest Qlik Sense versions
 1.9.15
