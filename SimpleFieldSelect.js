@@ -643,7 +643,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.enableoverlay==1){
 				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
 				obgcolor = obgcolor ? obgcolor : '#ababab';
-				html += '<div class="sfsoverlay" style="background-color:'+obgcolor+'">'+pr.overlaytext+'</div>';
+				html += '<div class="sfsoverlay" style="background-color:'+obgcolor+';'+checkUserCSSstyle2(pr.overlaybgcss)+'"><div class="sfsoverlaycont" style="'+checkUserCSSstyle2(pr.overlaytxtcss)+'">'+pr.overlaytext+'</div></div>';
 			}
 			//extra label
 			if(pr.inlinelabeltext){
@@ -1808,39 +1808,65 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				} else if(visType=='luiswitch'){
 					searchSelectionMethod = 3;
 				}
+				var found = 0;
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					if (filter == ''){
 						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
 					}
+					var filters = [];
+					if(pr.exportenableMultisearchWith){
+						filters = filter.split(pr.exportenableMultisearchWith);
+						filters = filters.map(str => str.trim());
+						filters = filters.filter(function(el) { return el; }); //remove empty
+					} else {
+						filters.push(filter);
+					}
 					var targets = $element.find(".data");
 					if (searchSelectionMethod==2){
 						targets.each(function(){
 							var parent = $(this).parent();
-							//console.log(parent.text());
-							if (parent.text().toLowerCase().indexOf(filter) > -1){
-								parent.removeClass('searchHide').addClass('searchSel');
-							} else {
+							for (var i = 0; i < filters.length; i++) {
+								if (parent.text().toLowerCase().indexOf(filters[i]) > -1){
+									parent.removeClass('searchHide').addClass('searchSel');
+									found = 1;
+								} else {
+									//parent.addClass('searchHide').removeClass('searchSel');
+								}
+							}
+							if(found==0){
 								parent.addClass('searchHide').removeClass('searchSel');
 							}
 						});
 					} else if (searchSelectionMethod==3){
 						targets.each(function(){
 							var parent = $(this).parent().parent();
-							//console.log(parent.text());
-							if (parent.text().toLowerCase().indexOf(filter) > -1){
-								parent.removeClass('searchHide').addClass('searchSel');
-							} else {
+							for (var i = 0; i < filters.length; i++) {
+								if (parent.text().toLowerCase().indexOf(filters[i]) > -1){
+									parent.removeClass('searchHide').addClass('searchSel');
+									found = 1;
+								} else {
+									//parent.addClass('searchHide').removeClass('searchSel');
+								}
+							}
+							if(found==0){
 								parent.addClass('searchHide').removeClass('searchSel');
 							}
 						});
 					} else {
 						targets.each(function(){
-							
-							if ($(this).html().toLowerCase().indexOf(filter) > -1){
-								$(this).removeClass('searchHide').addClass('searchSel');
-							} else {
-								$(this).addClass('searchHide').removeClass('searchSel');
+							found = 0;
+							var thisel = $(this);
+							for (var i = 0; i < filters.length; i++) {
+								if (thisel.html().toLowerCase().indexOf(filters[i]) > -1){
+									thisel.removeClass('searchHide').addClass('searchSel');
+									found = 1;
+								} else {
+									//$(this).addClass('searchHide').removeClass('searchSel');
+								}
+							}
+							if(found==0){
+								thisel.addClass('searchHide').removeClass('searchSel');
 							}
 						});
 					}

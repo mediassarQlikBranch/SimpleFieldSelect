@@ -1552,6 +1552,13 @@ define( [], function () {
 							  label: "Enable export support (if enabled right click menu not working)",
 							  defaultValue: false
 							},
+							exportenableMultisearchWith: {
+								ref: "props.exportenableMultisearchWith",
+								type: "string",
+								label: "Separator character for multiword search (copy-paste list of elements to search)",
+								defaultValue: '',
+								expression: 'optional'
+							},
 							overlay: {
 								ref: "props.enableoverlay",
 								type:"integer",
@@ -1580,7 +1587,20 @@ define( [], function () {
 									  label: "Overlay background-color",
 									  defaultValue: '#ababab',
 									  expression: 'optional'
-
+									},
+									overlaytxtcss: {
+									  ref: "props.overlaytxtcss",
+									  type: "string",
+									  label: "Overlay text CSS",
+									  defaultValue: '',
+									  expression: 'optional'
+									},
+									overlaybgcss: {
+									  ref: "props.overlaybgcss",
+									  type: "string",
+									  label: "Overlay background CSS",
+									  defaultValue: '',
+									  expression: 'optional'
 									},
 								}
 							}
@@ -1876,7 +1896,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.20 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.21 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

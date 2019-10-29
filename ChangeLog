@@ -1,3 +1,6 @@
+1.9.21
+ - User requested feature: Copy-paste multivalue search. You can define separator character for search field so that you can copy-paste multiple values to be searched with one line.
+ - Overlay functionality. Create a canvas on top of selector to prevent selecting.
 1.9.20
  - Global object settings: Custom CSS style for header and header text. Custom CSS for graph axis texts.
 1.9.19
