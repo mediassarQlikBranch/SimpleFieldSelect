@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Global object settings: Custom CSS style for header and header text. Custom CSS for graph axises.
 - Possibility to hide elements by their value with defined list of items to be hidden.
 - Bug fix: If default value with variable is used it might cause infinite loop and flickering.  Tip: Do not use variable default, set variale value hard coeded instead.
 - Bug fix: In a mashup variable values may have not been set correctly with latest Qlik Sense versions

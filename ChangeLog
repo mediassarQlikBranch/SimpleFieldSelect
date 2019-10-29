@@ -1,3 +1,5 @@
+1.9.20
+ - Global object settings: Custom CSS style for header and header text. Custom CSS for graph axis texts.
 1.9.19
  - Inline label will be shown in tooltip
  - Global Native selection background color fix for older Sense releases

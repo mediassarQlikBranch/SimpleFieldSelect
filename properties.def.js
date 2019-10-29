@@ -534,6 +534,27 @@ define( [], function () {
 						defaultValue: '',
 						expression:"optional"
 					},
+					global_cObjHeaderCSS: {
+						type: "string",
+						label: "Custom CSS style for header",
+						ref: "props.global_cObjHeaderCSS",
+						defaultValue: '',
+						expression:"optional"
+					},
+					global_cObjHeaderTxtCSS: {
+						type: "string",
+						label: "Custom CSS style for header text (you may need to use !important to overwrite defaults)",
+						ref: "props.global_cObjHeaderTxtCSS",
+						defaultValue: '',
+						expression:"optional"
+					},
+					global_objAxisCSS: {
+						type: "string",
+						label: "Custom CSS style for axis texts (you may need to use !important to overwrite defaults)",
+						ref: "props.global_objAxisCSS",
+						defaultValue: '',
+						expression:"optional"
+					},
 					globalobjectgeneral2:{
 						component: "text",
 						label: "Following will apply to all"
@@ -1855,7 +1876,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.18 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.20 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

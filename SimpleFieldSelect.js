@@ -85,15 +85,14 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet:not(.qv-custom-size), .sheet-list #grid, .qvt-sheet.qv-custom-size #grid { background-color:'+pr.global_bgcolor+';}';
 		}
 		var customObjectSelector = '';//, customParentObjectSelector = '';
-		
+		var cObjSelectors = [];
 		if (pr.global_customselector){
-			var sArray = [];
 			var selectors = pr.global_customselector.split(";");
 			selectors.forEach(function(i){
-				sArray.push('.qv-object-'+i);
+				cObjSelectors.push('.qv-object-'+i);
 				//selectors3.push('.qv-gridcell:not(.qv-gridcell-empty):has(> .qv-object-'+i+')');
 			});
-			customObjectSelector = ' '+sArray.join(',');
+			customObjectSelector = ' '+cObjSelectors.join(',');
 			//customParentObjectSelector = ' '+selectors3.join(',');
 		}
 		if (pr.global_bgcss){
@@ -132,6 +131,27 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			} else {
 				gcss += ' .qv-object {'+ checkUserCSSstyle2(pr.global_customObjCSS,1) +'}';
 			}
+		}
+		if(pr.global_cObjHeaderCSS){
+			if (customObjectSelector){
+				gcss += ' '+cObjSelectors.join(' .qv-object-header,') +' .qv-object-header {'+checkUserCSSstyle2(pr.global_cObjHeaderCSS,1)+'}';
+			} else {
+				gcss += ' .qv-object .qv-object-header {'+ checkUserCSSstyle2(pr.global_cObjHeaderCSS,1) +'}';
+			}
+		}
+		if(pr.global_cObjHeaderTxtCSS){
+			if (customObjectSelector){
+				gcss += ' '+cObjSelectors.join(' .qv-object-title,') +' .qv-object-title {'+checkUserCSSstyle2(pr.global_cObjHeaderTxtCSS,1)+'}';
+			} else {
+				gcss += ' .qv-object .qv-object-title {'+ checkUserCSSstyle2(pr.global_cObjHeaderTxtCSS,1) +'}';
+			}
+		}
+		if(pr.global_objAxisCSS){
+			if (customObjectSelector){
+				gcss += ' '+cObjSelectors.join(' .lui-fade-button__text,') +' .lui-fade-button__text {'+checkUserCSSstyle2(pr.global_objAxisCSS,1)+'}';
+			} else {
+				gcss += ' .qv-object .lui-fade-button__text {'+ checkUserCSSstyle2(pr.global_objAxisCSS,1) +'}';
+			}	
 		}
 		if(pr.removeHeaderFromTextImageObjects){
 			gcss += " .qv-object-text-image header {display:none!important;}";
