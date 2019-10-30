@@ -1811,9 +1811,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				var found = 0;
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
-					if (filter == ''){
-						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
-					}
+					
 					var filters = [];
 					if(pr.exportenableMultisearchWith){
 						filters = filter.split(pr.exportenableMultisearchWith);
@@ -1821,6 +1819,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else {
 						filters.push(filter);
+					}
+					if (filters.length == 0){
+						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
+						$element.find(".searchHide").removeClass('searchHide');
+						return false;
 					}
 					var targets = $element.find(".data");
 					if (searchSelectionMethod==2){

@@ -1570,7 +1570,7 @@ define( [], function () {
 								type: "items",
 								label: "Overlaysettings",
 								show: function ( data ) {
-									return data.qListObjectDef && data.props && data.props.enableoverlay==1;
+									return data.qListObjectDef && data.props && data.props.enableoverlay;
 								},
 								items: {
 									overlaytext: {

@@ -1,5 +1,7 @@
+1.9.22
+ - Bug fix for overlay and new multiword search
 1.9.21
- - User requested feature: Copy-paste multivalue search. You can define separator character for search field so that you can copy-paste multiple values to be searched with one line.
+ - User requested feature: Copy-paste multivalue search. You can define separator character for search field so that you can copy-paste multiple values to be searched. For example set separator to ; and type into SFS search box London;Paris;Barcelona;New York;Helsinki and those cities will be selected (Wildcards are not supported.)
  - Overlay functionality. Create a canvas on top of selector to prevent selecting.
 1.9.20
  - Global object settings: Custom CSS style for header and header text. Custom CSS for graph axis texts.
