@@ -1,3 +1,5 @@
+1.9.23
+ - Top padding was mising from the element. Because idea is not to break legacy versions, there is also now more modern way to set padding of the visualization with custom padding field.
 1.9.22
  - Bug fix for overlay and new multiword search
 1.9.21

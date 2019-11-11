@@ -613,6 +613,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.bottompadding && pr.bottompadding != '-'){
 				articleInnerElement.css('padding-bottom',pr.bottompadding+'px');
 			}
+			if(pr.toppadding && pr.toppadding != '-'){
+				articleInnerElement.css('padding-top',pr.toppadding+'px');
+			}
+			if(pr.custompadding && pr.custompadding != '-'){
+				articleInnerElement.css('padding',pr.custompadding);
+			}
 			if (visType=='select2'){
 				if (pr.select2hoverBGcolor){
 					extraStyle += ' .select2-results__option--highlighted[aria-selected] { background-color: '+pr.select2hoverBGcolor+'!important;}';

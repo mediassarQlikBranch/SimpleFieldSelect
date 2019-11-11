@@ -92,6 +92,21 @@ define( [], function () {
 						options: paddingoptions,
 						defaultValue: "-"
 					},
+					toppadding: {
+						type: "string",
+						component: "dropdown",
+						label: "Top padding, default margin",
+						ref: "props.toppadding",
+						options: paddingoptions,
+						defaultValue: "-"
+					},
+					custompadding:{
+						type: "string",
+						label: "Custom padding, CSS style (2px or 0px 4px 0px 5px)",
+						ref: "props.custompadding",
+						defaultValue: '',
+						expression:"optional"
+					}
 					showHeader: {
 					  ref: "props.showHeader",
 					  type: "boolean",
@@ -1896,7 +1911,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.21 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.23 Developed by Matti Punkeri / Mediassar Oy"
 							}
 						}
 					}

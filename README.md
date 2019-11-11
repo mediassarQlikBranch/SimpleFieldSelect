@@ -1,7 +1,7 @@
 # Qlik Sense extension for field and variable selections with "missing features"
 
 This extension is an "all in one" selection component with several customization options. It gives Qlik Sense many Qlikview features like select only one, default value and context menu.
-To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide many settings for example inside the year selector. In addition you can set  background color of the sheet, hide title bar, modify all borders, remove Insights button etc.
+To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide many settings for example inside the year selector. In addition you can set  background color of the sheet/objects, hide title bar, modify all borders, remove Insights button etc.
 
 If you have a good idea for further development, let us know.
 
@@ -99,6 +99,8 @@ This extension is supposed to be very light weight. It has no big libraries atta
 
 ## Screenshots
 ![Examples](/docs/img/select2demo.PNG?raw=true "Header and Select2 demo" )
+
+![Overlay](/docs/img/CanvasButton.png?raw=true "Overlay and buttons demo" )
 
 ![Examples2](/docs/img/SFSdemo.JPG?raw=true "Examples" )
 
