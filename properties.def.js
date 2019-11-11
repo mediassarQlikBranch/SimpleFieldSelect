@@ -106,7 +106,7 @@ define( [], function () {
 						ref: "props.custompadding",
 						defaultValue: '',
 						expression:"optional"
-					}
+					},
 					showHeader: {
 					  ref: "props.showHeader",
 					  type: "boolean",
