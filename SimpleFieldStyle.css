@@ -205,6 +205,7 @@
 	display:none;
 	width:100%;
 }
+
 .qv-object-SimpleFieldSelect .sfssearchIcon {
 	position:absolute;
 	top:3px;
@@ -215,11 +216,19 @@
 	opacity: 0.6;
 	filter: alpha(opacity=60);
 }
+.qv-object-SimpleFieldSelect .sfssearchicon2 {
+	height:100%;
+	margin-left:4px;
+	margin-top:2px;
+}
 .qv-object-SimpleFieldSelect .sfssearchIconWfullscrn {
 	right:35px;
 }
 .qv-object-SimpleFieldSelect .sfssearchDivWfullscrn {
 	width:calc(100% - 30px);
+}
+.qv-object-SimpleFieldSelect .sfssearchinput_clear {
+	margin-right:4px;
 }
 .qv-object-SimpleFieldSelect .sfssearchIcon:hover, .qv-object-SimpleFieldSelect .sfssearchinput_clear:hover{
 	cursor:pointer;
@@ -246,7 +255,7 @@
 	filter: alpha(opacity=80);
 }
 .qv-object-SimpleFieldSelect .sfssearchinput {
-
+	margin-left:4px;
 }
 .qv-object-SimpleFieldSelect .searchHide {
 	display: none!important;

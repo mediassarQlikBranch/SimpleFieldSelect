@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Copy-paste multivalue search can be set into excel mode where you can user either list of values from excel in vertical or horizontal mode.
 - Copy-paste multivalue search. You can define separator character for search field so that you can copy-paste multiple values to be searched. For example set separator to ; and type into SFS search box London;Paris;Barcelona;New York;Helsinki and those cities will be selected (Wildcards are not supported.)
 - Overlay functionality. Create a canvas on top of selector to prevent selecting.
 - Global object settings: Custom CSS style for header and header text. Custom CSS for graph axis texts.

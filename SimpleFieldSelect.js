@@ -598,11 +598,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.displayFlexBox && pr.displayFlexBoxWidth){
 				extraStyle += ' .'+objectCSSid +' .sfe {flex-basis:'+checkUserCSSstyle2(pr.displayFlexBoxWidth,0)+'}';
 			}
-			/*if (layout.props.specialFontcolor){
-				articleElement.css('color',layout.props.specialFontcolor);
-			} else {
-				articleElement.css('color','');
-			}*/
 			//left padding in one qlik theme
 			if(pr.leftpadding && pr.leftpadding != '-'){
 				articleInnerElement.css('padding-left',pr.leftpadding+'px');
@@ -672,13 +667,21 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
 					var searchId = 'se'+layout.qInfo.qId;
 					if(pr.removeFullScrnBtn || pr.showHeader){
-						html += '<div class="sfssearchdiv">';
+						html += '<div class="sfssearchdiv"';
 					} else {
-						html += '<div class="sfssearchdiv sfssearchDivWfullscrn">';
+						html += '<div class="sfssearchdiv sfssearchDivWfullscrn"';
 					}
-					html += '<div class="lui-search">';
-					html += '<span class="lui-icon lui-icon--search"></span>';
-					html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" maxlength="255" spellcheck="false" type="text" placeholder="Search"/>';
+					if (pr.searchExcelCopypaste){
+						html += ' style="height:40px;"';
+					}
+					html += '>';
+					html += '<div class="lui-search" style="height:100%;">';
+					html += '<span class="lui-icon lui-icon--search sfssearchicon2"></span>';
+					if (pr.searchExcelCopypaste){
+						html += '<textarea class="lui-search__input sfssearchinput" id="'+searchId+'" spellcheck="false" type="text" placeholder="Search" style="resize: none; height:100%;"></textarea>';
+					} else {
+						html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" spellcheck="false" type="text" placeholder="Search" />';
+					}
 					html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchinput_clear" title="clear search"></span>';
 					html += '</div></div>';
 					if(pr.removeFullScrnBtn || pr.showHeader){
@@ -1815,10 +1818,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					searchSelectionMethod = 3;
 				}
 				var found = 0;
+				searchField.parent().addClass('search-focused');
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
-					
 					var filters = [];
+					if (pr.searchExcelCopypaste){
+						filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
+						filters = filters.map(str => str.trim());
+						filters = filters.filter(function(el) { return el; }); //remove empty
+					} else 
 					if(pr.exportenableMultisearchWith){
 						filters = filter.split(pr.exportenableMultisearchWith);
 						filters = filters.map(str => str.trim());
@@ -1831,7 +1839,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						$element.find(".searchHide").removeClass('searchHide');
 						return false;
 					}
-					var targets = $element.find(".data");
+					var targets = $element.find('.data');
 					if (searchSelectionMethod==2){
 						targets.each(function(){
 							var parent = $(this).parent();

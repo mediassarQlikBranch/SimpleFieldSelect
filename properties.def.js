@@ -1561,10 +1561,11 @@ define( [], function () {
 									);
 							  	}
 							},
-							exportenabled: {
-							  ref: "props.exportenabled",
+							
+							searchExcelCopypaste: {
+							  ref: "props.searchExcelCopypaste",
 							  type: "boolean",
-							  label: "Enable export support (if enabled right click menu not working)",
+							  label: "Multiword search with Excel copy-paste",
 							  defaultValue: false
 							},
 							exportenableMultisearchWith: {
@@ -1572,8 +1573,12 @@ define( [], function () {
 								type: "string",
 								label: "Separator character for multiword search (copy-paste list of elements to search)",
 								defaultValue: '',
-								expression: 'optional'
+								expression: 'optional',
+								show: function(data){
+									return data.props && !data.props.searchExcelCopypaste;
+								}
 							},
+
 							overlay: {
 								ref: "props.enableoverlay",
 								type:"integer",
@@ -1618,6 +1623,12 @@ define( [], function () {
 									  expression: 'optional'
 									},
 								}
+							},
+							exportenabled: {
+							  ref: "props.exportenabled",
+							  type: "boolean",
+							  label: "Enable export support (Qlik native export, if enabled right click menu not working)",
+							  defaultValue: false
 							}
 						}
 					},
@@ -1911,7 +1922,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.23 Developed by Matti Punkeri / Mediassar Oy"
+							label: "Version 1.9.24 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}
