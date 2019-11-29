@@ -1824,12 +1824,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					var filters = [];
 					if (pr.searchExcelCopypaste){
 						filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
-						filters = filters.map(str => str.trim());
+						filters = filters.map(function (str) { return str.trim() });
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else 
 					if(pr.exportenableMultisearchWith){
 						filters = filter.split(pr.exportenableMultisearchWith);
-						filters = filters.map(str => str.trim());
+						filters = filters.map(function (str) { return str.trim() });
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else {
 						filters.push(filter);
