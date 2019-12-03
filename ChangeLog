@@ -1,3 +1,9 @@
+1.9.25
+ - Sheet title hiding fix
+ - Alternative way to set sheet background CSS. This one allows to use background with extended sheet functionality so that background will stay with the moves of the grid.
+ - IE 11 support for search - thanks to github user ahmednuaman for pointing the issue!
+ - Global: Sheet background extra HTML element - experimental feature to have custom HTML on document background.
+  - Try for example this: '<div style="background-color:green; width:100%;height:100px;"></div> <div style="background-color:#A29723; width:calc(100% - 8px);height:calc(100% - 100px); border:4px solid green;"></div><div style="position:fixed; bottom:20px; left:25px; background-color:#d7d7d7;color:#ee1145;padding:10px;border-radius:10px;z-index:1300;">Notice! There is this kind of info box</div>'
 1.9.24
  - Excel copy-paste multisearch feature. Get a list of elements from excel, in vertical or horizontal way and copy paste it to SFS search field. Feature can be enabled from settings.
  - Improvements to search field visuals

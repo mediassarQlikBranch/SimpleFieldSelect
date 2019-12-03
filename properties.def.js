@@ -203,7 +203,7 @@ define( [], function () {
 					},
 					propagationInfo:{
 						component: "text",
-						label: "Most of the following settings are inherited from this sheet to others when user changes sheet. You need to have same settings on other sheets too to have the same effect on every possible landing sheet. Use master items for same settings on every sheet. Changing some of the values back to default requires browser refresh.",					
+						label: "Most of the following settings are inherited from this sheet to others when user changes sheet. You need to have same settings on other sheets too to have the same effect on every possible landing sheet. Use master items for same settings on every sheet. Changing some of the values back to default requires browser refresh.",
 					},
 					errorglobal: { //cannot be shown when editing masterobject
 						component: "text",
@@ -241,6 +241,33 @@ define( [], function () {
 						ref: "props.global_bgcss",
 						defaultValue: '',
 						expression:"optional"
+					},
+					global_bgcss2: {
+						type: "string",
+						label: "Sheet background CSS, sticky with extended sheet",
+						ref: "props.global_bgcss2",
+						defaultValue: '',
+						expression:"optional"
+					},
+					global_bghtmlinfo:{
+						component: "text",
+						label: "Sheet background HTML: If used, there will be full size container created which CSS can be controlled. Inside this container following HTML content will be inserted. \nExample: "+'<div style="background-color:green; width:100%;height:100px;"></div><div style="background-color:#A29723; width:calc(100% - 8px);height:calc(100% - 100px); border:4px solid green;"></div><div style="position:fixed; bottom:20px; left:25px; background-color:#d7d7d7;color:#ee1145;padding:10px;border-radius:10px;z-index:1300;">Notice! There is this kind of info box</div>',
+					},
+					global_bghtml: {
+						type:"string",
+						component:"textarea",
+						label: "Sheet background extra HTML element",
+						ref:"props.global_bghtml",
+						defaultValue:'',
+						expression:'optional'
+					},
+					global_bghtmlcss: {
+						type:"string",
+						component:"textarea",
+						label: "CSS for Sheet background extra HTML element -container",
+						ref:"props.global_bghtmlcss",
+						defaultValue:'',
+						expression:'optional'
 					},
 					global_fontcolor: {
 						type: "string",
@@ -1922,7 +1949,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.24 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 1.9.25 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

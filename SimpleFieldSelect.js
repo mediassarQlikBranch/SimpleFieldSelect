@@ -96,7 +96,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//customParentObjectSelector = ' '+selectors3.join(',');
 		}
 		if (pr.global_bgcss){
-			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+pr.global_bgcss+'}';
+			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+checkUserCSSstyle2(pr.global_bgcss)+'}';
+		}
+		if (pr.global_bgcss2){
+			gcss += ' #grid {'+checkUserCSSstyle2(pr.global_bgcss2)+'}';
 		}
 		if (pr.global_borderwidth && pr.global_borderwidth != '-'){
 			gcss += ' .sheet-grid .qv-gridcell:not(.qv-gridcell-empty),.qv-mode-edit .qv-gridcell:not(.qv-gridcell-empty), .sheet-grid:not(.library-dragging)#grid .qv-gridcell.active { border-width:'+pr.global_borderwidth+'px;}';
@@ -762,9 +765,18 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove others.');
 				}
 				$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
+				if(pr.global_bghtml){
+					var basestyle = 'position: absolute;top: 0px;right: 0px;left: 0px;bottom: 0px;';
+					if ($("#sfsgridbg").length>0){
+						$("#sfsgridbg").html(pr.global_bghtml);
+						$("#sfsgridbg").attr('style',basestyle+checkUserCSSstyle2(pr.global_bghtmlcss));
+					} else {
+						$("#grid").append('<div id="sfsgridbg" style="'+basestyle+checkUserCSSstyle2(pr.global_bghtmlcss)+'">'+pr.global_bghtml+'</div>');
+					}
+				}
 				if (pr.hideSheetTitle){
-					//$(".sheet-title-container").hide();
-					document.getElementByClass( 'sheet-title-container' ).style.display = 'none';
+					$(".sheet-title-container").hide();
+					//document.getElementByClass( 'sheet-title-container' ).style.display = 'none';
 				} else {
 					if(pr.removeSheetTitlePadding){
 						$(".sheet-title-container").css('padding','0');
@@ -1819,17 +1831,18 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				var found = 0;
 				searchField.parent().addClass('search-focused');
+				function strfilter (str) { return str.trim() }
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					var filters = [];
 					if (pr.searchExcelCopypaste){
 						filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
-						filters = filters.map(str => str.trim());
+						filters = filters.map(strfilter);
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else 
 					if(pr.exportenableMultisearchWith){
 						filters = filter.split(pr.exportenableMultisearchWith);
-						filters = filters.map(str => str.trim());
+						filters = filters.map(strfilter);
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else {
 						filters.push(filter);
