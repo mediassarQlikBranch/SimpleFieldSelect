@@ -205,8 +205,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			gcss += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
 		}
 		if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-			if($("#qv-toolbar-container").length>0) {//pre 2019 feb
-				gcss += ' #qv-toolbar-container {display:none!important;}';
+			if($("#qv-toolbar-container,.qv-toolbar-container").length>0) {//pre 2019 feb
+				gcss += ' #qv-toolbar-container,.qv-toolbar-container {display:none!important;}';
 				//$("#qv-toolbar-container").css('display','none');
 			} else {
 				gcss += ' .qs-toolbar-container {display:none!important;}';
@@ -424,7 +424,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.enableGlobals){
 				//when exiting edit mode.
 				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-					$("#qv-toolbar-container").hide();
+					$("#qv-toolbar-container,.qv-toolbar-container").hide();
 				}
 				//reset keepaliver
 				if(pr.keepaliver && pr.keepaliver>0){
