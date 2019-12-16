@@ -451,9 +451,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			} else if (scpr.clearFieldSelOnFirstLoad){
 				if(debug) console.log('clear selections');
 				$scope.backendApi.selectValues( 0, [], false );
-				//var app = qlik.currApp(); //alternative
-				//app.field($scope.layout.qListObject.qDimensionInfo.qFallbackTitle).clear();
 			}
+			//clean
 			if (scpr.enableGlobals && scpr.clearAllSelOnLeave){
 				$scope.$on('$destroy', function (ev) {
 					if (debug) console.log('clear all');
@@ -464,6 +463,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				$scope.$on('$destroy', function (ev) {
 					if (debug) console.log('clear selections');
 					$scope.backendApi.selectValues( 0, [], false );
+				});
+			}
+			if (scpr.enableGlobals && scpr.global_bghtml){ //remove
+				$scope.$on('$destroy', function (ev) {
+					$("#sfsgridbg").remove();
 				});
 			}
 			$scope.$on('$destroy', function (ev) {

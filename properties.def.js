@@ -1949,7 +1949,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.25 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 1.9.26 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

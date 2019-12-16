@@ -1,3 +1,5 @@
+1.9.26
+ - Sheet background extra HTML will be cleaned when leaving sheet.
 1.9.25
  - Sheet title hiding fix
  - Alternative way to set sheet background CSS. This one allows to use background with extended sheet functionality so that background will stay with the moves of the grid.
