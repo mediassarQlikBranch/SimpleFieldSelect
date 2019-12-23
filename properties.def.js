@@ -424,6 +424,36 @@ define( [], function () {
 					},
 				}
 			},
+			globalmobile: {
+				type: "items",
+				label: "Mobile view settings",
+				show: function ( data ) {
+					return  data.props && data.props.enableGlobals ;
+				},
+				items: {
+					hideMobileSearch: {
+						ref: "props.ghideMobileSearch",
+						type: "integer",
+						label: "Hide search field from mobile (1 to hide)",
+						defaultValue: 0,
+						expression:"optional"
+					},
+					hideMobileHeader: {
+						ref: "props.ghideMobileHeader",
+						type: "integer",
+						label: "Hide top header from mobile (1 to hide)",
+						defaultValue: 0,
+						expression:"optional"
+					},
+					hideMobileFooter: {
+						ref: "props.ghideMobileFooter",
+						type: "integer",
+						label: "Hide bottom header from mobile (1 to hide)",
+						defaultValue: 0,
+						expression:"optional"
+					}
+				}
+			},
 			selectionandcontrol: {
 				type: "items",
 				label: "Selection bar and controls",
@@ -807,12 +837,14 @@ define( [], function () {
 							value: "luiswitch",label: "Qlik Switch"}, {
 							value: "luicheckbox",label: "Qlik Checkbox"}, {
 							value: "luiradio",label: "Qlik Radio button"}, {
-							value: "txtonly",label: "Only a textarea"}
+							value: "txtonly",label: "Only a textarea"}, {
+							value: "searchonly",label: "Only search and select"
+							}
 							//, {value: "actions",label: "Actions and functions"}
 						],
 						defaultValue: "hlist",
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable && (data.props.variableIsDate ));
+							return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable && data.props.variableIsDate );
 						}
 					},
 					textareaonlytext: {
@@ -1422,7 +1454,8 @@ define( [], function () {
 						type: "items",
 						label: "Selections",
 						show: function ( data ) {
-									return data.qListObjectDef && data.props && !((data.props.variableIsDate || data.props.visualizationType=='input') && data.props.dimensionIsVariable);
+							return data.qListObjectDef && data.props && !((data.props.variableIsDate || data.props.visualizationType=='input') && data.props.dimensionIsVariable)
+								&& !(data.props.visualizationType=='txtonly' || data.props.visualizationType=='searchonly');
 						},
 						items: {
 							selectDefault: {
@@ -1577,35 +1610,25 @@ define( [], function () {
 						label: "Other settings",
 						grouped: true,
 						items: {
-							enablesearch:{
-								ref: "props.enablesearch",
-								type: "boolean",
-								label: "Enable search",
-								defaultValue: true,
-								show: function ( data ) {
-									return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
-									(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch')
-									);
-							  	}
-							},
-							
-							searchExcelCopypaste: {
-							  ref: "props.searchExcelCopypaste",
+							HideFromSelectionsBar: {
+							  ref: "props.hideFromSelectionsBar",
 							  type: "boolean",
-							  label: "Multiword search with Excel copy-paste",
-							  defaultValue: false
+							  label: "Hide from selections bar",
+							  defaultValue: false,
+							  show: function ( data ) {
+								return data.qListObjectDef && data.props && !data.props.dimensionIsVariable;
+							  }
 							},
-							exportenableMultisearchWith: {
-								ref: "props.exportenableMultisearchWith",
-								type: "string",
-								label: "Separator character for multiword search (copy-paste list of elements to search)",
-								defaultValue: '',
-								expression: 'optional',
-								show: function(data){
-									return data.props && !data.props.searchExcelCopypaste;
-								}
+							HideFromSelectionsFieldOptional: {
+							  ref: "props.hideFromSelectionRealField",
+							  type: "string",
+							  label: "(Opt) Name of the field without special marks (if field has [ mark)",
+							  defaultValue: "",
+							  expression:"optional",
+							  show: function ( data ) {
+									return  (data.props.hideFromSelectionsBar);
+							  }
 							},
-
 							overlay: {
 								ref: "props.enableoverlay",
 								type:"integer",
@@ -1648,7 +1671,7 @@ define( [], function () {
 									  label: "Overlay background CSS",
 									  defaultValue: '',
 									  expression: 'optional'
-									},
+									}
 								}
 							},
 							exportenabled: {
@@ -1659,30 +1682,39 @@ define( [], function () {
 							}
 						}
 					},
-					Hiding: {
+					Searchsettings: {
 						type: "items",
-						label: "Hiding",
+						label: "Search settings",
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && !data.props.dimensionIsVariable;
-						},
+							return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
+							(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' || data.props.visualizationType=='searchonly')
+							);
+					  	},
 						items: {
-							HideFromSelectionsBar: {
-							  ref: "props.hideFromSelectionsBar",
-							  type: "boolean",
-							  label: "Hide from selections bar",
-							  defaultValue: false,
-							  show: true
-
+							enablesearch:{
+								ref: "props.enablesearch",
+								type: "boolean",
+								label: "Enable search",
+								defaultValue: true,
+								show: function ( data ) {
+									return data.props.visualizationType!='searchonly'
+							  	}
 							},
-							HideFromSelectionsFieldOptional: {
-							  ref: "props.hideFromSelectionRealField",
-							  type: "string",
-							  label: "(Opt) Name of the field without special marks (if field has [ mark)",
-							  defaultValue: "",
-							  expression:"optional",
-							  show: function ( data ) {
-									return  (data.props.hideFromSelectionsBar);
-							  }
+							searchExcelCopypaste: {
+							  ref: "props.searchExcelCopypaste",
+							  type: "boolean",
+							  label: "Multiword search with Excel copy-paste",
+							  defaultValue: false
+							},
+							exportenableMultisearchWith: {
+								ref: "props.exportenableMultisearchWith",
+								type: "string",
+								label: "Separator character for multiword search (copy-paste list of elements to search)",
+								defaultValue: '',
+								expression: 'optional'
+								/*show: function(data){
+									return data.props && !data.props.searchExcelCopypaste;
+								}*/
 							}
 						}
 					},
@@ -1949,7 +1981,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.26 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 1.9.27 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

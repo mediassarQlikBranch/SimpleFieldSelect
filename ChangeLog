@@ -1,3 +1,8 @@
+1.9.27
+ - Search only visualization - will show search box only, won't draw elements. This is usefull for fields with high number of elements and when there is a need to select great amount of them. For example by copy-pasting from Excel etc. Works also with delimited string. Limitation: Won't count duplicates in multiword case correctly while searching.
+ - Mobile header, search field and footer hiding options in Global settings.
+ - Faster search, ESC key handling
+ - Excel search may have also delimited data if delimiter is set. So both settings can be enabled at the same time.
 1.9.26
  - Sheet background extra HTML will be cleaned when leaving sheet.
 1.9.25

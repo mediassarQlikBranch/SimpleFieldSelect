@@ -1,13 +1,11 @@
 define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./jquery-ui.min","./select2/select2.min"], 
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
-	/*if (!$("#sfscss").length>0){
-		$( '<style id="sfscss">' ).html( cssContent ).appendTo( "head" );
-	}*/
 	var debug = false;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
+	var searchDictionary;
 	var keepaliverTimer;
 
 	//If nothing selected but should be
@@ -233,18 +231,32 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			
 		}
 		if(pr.global_selectBGcolor){
-			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
-			gcss += '.qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}'
+			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
+			gcss += ' .qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}'
 		}
 		if(pr.global_selectBordercolor){
-			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
+			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
 		}
 		if(pr.global_selectFontcolor){
-			gcss += '.qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { color: '+pr.global_selectFontcolor+';}';
+			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected { color: '+pr.global_selectFontcolor+';}';
 		}
 		if(!pr.hideSheetTitle && pr.sheetTitleCSS && pr.sheetTitleCSS != ''){
-			gcss += '.qv-panel-sheet .sheet-title-container {'+checkUserCSSstyle2(pr.sheetTitleCSS)+'}';
+			gcss += ' .qv-panel-sheet .sheet-title-container {'+checkUserCSSstyle2(pr.sheetTitleCSS)+'}';
 		}
+		
+		//if ($('.smallDevice').length >0){ //in anycase
+			if (pr.ghideMobileSearch){
+				gcss += ' .qv-global-search-container {display:none!important;}';
+				//gcss += ' #qs-page-container {height:100%!important;}';
+			}
+			if(pr.ghideMobileHeader){
+				gcss += ' .qs-mobile-toolbar {display:none!important;}';
+				gcss += ' #qs-page-container {height:100%!important;}';
+			}
+			if(pr.ghideMobileFooter){
+				gcss += ' .quick-navigation-wrapper {display:none!important;}';
+			}
+		//}
 		return gcss;
 	}
 	//not in use yet
@@ -903,6 +915,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.displayFlexBox){
 				displayFlexBoxClass = ' flexboxcont';
 			}
+			
 			//if date select to variable
 			if (pr.variableIsDate && pr.dimensionIsVariable){
 				if ($("#sfsdatepicker").length>0){
@@ -1145,7 +1158,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						displayastableClass = ' ulastable';
 					}
 					html += '<ul class="horizontal'+roundcornerClass+rmarginclass+displayastableClass+displayFlexBoxClass+'" style="'+stylechanges+'">';
-				} else if (visType=='checkbox' || visType=='radio'){
+				} else if (visType=='checkbox' || visType=='radio' || visType=='btn'){
 					html += '<div class="'+displayFlexBoxClass+'" style="'+stylechanges+'">';
 				} else if (visType=='dropdown'){
 					if (pr.preElemHtml){
@@ -1157,10 +1170,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						html += pr.preElemHtml;
 					}
 					html += '<select class="dropdownsel'+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,'')+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+containerStyles+mainobjectstyle+'"' +elementExtraAttribute+multiselect+ '>'; //no elementpadding/margin
-				} else if (visType=='btn'){
-					html += '<div class="'+displayFlexBoxClass+'" style="'+stylechanges+'">';
 				} else if (visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
-
+				} else if (visType=='searchonly'){
+					
 				} else {
 					html += 'Select visualization type';
 				}
@@ -1216,6 +1228,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				} else {
 					optionsforselect = matrixdata;
 				}
+
 				//dropdown default option
 				if ((visTypedropdownOrSelect2) && !pr.selectmultiselect && pr.dropdownValueForNoSelect && pr.dropdownValueForNoSelect != ''){
 					html += '<option class="state0" dval="" value="">' + pr.dropdownValueForNoSelect;
@@ -1241,8 +1254,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (debug) {console.log('hide:'); console.log(hideItems);}
 				}
 				//special case, calc selected
-				var calcSelected = 0;
-				if (pr.showOnlySelectedItems && pr.showOnlySelectedItemsShowPossible){
+				var calcSelected = 0, calcTotalRows = optionsforselect.length;
+				if (pr.showOnlySelectedItems && pr.showOnlySelectedItemsShowPossible || visType == 'searchonly'){
 					if (debug) console.log('calc selected');
 					optionsforselect.forEach( function ( row ) {
 						if (row[0].qState === 'S'){
@@ -1250,7 +1263,25 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						}
 					});
 				}
-
+				if (visType == 'searchonly'){
+					//if (visType=='searchonly'){ //draw here so that stats exists
+					var searchId = 'se'+layout.qInfo.qId;
+					html += '<div class="sfssearchonlydiv">';
+					html += '<div class="lui-search" style="height:100%;">';
+					html += '<span class="lui-icon lui-icon--search sfssearchicon2"></span>';
+					html += '<textarea class="lui-search__input sfssearchinput" id="'+searchId+'" spellcheck="false" type="text" placeholder="Search" style="resize: none; padding:3px; height:100%;"></textarea>';
+					html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchonlyinput_clear" title="clear search"></span>';
+					html += '</div></div>';
+					html += '<div class="sfssearchcountbar qv-state-count-bar">';
+					var selectedperc = calcTotalRows ? Math.floor(calcSelected / calcTotalRows * 100) : 0;
+					var notselectedperc = 100 - selectedperc;
+					html += '<div id="sel'+searchId+'" class="state selected" style="width: '+selectedperc+'%;"></div>';
+					html += '<div id="alt'+searchId+'" class="state alternative" style="width: '+notselectedperc+'%;"></div>';
+					html += '</div>';
+					html += '<div id="stat'+searchId+'" class="sfssearchstat" title="Selected count">'+calcSelected+'/'+calcTotalRows+'</div>';
+					//}
+					searchDictionary = optionsforselect;
+				} else {
 				//paint options
 				optionsforselect.forEach( function ( row ) {
 					if (pr.hidePassiveItems && !pr.dimensionIsVariable && row[0].qState === 'X'){ //if passive hiding enabled
@@ -1402,6 +1433,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						html += pr.postElemHtml;
 					}
 				});
+				} //vistype != 'searconly'
 				if (visType=='hlist' || visType=='vlist'){
 					html += '</ul>';
 				}else if (visTypedropdownOrSelect2){
@@ -1612,9 +1644,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 							}
 						});
-						/*listtargets.on( 'touchstart', function (e) {
-							console.log(e);
-						});*/
+						
 						//todo, fix mobile
 						listtargets.on( 'mouseenter touchmove', function () {
 							if(isMouseDown){
@@ -1626,10 +1656,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							}
 						});
 					}
-					//for first element
-					/*listtargets.on('mousedown',function(event){
-						//$(this).addClass('selthis').addClass('stateS').removeClass('stateA');
-					});*/
 					//normal click
 					listtargets.on( 'qv-activate', function (ev) { //mouseenter
 						var clicktarget = $(this);
@@ -1827,20 +1853,33 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.enablesearch){
 				var searchField = $element.find('#'+searchId);
 				var searchIcon = $element.find('.sfssearchIcon');
+				var searchStatus, searchSelCount, searchAltCount;
 				var searchSelectionMethod = 1;
 				if (visType=='checkbox' || visType=='radio' || visType=='luicheckbox' || visType=='luiradio'){
 					searchSelectionMethod = 2;
 				} else if(visType=='luiswitch'){
 					searchSelectionMethod = 3;
+				} else if(visType=='searchonly'){
+					searchSelectionMethod = 4;
+					searchStatus = $element.find('#stat'+searchId);
+					searchSelCount = $element.find('#sel'+searchId);
+					searchAltCount = $element.find('#alt'+searchId);
 				}
 				var found = 0;
-				searchField.parent().addClass('search-focused');
-				function strfilter (str) { return str.trim() }
+				var toSelectWithSearchOnly = [];
+				if (searchSelectionMethod != 4){
+					searchField.parent().addClass('search-focused');
+				}
+				function strfilter (str) { return str.trim(); }
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					var filters = [];
 					if (pr.searchExcelCopypaste){
-						filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
+						if (pr.exportenableMultisearchWith){
+							filters = filter.split("\n").join('|s|').split("\t").join('|s|').split(pr.exportenableMultisearchWith).join('|s|').split('|s|');
+						} else {
+							filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
+						}
 						filters = filters.map(strfilter);
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else 
@@ -1850,18 +1889,23 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					} else {
 						filters.push(filter);
+						filters = filters.map(strfilter);
+						filters = filters.filter(function(el) { return el; }); //remove empty
 					}
 					if (filters.length == 0){
-						$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
-						$element.find(".searchHide").removeClass('searchHide');
+						if (searchSelectionMethod != 4){
+							$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
+							$element.find(".searchHide").removeClass('searchHide');
+						}
 						return false;
 					}
 					var targets = $element.find('.data');
 					if (searchSelectionMethod==2){
 						targets.each(function(){
 							var parent = $(this).parent();
+							var targettext = parent.text().toLowerCase();
 							for (var i = 0; i < filters.length; i++) {
-								if (parent.text().toLowerCase().indexOf(filters[i]) > -1){
+								if (targettext.indexOf(filters[i]) > -1){
 									parent.removeClass('searchHide').addClass('searchSel');
 									found = 1;
 								} else {
@@ -1875,8 +1919,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					} else if (searchSelectionMethod==3){
 						targets.each(function(){
 							var parent = $(this).parent().parent();
+							var targettext = parent.text().toLowerCase();
 							for (var i = 0; i < filters.length; i++) {
-								if (parent.text().toLowerCase().indexOf(filters[i]) > -1){
+								if (targettext.indexOf(filters[i]) > -1){
 									parent.removeClass('searchHide').addClass('searchSel');
 									found = 1;
 								} else {
@@ -1887,12 +1932,30 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								parent.addClass('searchHide').removeClass('searchSel');
 							}
 						});
+					} else if (searchSelectionMethod==4){
+						toSelectWithSearchOnly = [];
+						for (var s in searchDictionary){
+							var targettext = searchDictionary[s][0].qText.toLowerCase();
+							for (var i = 0; i < filters.length; i++) {
+								if(targettext.indexOf(filters[i]) > -1){
+									found += 1; //wont handle duplicates
+									toSelectWithSearchOnly.push(searchDictionary[s][0].qElemNumber);
+									//console.log(toSelectWithSearchOnly);
+								}
+							}
+						}
+						searchStatus.html((toSelectWithSearchOnly.length)+'/'+calcTotalRows);
+						var selectedperc = calcTotalRows ? Math.floor(toSelectWithSearchOnly.length / calcTotalRows * 100) : 0;
+						var notselectedperc = 100 - selectedperc;
+						searchSelCount.css('width',selectedperc+'%');
+						searchAltCount.css('width',notselectedperc+'%');
 					} else {
 						targets.each(function(){
 							found = 0;
 							var thisel = $(this);
+							var targettext = thisel.html().toLowerCase();
 							for (var i = 0; i < filters.length; i++) {
-								if (thisel.html().toLowerCase().indexOf(filters[i]) > -1){
+								if (targettext.indexOf(filters[i]) > -1){
 									thisel.removeClass('searchHide').addClass('searchSel');
 									found = 1;
 								} else {
@@ -1909,25 +1972,44 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				searchField.keypress(function(e){
 					if(e.which == 13){ //enter key pressed
 						var valuesToSelect = [];
-						if (searchSelectionMethod==2 || searchSelectionMethod==3){
-							var targets = $element.find(".searchSel input");
+						if (searchSelectionMethod==4){
+							valuesToSelect = toSelectWithSearchOnly;
 						} else {
-							var targets = $element.find(".searchSel");
-						}
-						targets.each(function(){
-							var val = parseInt($(this).attr( "dval" ),10);
-							if (!isNaN(val)){
-								valuesToSelect.push( val );
+						
+							if (searchSelectionMethod==2 || searchSelectionMethod==3){
+								var targets = $element.find(".searchSel input");
+							} else {
+								var targets = $element.find(".searchSel");
 							}
-						});
+							targets.each(function(){
+								var val = parseInt($(this).attr( "dval" ),10);
+								if (!isNaN(val)){
+									valuesToSelect.push( val );
+								}
+							});
+						}
 						selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
+					}
+				});
+				searchField.keyup(function(e){
+					if(e.which == 27){ //esc
+						$element.find('#cl'+searchId).trigger('click'); //clear
 					}
 				});
 				//clear search
 				$element.find('#cl'+searchId).click(function(){
+					if(searchSelectionMethod == 4){
+						searchField.val('');
+						toSelectWithSearchOnly = [];
+						var e = $.Event('keypress');
+						e.which = 13;
+						searchField.trigger(e);
+					}
 					if(searchField.val()==''){ //on second press
-						searchField.parent().parent().hide('slow');
-						searchIcon.show();
+						if(searchSelectionMethod != 4){ //!searchonly
+							searchField.parent().parent().hide('slow');
+							searchIcon.show();
+						}
 					} else {
 						searchField.val('');
 						searchField.trigger('keyup');
