@@ -431,6 +431,12 @@ define( [], function () {
 					return  data.props && data.props.enableGlobals ;
 				},
 				items: {
+					removeMobileZoom: {
+					  ref: "props.gremoveMobileZoom",
+					  type: "boolean",
+					  label: "Disable mobile zoom effect from all objects? (less clicking)",
+					  defaultValue: false
+					},
 					hideMobileSearch: {
 						ref: "props.ghideMobileSearch",
 						type: "integer",
@@ -516,7 +522,7 @@ define( [], function () {
 					  ref: "props.hideGuiToolbar",
 					  component: "switch",
 					  type: "boolean",
-					  label: "Hide whole main toolbar?",
+					  label: "Hide whole main toolbar? (requires page refresh after enabled)",
 					  defaultValue: false,
 					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
 					  change: function(data){
@@ -567,7 +573,7 @@ define( [], function () {
 					},
 					hideguitoolbarInfo:{
 						component: "text",
-						label: "When main toolbar is hidden you cannot access Edit mode. You have to change last part of the url to /state/edit . Toolbar will be hidden only when not in Edit mode.",
+						label: "Refresh page. When main toolbar is hidden you cannot access Edit mode. You have to change last part of the url to /state/edit . Toolbar will be hidden only when not in Edit mode.",
 						show: function ( data ) {
 							return data.props  && data.props.hideGuiToolbar;
 					  }
@@ -1981,7 +1987,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.27 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 1.9.28 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

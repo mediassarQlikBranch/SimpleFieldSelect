@@ -1,3 +1,5 @@
+1.9.28
+ - Global option to remove zoom efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
 1.9.27
  - Search only visualization - will show search box only, won't draw elements. This is usefull for fields with high number of elements and when there is a need to select great amount of them. For example by copy-pasting from Excel etc. Works also with delimited string. Limitation: Won't count duplicates in multiword case correctly while searching.
  - Mobile header, search field and footer hiding options in Global settings.

@@ -244,7 +244,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			gcss += ' .qv-panel-sheet .sheet-title-container {'+checkUserCSSstyle2(pr.sheetTitleCSS)+'}';
 		}
 		
-		//if ($('.smallDevice').length >0){ //in anycase
+		//if ($('.smallDevice').length >0){ //in anycase transparent-overlay
 			if (pr.ghideMobileSearch){
 				gcss += ' .qv-global-search-container {display:none!important;}';
 				//gcss += ' #qs-page-container {height:100%!important;}';
@@ -256,6 +256,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.ghideMobileFooter){
 				gcss += ' .quick-navigation-wrapper {display:none!important;}';
 			}
+			
 		//}
 		return gcss;
 	}
@@ -388,7 +389,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	}
 	function setSmallDeviceStuff($element,pr){
 		var parent = $element.closest('.qv-gridcell');
-		//console.log(parent.html());
+		
+		if(pr.enableGlobals && pr.gremoveMobileZoom){ //from all
+			$(".transparent-overlay").remove();
+		} else
 		if(pr.mobileRemoveZoom){
 			parent.find('.transparent-overlay').remove(); //remove mobile zoom haveto
 		}
@@ -398,6 +402,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		} else {
 			parent.css('height','65px');
 		}
+
 	}
 	return {
 		initialProperties: {
