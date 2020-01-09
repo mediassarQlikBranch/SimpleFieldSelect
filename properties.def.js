@@ -434,7 +434,7 @@ define( [], function () {
 					removeMobileZoom: {
 					  ref: "props.gremoveMobileZoom",
 					  type: "boolean",
-					  label: "Disable mobile zoom effect from all objects? (less clicking)",
+					  label: "Disable mobile zoom/maximize effect from all objects? (less clicking)",
 					  defaultValue: false
 					},
 					hideMobileSearch: {

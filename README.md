@@ -9,7 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Global option to remove zoom efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
+- Global option to remove zoom/maximize efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
 - Search only visualization - will show search box only, won't draw elements. This is usefull for fields with high number of elements and when there is a need to select great amount of them. For example by copy-pasting from Excel etc. Works also with delimited string. Limitation: Won't count duplicates in multiword case correctly while searching.
 - Global option for Sheet background extra HTML element - experimental feature to have custom HTML on document background. See ChangeLog for a demo.
 - Copy-paste multivalue search can be set into excel mode where you can user either list of values from excel in vertical or horizontal mode.
