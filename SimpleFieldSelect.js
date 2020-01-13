@@ -1858,7 +1858,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.enablesearch){
 				var searchField = $element.find('#'+searchId);
 				var searchIcon = $element.find('.sfssearchIcon');
-				var searchStatus, searchSelCount, searchAltCount;
+				var searchStatus, searchSelCount, searchAltCount, searchOnlyDiv;
 				var searchSelectionMethod = 1;
 				if (visType=='checkbox' || visType=='radio' || visType=='luicheckbox' || visType=='luiradio'){
 					searchSelectionMethod = 2;
@@ -1869,6 +1869,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					searchStatus = $element.find('#stat'+searchId);
 					searchSelCount = $element.find('#sel'+searchId);
 					searchAltCount = $element.find('#alt'+searchId);
+					searchOnlyDiv = $element.find('.sfssearchonlydiv');
+					pr.searchExcelCopypaste = 1; //force
 				}
 				var found = 0;
 				var toSelectWithSearchOnly = [];
@@ -1876,14 +1878,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					searchField.parent().addClass('search-focused');
 				}
 				function strfilter (str) { return str.trim(); }
+				var filters = [], filtercount = 0;
+				
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
-					var filters = [];
+					filters = [];
 					if (pr.searchExcelCopypaste){
 						if (pr.exportenableMultisearchWith){
-							filters = filter.split("\n").join('|s|').split("\t").join('|s|').split(pr.exportenableMultisearchWith).join('|s|').split('|s|');
+							filters = filter.split("\n").join('|!|').split("\t").join('|!|').split(pr.exportenableMultisearchWith).join('|!|').split('|!|');
 						} else {
-							filters = filter.split("\n").join('|s|').split("\t").join('|s|').split('|s|');
+							filters = filter.split("\n").join('|!|').split("\t").join('|!|').split('|!|');
 						}
 						filters = filters.map(strfilter);
 						filters = filters.filter(function(el) { return el; }); //remove empty
@@ -1897,19 +1901,21 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						filters = filters.map(strfilter);
 						filters = filters.filter(function(el) { return el; }); //remove empty
 					}
-					if (filters.length == 0){
+					filtercount = filters.length;
+					if (filtercount == 0){
 						if (searchSelectionMethod != 4){
 							$element.find(".searchSel").removeClass('searchSel').removeClass('searchHide');
 							$element.find(".searchHide").removeClass('searchHide');
 						}
 						return false;
 					}
+
 					var targets = $element.find('.data');
 					if (searchSelectionMethod==2){
 						targets.each(function(){
 							var parent = $(this).parent();
 							var targettext = parent.text().toLowerCase();
-							for (var i = 0; i < filters.length; i++) {
+							for (var i = 0; i < filtercount; i++) {
 								if (targettext.indexOf(filters[i]) > -1){
 									parent.removeClass('searchHide').addClass('searchSel');
 									found = 1;
@@ -1925,7 +1931,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						targets.each(function(){
 							var parent = $(this).parent().parent();
 							var targettext = parent.text().toLowerCase();
-							for (var i = 0; i < filters.length; i++) {
+							for (var i = 0; i < filtercount; i++) {
 								if (targettext.indexOf(filters[i]) > -1){
 									parent.removeClass('searchHide').addClass('searchSel');
 									found = 1;
@@ -1938,28 +1944,21 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							}
 						});
 					} else if (searchSelectionMethod==4){
-						toSelectWithSearchOnly = [];
-						for (var s in searchDictionary){
-							var targettext = searchDictionary[s][0].qText.toLowerCase();
-							for (var i = 0; i < filters.length; i++) {
-								if(targettext.indexOf(filters[i]) > -1){
-									found += 1; //wont handle duplicates
-									toSelectWithSearchOnly.push(searchDictionary[s][0].qElemNumber);
-									//console.log(toSelectWithSearchOnly);
-								}
-							}
+						if (filtercount < 100){ //do preminilary search here
+							toSelectWithSearchOnly = searchOnlySearch(searchDictionary, filters, filtercount, pr.searchMethod);
+							searchStatus.html((toSelectWithSearchOnly.length)+'/'+calcTotalRows);
+							var selectedperc = calcTotalRows ? Math.floor(toSelectWithSearchOnly.length / calcTotalRows * 100) : 0;
+							var notselectedperc = 100 - selectedperc;
+							searchSelCount.css('width',selectedperc+'%');
+							searchAltCount.css('width',notselectedperc+'%');
 						}
-						searchStatus.html((toSelectWithSearchOnly.length)+'/'+calcTotalRows);
-						var selectedperc = calcTotalRows ? Math.floor(toSelectWithSearchOnly.length / calcTotalRows * 100) : 0;
-						var notselectedperc = 100 - selectedperc;
-						searchSelCount.css('width',selectedperc+'%');
-						searchAltCount.css('width',notselectedperc+'%');
+						/**/
 					} else {
 						targets.each(function(){
 							found = 0;
 							var thisel = $(this);
 							var targettext = thisel.html().toLowerCase();
-							for (var i = 0; i < filters.length; i++) {
+							for (var i = 0; i < filtercount; i++) {
 								if (targettext.indexOf(filters[i]) > -1){
 									thisel.removeClass('searchHide').addClass('searchSel');
 									found = 1;
@@ -1978,7 +1977,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if(e.which == 13){ //enter key pressed
 						var valuesToSelect = [];
 						if (searchSelectionMethod==4){
+							searchField.addClass('sfssearching');
+							toSelectWithSearchOnly = searchOnlySearch(searchDictionary, filters, filtercount, pr.searchMethod);
+							searchStatus.html((toSelectWithSearchOnly.length)+'/'+calcTotalRows);
+							var selectedperc = calcTotalRows ? Math.floor(toSelectWithSearchOnly.length / calcTotalRows * 100) : 0;
+							var notselectedperc = 100 - selectedperc;
+							searchSelCount.css('width',selectedperc+'%');
+							searchAltCount.css('width',notselectedperc+'%');
 							valuesToSelect = toSelectWithSearchOnly;
+							searchField.removeClass('sfssearching');
 						} else {
 						
 							if (searchSelectionMethod==2 || searchSelectionMethod==3){
@@ -2061,7 +2068,33 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				});
 				
 			}
-
+			function searchOnlySearch(searchDictionary, filters, filtercount, searchmethod){
+				var toSelectWithSearchOnly = [];
+				if (searchmethod && searchmethod>0){ //Exact
+					for (var s in searchDictionary){
+						var targettext = searchDictionary[s][0].qText.toLowerCase();
+						for (var i = 0; i < filtercount; i++) {
+							//if(targettext.indexOf(filters[i]) > -1){
+							if(targettext==filters[i]){
+								found += 1; //wont handle duplicates
+								toSelectWithSearchOnly.push(searchDictionary[s][0].qElemNumber);
+							}
+						}
+					}
+				} else { //normal qlik
+					for (var s in searchDictionary){
+						var targettext = searchDictionary[s][0].qText.toLowerCase();
+						for (var i = 0; i < filtercount; i++) {
+							if(targettext.indexOf(filters[i]) > -1){
+							//if(targettext==filters[i]){
+								found += 1; //wont handle duplicates
+								toSelectWithSearchOnly.push(searchDictionary[s][0].qElemNumber);
+							}
+						}
+					}
+				}
+				return toSelectWithSearchOnly;
+			}
 			//curent selections to url
 			function getSelectedUrl(dialogOrClipboard){
 				

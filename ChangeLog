@@ -1,3 +1,6 @@
+1.9.29
+ - Multiword searchonly visualization improvements: If over 100 search terms, search happens only after pressing enter. Search can be set to exact-mode within search settings. It is faster, whole word comparison, if you have to select thousands of elements. Normal search searches for the occurance of the string as Qlik does.
+ - Search only visualization will allways parse "Excel" styled copy-paste data
 1.9.28
  - Global option to remove zoom efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
 1.9.27

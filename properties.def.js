@@ -1710,7 +1710,10 @@ define( [], function () {
 							  ref: "props.searchExcelCopypaste",
 							  type: "boolean",
 							  label: "Multiword search with Excel copy-paste",
-							  defaultValue: false
+							  defaultValue: false,
+							  show: function ( data ) {
+								return data.props.visualizationType!='searchonly'
+							  }
 							},
 							exportenableMultisearchWith: {
 								ref: "props.exportenableMultisearchWith",
@@ -1718,9 +1721,16 @@ define( [], function () {
 								label: "Separator character for multiword search (copy-paste list of elements to search)",
 								defaultValue: '',
 								expression: 'optional'
-								/*show: function(data){
-									return data.props && !data.props.searchExcelCopypaste;
-								}*/
+							},
+							searchMethod: {
+								ref: "props.searchMethod",
+								type: "number",
+								label: "0 as qlik style, 1 as exact (fastest)",
+								defaultValue: 0,
+								expression: 'optional',
+								show: function(data){
+									return data.props.visualizationType=='searchonly';
+								}
 							}
 						}
 					},
