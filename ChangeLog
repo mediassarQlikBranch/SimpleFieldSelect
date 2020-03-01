@@ -1,3 +1,5 @@
+1.9.30
+ - Hide from selections bar - fix, if a function is used in the field name or for someother reason = mark is in the beginning
 1.9.29
  - Multiword searchonly visualization improvements: If over 100 search terms, search happens only after pressing enter. Search can be set to exact-mode within search settings. It is faster, whole word comparison, if you have to select thousands of elements. Normal search searches for the occurance of the string as Qlik does.
  - Search only visualization will allways parse "Excel" styled copy-paste data

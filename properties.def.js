@@ -1619,7 +1619,7 @@ define( [], function () {
 							HideFromSelectionsBar: {
 							  ref: "props.hideFromSelectionsBar",
 							  type: "boolean",
-							  label: "Hide from selections bar",
+							  label: "Hide from selections bar (won't work with dimensions with functions in expression)",
 							  defaultValue: false,
 							  show: function ( data ) {
 								return data.qListObjectDef && data.props && !data.props.dimensionIsVariable;

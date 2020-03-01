@@ -759,17 +759,18 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					var fieldToHide = pr.hideFromSelectionRealField;
 					if (fieldToHide == '' || !fieldToHide){
 						fieldToHide = layout.qListObject.qDimensionInfo.qGroupFieldDefs[0]; //try this one if not defined.
-						if (fieldToHide.slice(0,1)==='='){ //if first letter =
-							fieldToHide = fieldToHide.slice(1);
-						}
 						fieldToHide = fieldToHide.replace(/[\[\]']+/g,''); //reomve []
+						var fieldToHide2 = fieldToHide;
+						if (fieldToHide.slice(0,1)==='='){ //if first letter =, sometimes needed, sometimes not.
+							fieldToHide2 = fieldToHide2.slice(1);
+						}
 					}
-					var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
+					var fieldToHideSelector = layout.qInfo.qId;
 					if (fieldToHideSelector){
 						if ($('#hid'+fieldToHideSelector).length>0){
 							//already hidden
 						} else {
-							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.qv-selections-pager li[data-csid="'+ fieldToHide2 +'"] {display:none;}</style>');
 						}
 					}
 				}
