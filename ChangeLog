@@ -1,3 +1,5 @@
+1.9.31
+ - Search only visualization fix if two or more instances on one sheet
 1.9.30
  - Hide from selections bar - fix, if a function is used in the field name or for someother reason = mark is in the beginning
 1.9.29

@@ -5,7 +5,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
-	var searchDictionary;
 	var keepaliverTimer;
 
 	//If nothing selected but should be
@@ -500,6 +499,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			var pr = layout.props;
 			var visType = pr.visualizationType;
 			var sfssettings = {};
+			var searchDictionary;
 
 			//exit if needed, no dimension, not txtonly, variable empty
 			if (pr.dimensionIsVariable){
@@ -1946,6 +1946,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						});
 					} else if (searchSelectionMethod==4){
 						if (filtercount < 100){ //do preminilary search here
+							if (debug) console.log(searchDictionary);
 							toSelectWithSearchOnly = searchOnlySearch(searchDictionary, filters, filtercount, pr.searchMethod);
 							searchStatus.html((toSelectWithSearchOnly.length)+'/'+calcTotalRows);
 							var selectedperc = calcTotalRows ? Math.floor(toSelectWithSearchOnly.length / calcTotalRows * 100) : 0;

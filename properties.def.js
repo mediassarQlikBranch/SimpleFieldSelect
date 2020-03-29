@@ -1997,7 +1997,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.28 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 1.9.31 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}
