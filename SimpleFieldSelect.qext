@@ -2,7 +2,7 @@
 	"name": "SimpleFieldSelect",
 	"description": "Field and variable selector for Qlik Sense",
 	"type": "visualization",
-	"version": "1.9.31",
+	"version": "2.0.0",
 	"icon": "list",
 	"author": "Matti Punkeri / Oivalo Oy",
 	"homepage": "",

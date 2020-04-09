@@ -424,6 +424,141 @@ define( [], function () {
 					},
 				}
 			},
+			globalsfs: {
+				type: "items",
+				label: "Global settings for SimpleFieldSelect elements",
+				show: function ( data ) {
+					return  data.props && data.props.enableGlobals ;
+				},
+				items: {
+					globsfs_text: { //cannot be shown when editing masterobject
+						component: "text",
+						label: "Local setting of each SFS will override these"
+					},
+					globsfs_stateS_bg: {
+						type: "string",
+						label: "Selected background (Qlik green: #009845)",
+						ref: "props.globsfs_stateS_bg",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateO_bg: {
+						type: "string",
+						label: "Possible selection background",
+						ref: "props.globsfs_stateO_bg",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateA_bg: {
+						type: "string",
+						label: "Alternative selection background",
+						ref: "props.globsfs_stateA_bg",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateX_bg: {
+						type: "string",
+						label: "Excluded selection background",
+						ref: "props.globsfs_stateX_bg",
+						defaultValue: '',expression:"optional"
+					},
+					glob_fontcolors:{
+						component: "text",
+						label: "Font colors"
+					},
+					globsfs_stateS_fo: {
+						type: "string",
+						label: "Selected text color",
+						ref: "props.globsfs_stateS_fo",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateO_fo: {
+						type: "string",
+						label: "Possible selection text color",
+						ref: "props.globsfs_stateO_fo",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateA_fo: {
+						type: "string",
+						label: "Alternative selection text color",
+						ref: "props.globsfs_stateA_fo",
+						defaultValue: '',expression:"optional"
+					},
+					globsfs_stateX_fo: {
+						type: "string",
+						label: "Excluded selection text color",
+						ref: "props.globsfs_stateX_fo",
+						defaultValue: '',expression:"optional"
+					},
+					othercolors:{
+						component: "text",
+						label: "Other colors"
+					},
+					globsfs_border: {
+						type: "string",
+						label: "Border color of an input",
+						ref: "props.globsfs_border",
+						defaultValue: '', expression:"optional"
+					},
+					globsfs_hoverBG:{
+						type: "string",
+						label: "Hover background color",
+						ref: "props.globsfs_hoverBG",
+						defaultValue: '', expression:"optional",
+						show: function(data){
+							return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
+						}
+					},
+					globsfs_hoverFontcolor:{
+						type: "string",
+						label: "Hover font color",
+						ref: "props.globsfs_hoverFontcolor",
+						defaultValue: '', expression:"optional",
+						show: function(data){
+							return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
+						}
+						
+					},
+					glob_paddings:{
+						component: "text",
+						label: "Paddings - use values like 2px or 1em"
+					},
+					/*globsfs_contentpad: {
+						type: "string",
+						label: "Padding for the content",
+						ref: "props.globsfs_contentpad",
+						defaultValue: '',expression:'optional'
+					},*/
+					globsfs_leftpad: {
+						type: "string",
+						label: "Left padding, default margin",
+						ref: "props.globsfs_leftpad",
+						defaultValue: '',expression:'optional'
+					},
+					globsfs_bottompad: {
+						type: "string",
+						label: "Bottom padding, default margin",
+						ref: "props.globsfs_bottompad",
+						defaultValue: '',expression:'optional'
+					},
+					globsfs_rightpad: {
+						type: "string",
+						label: "Right padding, default margin",
+						ref: "props.globsfs_rightpad",
+						defaultValue: '',expression:'optional'
+					},
+					globsfs_toppad: {
+						type: "string",
+						label: "Top padding, default margin",
+						ref: "props.globsfs_toppad",
+						defaultValue: '',
+						expression:'optional'
+					},
+					globsfs_custompad:{
+						type: "string",
+						label: "Custom padding, CSS style (2px or 0px 4px 0px 5px)",
+						ref: "props.globsfs_custompad",
+						defaultValue: '', expression:'optional'
+					},
+				}
+			},
 			globalmobile: {
 				type: "items",
 				label: "Mobile view settings",
@@ -801,10 +936,6 @@ define( [], function () {
 						if (data.props.dimensionIsVariable){
 							findVariableName(data.qListObjectDef,data.props);
 							findVariableValue(data);
-							//data.props.variableName = data.props.variableName.replace("=",''); //remove mark if exists.
-							/*data.variableValue = data.variableValue || {};
-							data.variableValue.qStringExpression = '=' + data.props.variableName; //.qDef.qFieldDefs[0];
-							if(debug) console.log('variable expression is =' + data.props.variableName);*/
 						}
                       }
                     },
@@ -814,7 +945,7 @@ define( [], function () {
 						label: "Variable is a date selector?",
 						defaultValue: false,
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.dimensionIsVariable;
+							return data.props && data.props.dimensionIsVariable;
 						}
 					},
 					variableEmptyAlreadySelected: {
@@ -823,7 +954,7 @@ define( [], function () {
 						label: "Set variable to empty string when already selected is selected again?",
 						defaultValue: false,
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.dimensionIsVariable && !data.props.variableIsDate && data.props.visualizationType!='input';
+							return data.props && data.props.dimensionIsVariable && !data.props.variableIsDate && data.props.visualizationType!='input';
 						}
 					},
                     VisualizationType: {
@@ -1209,7 +1340,7 @@ define( [], function () {
 							  ref: "props.removeFullScrnBtn",
 							  type: "boolean",
 							  label: "Remove full screen button",
-							  defaultValue: false
+							  defaultValue: true
 							},
 							mobileContainerHeight: {
 							  ref: "props.mobileCustomHeightCSS",
@@ -1692,7 +1823,7 @@ define( [], function () {
 						type: "items",
 						label: "Search settings",
 						show: function ( data ) {
-							return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues) ||
+							return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues && !data.props.variableIsDate) ||
 							(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' || data.props.visualizationType=='searchonly')
 							);
 					  	},
@@ -1712,7 +1843,7 @@ define( [], function () {
 							  label: "Multiword search with Excel copy-paste",
 							  defaultValue: false,
 							  show: function ( data ) {
-								return data.props.visualizationType!='searchonly'
+								return data.props.visualizationType!='searchonly' && data.props.enablesearch;
 							  }
 							},
 							exportenableMultisearchWith: {
@@ -1731,6 +1862,15 @@ define( [], function () {
 								show: function(data){
 									return data.props.visualizationType=='searchonly';
 								}
+							},
+							searcHideClear :{
+							  ref: "props.searcHideClear",
+							  type: "boolean",
+							  label: "Hide clear button",
+							  defaultValue: false,
+							  show: function ( data ) {
+								return data.props.visualizationType=='searchonly' || data.props.enablesearch;
+							  }
 							}
 						}
 					},
@@ -1900,11 +2040,11 @@ define( [], function () {
 							},
 							color_hoverBG:{
 								type: "string",
-								label: "Hover backgroung color",
+								label: "Hover background color",
 								ref: "props.color_hoverBG",
 								defaultValue: '', expression:"optional",
 								show: function ( data ) {
-									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+									return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
 							  	}
 							},
 							color_hoverFont:{
@@ -1913,7 +2053,7 @@ define( [], function () {
 								ref: "props.color_hoverFont",
 								defaultValue: '', expression:"optional",
 								show: function ( data ) {
-									return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+									return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
 							  	}
 							}
 						}
@@ -1943,7 +2083,7 @@ define( [], function () {
 							  label: "Custom HTML attribute for every element",
 							  defaultValue: '',expression:"optional",
 							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+								return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
 							  }
 							},
 							customElementClass: {
@@ -1952,7 +2092,7 @@ define( [], function () {
 							  label: "Custom HTML class for every element",
 							  defaultValue: '',expression:"optional",
 							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+								return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
 							  }
 							},
 							customStyleCSS: {
@@ -1967,7 +2107,7 @@ define( [], function () {
 							  label: "Custom hover CSS style for every element",
 							  defaultValue: '',expression:"optional",
 							  show: function ( data ) {
-								return !data.props.visualizationType=='dropdown' && !data.props.visualizationType=='select2';
+								return !(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
 							  }
 							},
 							preElemHtml: {
@@ -1997,7 +2137,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 1.9.31 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 2.0.0 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

@@ -1,3 +1,9 @@
+2.0.0
+ - Option to remove clear button from search
+ - Minor fixes
+ - Remove full screen option will default in new objects to true, a wish from the Qlik Pre-sales. :)
+ - Hover color and font settings were hidden because of code typo. So element hover background and font colors can be again defined.
+ - Global option to set (many of) the colors and paddings of all SFS objects on a sheet. So you can use one object to control some settings of all SFS objects. No need to configure each separately.
 1.9.31
  - Search only visualization fix if two or more instances on one sheet
 1.9.30

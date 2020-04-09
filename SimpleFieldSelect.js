@@ -257,6 +257,28 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			
 		//}
+		var objsel = ' .qv-object-SimpleFieldSelect ';
+		if (pr.globsfs_stateS_bg){ gcss += objsel+'li.stateS {background-color:'+pr.globsfs_stateS_bg+';}'; }
+		if (pr.globsfs_stateO_bg){ gcss += objsel+'li.stateO {background-color:'+pr.globsfs_stateO_bg+';}'; }
+		if (pr.globsfs_stateA_bg){ gcss += objsel+'li.stateA {background-color:'+pr.globsfs_stateA_bg+';}'; }
+		if (pr.globsfs_stateX_bg){ gcss += objsel+'li.stateX {background-color:'+pr.globsfs_stateX_bg+';}'; }
+		if (pr.globsfs_stateS_fo){ gcss += objsel+'li.stateS {color:'+pr.globsfs_stateS_fo+';}'; }
+		if (pr.globsfs_stateO_fo){ gcss += objsel+'li.stateO {color:'+pr.globsfs_stateO_fo+';}'; }
+		if (pr.globsfs_stateA_fo){ gcss += objsel+'li.stateA {color:'+pr.globsfs_stateA_fo+';}'; }
+		if (pr.globsfs_stateX_fo){ gcss += objsel+'li.stateX {color:'+pr.globsfs_stateX_fo+';}'; }
+		if (pr.globsfs_border){ gcss += objsel+'.sfe,.qv-object-SimpleFieldSelect ul li {border-color:'+pr.globsfs_border+';}'; }
+		if (pr.globsfs_hoverBG){ gcss += objsel+'.sfe:hover {background-color:'+pr.globsfs_hoverBG+'!important; transition: 0.2s;}'; }
+		if (pr.globsfs_hoverFontcolor){ gcss += objsel+'.sfe:hover {color:'+pr.globsfs_hoverFontcolor+'!important; transition: 0.2s;}'; }
+		//paddings
+		objsel = ' .qv-object-SimpleFieldSelect .sfsdiv ';
+		//if (pr.globsfs_contentpad){ gcss += objsel+'{padding:'+pr.globsfs_contentpad+'; height:calc(100% - 2*('+pr.globsfs_contentpad+')); }'; }
+		if (pr.globsfs_leftpad){ gcss += objsel+'{padding-left:'+pr.globsfs_leftpad+';}'; }
+		if (pr.globsfs_bottompad){ gcss += objsel+'{padding-bottom:'+pr.globsfs_bottompad+';}'; }
+		if (pr.globsfs_rightpad){ gcss += objsel+'{padding-right:'+pr.globsfs_rightpad+';}'; }
+		if (pr.globsfs_toppad){ gcss += objsel+'{padding-top:'+pr.globsfs_toppad+';}'; }
+		if (pr.globsfs_custompad){ gcss += objsel+'{padding:'+pr.globsfs_custompad+';}'; }
+		
+		
 		return gcss;
 	}
 	//not in use yet
@@ -688,7 +710,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				
 			}
 			if(pr.enablesearch){
-				if((visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
+				if(!(pr.dimensionIsVariable && pr.variableIsDate) && (visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
 					var searchId = 'se'+layout.qInfo.qId;
 					if(pr.removeFullScrnBtn || pr.showHeader){
 						html += '<div class="sfssearchdiv"';
@@ -706,7 +728,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					} else {
 						html += '<input class="lui-search__input sfssearchinput" id="'+searchId+'" spellcheck="false" type="text" placeholder="Search" />';
 					}
-					html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchinput_clear" title="clear search"></span>';
+					if(!pr.searcHideClear){
+						html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchinput_clear" title="clear search"></span>';
+					}
 					html += '</div></div>';
 					if(pr.removeFullScrnBtn || pr.showHeader){
 
@@ -719,9 +743,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//content heigth
 			if(pr.contentpadding && pr.contentpadding != '-'){
 				containerDivHeight_reduce += (parseInt(pr.contentpadding)*2); //add padding to height reduce x 2
-				html += '<div style="padding:'+pr.contentpadding +'px; height:calc(100% - '+containerDivHeight_reduce+'px); min-height:50%;">';
+				html += '<div class="sfsdiv" style="padding:'+pr.contentpadding +'px; height:calc(100% - '+containerDivHeight_reduce+'px); min-height:50%;">';
 			} else {
-				html += '<div style="height:calc(100% - '+containerDivHeight_reduce+'px); min-height:50%;">';
+				html += '<div class="sfsdiv" style="height:calc(100% - '+containerDivHeight_reduce+'px); min-height:50%;">';
 			}
 			//change for mobile
 			if ($('.smallDevice').length >0){ //$(window).width()<600
@@ -941,7 +965,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
-					html += '<div class="checkboxgroup '+objectCSSid+'">';
+					html += '<div class="sfsc '+objectCSSid+'">';
 					html += '<input '+inattributes+' title="';
 					if (titletext != ''){
 						html += titletext; //escape quotas!!
@@ -1035,7 +1059,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						}
 					}
 					//build html
-					html += '<div class="checkboxgroup '+objectCSSid+'">';
+					html += '<div class="sfsc '+objectCSSid+'">';
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
@@ -1131,7 +1155,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 					html += '<div class="sfs_lui '+objectCSSid+displayFlexBoxClass+'" style="'+stylechanges+'"';
 				} else {
-					html += '<div class="checkboxgroup '+objectCSSid+'"';
+					html += '<div class="sfsc '+objectCSSid+'"';
 				}
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
@@ -1276,7 +1300,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					html += '<div class="lui-search" style="height:100%;">';
 					html += '<span class="lui-icon lui-icon--search sfssearchicon2"></span>';
 					html += '<textarea class="lui-search__input sfssearchinput" id="'+searchId+'" spellcheck="false" type="text" placeholder="Search" style="resize: none; padding:3px; height:100%;"></textarea>';
-					html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchonlyinput_clear" title="clear search"></span>';
+					if(!pr.searcHideClear){
+						html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchonlyinput_clear" title="clear search"></span>';
+					}
 					html += '</div></div>';
 					html += '<div class="sfssearchcountbar qv-state-count-bar">';
 					var selectedperc = calcTotalRows ? Math.floor(calcSelected / calcTotalRows * 100) : 0;
@@ -1619,7 +1645,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				//list action
 				if (visType=='hlist' || visType=='vlist'){
 					//todo, fix mobile "paint selection"
-					var listtargets = $element.find( '.checkboxgroup li' );
+					var listtargets = $element.find( '.sfsc li' );
 					if (!pr.dimensionIsVariable){
 						var isMouseDown = false, newselectionsDone = false;
 						articleElement.off('mousedown touchstart').off('mouseup mouseleave touchend');

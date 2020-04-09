@@ -21,14 +21,14 @@
 .qv-object-SimpleFieldSelect input :checked{
 	font-weight:bold;
 }
-.qv-object-SimpleFieldSelect .checkboxgroup label{
+.qv-object-SimpleFieldSelect .sfsc label{
 	padding-right:5px;
 	text-overflow: ellipsis;
 	display: inline-block;
 	padding-left:2px;
 	padding-top:2px;
 }
-.qv-object-SimpleFieldSelect .checkboxgroup {
+.qv-object-SimpleFieldSelect .sfsc {
 	height:100%;
 }
 .qv-object-SimpleFieldSelect .sfsbtn {
