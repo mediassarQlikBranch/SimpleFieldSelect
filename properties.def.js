@@ -1523,9 +1523,16 @@ define( [], function () {
 								},
 								expression:"optional"
 							},
+							aboutVarOpt:{
+								component: "text",
+								label: "Options for values: separate by ; To use a section title use ## in the beginning. Section titles are shown in dropdowns. You can set style of section.",
+								show: function ( data ) {
+									return  !data.props.variableIsDate ;
+								}
+							},
 							variableOptionsForValues: {
 								ref: "props.variableOptionsForValues",
-								label: "Options for values, separate by ;",
+								label: "Options for values",
 								type: "string",
 								defaultValue: "",
 								show: function ( data ) {
@@ -1533,6 +1540,17 @@ define( [], function () {
 								},
 								expression:"optional"
 							},
+							variableOptGroupStyle: {
+								ref: "props.variableOptGroupStyle",
+								label: "Style for section title",
+								type: "string",
+								defaultValue: "",
+								show: function ( data ) {
+									return  !data.props.variableIsDate && (data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2');
+								},
+								expression:"optional"
+							},
+							
 							varMultiselectAllow: {
 								ref: "props.varMultiselectAllow",
 								type: "boolean",
@@ -1548,11 +1566,11 @@ define( [], function () {
 								type: "string",
 								defaultValue: "|",
 								show: function ( data ) {
-									return data.props.varMultiselectAllow;
+									return !data.props.variableIsDate && data.props.varMultiselectAllow;
 								},
 								expression:"optional"
 							},
-							aboutSecondVariable:{
+							aboutSecVar:{
 								component: "text",
 								label: "You can set another variable to follow the main variables selections. You can use this feature like a key for the first variable",
 								show: function ( data ) {
@@ -2137,7 +2155,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.0 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 2.0.1 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

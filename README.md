@@ -9,6 +9,7 @@ If you have a good idea for further development, let us know.
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Sections to dropdown and select2 visualizations
 - Global options to control some visual settings of all SFS objects on a sheet, colors, paddings.
 - Global option to remove zoom/maximize efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
 - Search only visualization - will show search box only, won't draw elements. This is usefull for fields with high number of elements and when there is a need to select great amount of them. For example by copy-pasting from Excel etc. Works also with delimited string. Limitation: Won't count duplicates in multiword case correctly while searching.

@@ -1152,6 +1152,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			} else {
 				var visTypedropdownOrSelect2 = visType=='dropdown' || visType=='select2';
 				var stylechanges = fontsizechanges+fontStyleTxt+containerStyles;
+				var selectOptGroupStyle = '';
 				if(visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio'){
 					html += '<div class="sfs_lui '+objectCSSid+displayFlexBoxClass+'" style="'+stylechanges+'"';
 				} else {
@@ -1207,7 +1208,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					html += 'Select visualization type';
 				}
 				//print elements
-				var optionsforselect = [];
+				var optionsforselect = [], optionsPrintGroupHeaderBeforeValue = {};
 				if (pr.dimensionIsVariable){
 					//generate variable options from field
 					if (debug) console.log('variable value '+varvalue);
@@ -1227,6 +1228,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					sfssettings.variableOptionsForKeysArray = [];
 					splitted.forEach(function(opt){
 						var qState = 'O';
+						if (opt.substring(0,2)=='##'){ //is group info
+							optionsPrintGroupHeaderBeforeValue[varindex] = opt.substring(2);
+							return;
+						}
 						//if values match with current, mark selected
 						if (pr.varMultiselectAllow){
 							if (typeof varvalues[opt] !== 'undefined' && varvalues[opt]==1){
@@ -1253,7 +1258,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							sfssettings.variableOptionsForKeysArray = []; //reset array
 						}
 					}
-					
+					if (visTypedropdownOrSelect2){
+						selectOptGroupStyle = checkUserCSSstyle2(pr.variableOptGroupStyle);
+					}
 				//if not variable:
 				} else {
 					optionsforselect = matrixdata;
@@ -1315,6 +1322,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					searchDictionary = optionsforselect;
 				} else {
 				//paint options
+				var selectOptgroupSectionPrinted = 0;
 				optionsforselect.forEach( function ( row ) {
 					if (pr.hidePassiveItems && !pr.dimensionIsVariable && row[0].qState === 'X'){ //if passive hiding enabled
 						return; //exit current function
@@ -1441,6 +1449,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/>' + row[0].qText; //
 						html += '</label>';
 					} else if (visTypedropdownOrSelect2){
+						if (optionsPrintGroupHeaderBeforeValue && optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]){
+							if(selectOptgroupSectionPrinted){
+								html += '';
+							}
+							html += '<optgroup label="'+optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]+'" style="'+selectOptGroupStyle+'"></optgroup>'
+							selectOptgroupSectionPrinted = 1;
+						}
 						html += '<option '+elementstyle+'class="data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '" value="' + row[0].qElemNumber + '"' + dis + dropselection + ' >' + row[0].qText;
 						html += '</option>';
 					} else if (visType=='luiswitch'){
@@ -1465,10 +1480,14 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						html += pr.postElemHtml;
 					}
 				});
+				
 				} //vistype != 'searconly'
 				if (visType=='hlist' || visType=='vlist'){
 					html += '</ul>';
 				}else if (visTypedropdownOrSelect2){
+					if(selectOptgroupSectionPrinted){ //if
+						html += '';
+					}
 					html += '</select>';
 					if (pr.postElemHtml){
 						html += pr.postElemHtml;
