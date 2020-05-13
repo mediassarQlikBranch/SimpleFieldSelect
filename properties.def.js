@@ -2155,7 +2155,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.1 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 2.0.2 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

@@ -87,6 +87,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			var selectors = pr.global_customselector.split(";");
 			selectors.forEach(function(i){
 				cObjSelectors.push('.qv-object-'+i);
+				cObjSelectors.push('.qv-object-'+i+' .qv-inner-object'); //newer qlik
 				//selectors3.push('.qv-gridcell:not(.qv-gridcell-empty):has(> .qv-object-'+i+')');
 			});
 			customObjectSelector = ' '+cObjSelectors.join(',');
@@ -149,8 +150,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		if(pr.global_objAxisCSS){
 			if (customObjectSelector){
 				gcss += ' '+cObjSelectors.join(' .lui-fade-button__text,') +' .lui-fade-button__text {'+checkUserCSSstyle2(pr.global_objAxisCSS,1)+'}';
+				gcss += ' '+cObjSelectors.join(' .chart-data-title-label,') +' {'+checkUserCSSstyle2(pr.global_objAxisCSS,1)+'}';
+				gcss += ' '+cObjSelectors.join(' button span span,') +' {'+checkUserCSSstyle2(pr.global_objAxisCSS,1)+'}';
 			} else {
-				gcss += ' .qv-object .lui-fade-button__text {'+ checkUserCSSstyle2(pr.global_objAxisCSS,1) +'}';
+				gcss += ' .qv-object .lui-fade-button__text, .chart-data-title-label, .qv-object button span span {'+ checkUserCSSstyle2(pr.global_objAxisCSS,1) +'}';
 			}	
 		}
 		if(pr.removeHeaderFromTextImageObjects){

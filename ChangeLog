@@ -1,3 +1,6 @@
+2.0.2
+ - Fix for Global object background with newer Qlik version and cloud
+ - Fox for Global object axis color change (newer Qlik version have different kind of way to set colors) Both old and new version should be supported now.
 2.0.1
  - Dropdown and select2 have possibility to create sections group labels with special notation in variable settings like ##firstvaleus;1;2;3;4;##secondvalues;5;6;7;8
 2.0.0
