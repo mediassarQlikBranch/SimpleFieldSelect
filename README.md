@@ -5,6 +5,8 @@ To reduce amount of required extensions on a sheet Simple Field Select has globa
 
 If you have a good idea for further development, let us know.
 
+This extension is tested on Qlik Cloud. For Qlik Cloud installation, please use zip files located in the dist folder.
+
 ## To install
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
