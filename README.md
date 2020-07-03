@@ -3,7 +3,7 @@
 This extension is an "all in one" selection component with several customization options. It gives Qlik Sense many Qlikview features like select only one, default value and context menu.
 To reduce amount of required extensions on a sheet Simple Field Select has global options for the current sheet modification. In this way you can hide many settings for example inside the year selector. In addition you can set  background color of the sheet/objects, hide title bar, modify all borders, remove Insights button etc.
 
-If you have a good idea for further development, let us know.
+If you have a good idea for further development, let us know. Check https://www.oivalo.fi
 
 This extension is tested on Qlik Cloud. For Qlik Cloud installation, please use zip files located in the dist folder.
 
@@ -137,3 +137,5 @@ HTML inputs:
 
 For date picker jQuery UI component is used. CSS is parsed for only required parts.
 Select2 (select2.org) plugin is used for Select2 dropdown visualization.
+
+Visit https://www.oivalo.fi
