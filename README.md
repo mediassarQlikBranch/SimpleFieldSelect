@@ -11,6 +11,7 @@ This extension is tested on Qlik Cloud. For Qlik Cloud installation, please use 
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
+- Disable toggle - Finally there is not fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
 - Sections to dropdown and select2 visualizations
 - Global options to control some visual settings of all SFS objects on a sheet, colors, paddings.
 - Global option to remove zoom/maximize efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
@@ -40,7 +41,6 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 - Add text object to menu bar
 - Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
   - Enable Global modifications for only one SimpleFieldSelect object per sheet.
-- **Qlik Sense November's (and lataer) native feature for Always one selected doesn't allow selection through API as before.**
 - Note! Change to export mode handling in 1.8.6, see release notes
 
 

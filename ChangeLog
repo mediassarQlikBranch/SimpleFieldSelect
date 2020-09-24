@@ -1,3 +1,5 @@
+2.0.3
+ -  Disable toggle mode -option. This is actually fix for case when Qlik has "Always one selected value" - set, now this old issue is finally fixed! You have to set extension to work with out Toggle mode.
 2.0.2
  - Fix for Global object background with newer Qlik version and cloud
  - Fox for Global object axis color change (newer Qlik version have different kind of way to set colors) Both old and new version should be supported now.

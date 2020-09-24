@@ -281,6 +281,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		if (pr.globsfs_toppad){ gcss += objsel+'{padding-top:'+pr.globsfs_toppad+';}'; }
 		if (pr.globsfs_custompad){ gcss += objsel+'{padding:'+pr.globsfs_custompad+';}'; }
 		
+		if(pr.global_customCSS){
+			gcss += ' '+pr.global_customCSS;
+		}
 		
 		return gcss;
 	}
@@ -368,7 +371,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 		//set field
 		} else {
-			if(debug) console.log('set value to index '+value);
+			if(layout.props.disableToggleMode){
+				selectvalueMethod = false; //for Always one selected value
+			}
+			if(debug) console.log('set value to index '+value + ' method '+selectvalueMethod); //true normal QLik method, 
 			if(isNaN(value)){
 				self.backendApi.selectValues( 0, [], selectvalueMethod );
 			} else {

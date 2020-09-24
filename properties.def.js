@@ -383,6 +383,13 @@ define( [], function () {
 					  type: "integer",
 					  expression:"optional",
 					  defaultValue: 0
+					},
+					global_customCSS: {
+					  ref: "props.global_customCSS",
+					  label: "Custom CSS",
+					  type: "string",
+					  expression:"optional",
+					  defaultValue: ''
 					}
 				}
 
@@ -983,6 +990,16 @@ define( [], function () {
 						show: function ( data ) {
 							return data.qListObjectDef && data.props && !(data.props.dimensionIsVariable && data.props.variableIsDate );
 						}
+					},
+					toggleMode: {
+						ref: "props.disableToggleMode",
+						type: "boolean",
+						label: 'Disable toggle mode - if field is set in Qlik to "Always one selected value" - check this to make selections to work',
+						defaultValue: false,
+						show: function ( data ) {
+							return data.props && !data.props.dimensionIsVariable && data.props.visualizationType!='txtonly';
+						}
+
 					},
 					textareaonlytext: {
 						component: "textarea",
@@ -2155,7 +2172,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.2 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 2.0.3 Developed by Matti Punkeri / Oivalo Oy"
 							}
 						}
 					}

@@ -3,4 +3,6 @@ SimpleFieldSelect.js;
 SimpleFieldStyle.css;
 jquery-ui.min.js;
 datepicker.css;
-properties.def.js
+properties.def.js;
+select2/select2.css;
+select2/select2.min.js;
