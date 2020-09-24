@@ -11,7 +11,7 @@ This extension is tested on Qlik Cloud. For Qlik Cloud installation, please use 
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
 ## Latest features
-- Disable toggle - Finally there is not fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
+- Disable toggle - Finally there is now fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
 - Sections to dropdown and select2 visualizations
 - Global options to control some visual settings of all SFS objects on a sheet, colors, paddings.
 - Global option to remove zoom/maximize efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
