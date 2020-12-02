@@ -1257,29 +1257,30 @@ define( [], function () {
 								options: sortoptions,
 								defaultValue: 0,
 								change: function(item){
-									item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression;
+									//item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression;
 								}
-							},
+							},*/
 							qExpression: {
 								type: "string",
 								label: "Sort by expression",
-								ref: "qListObjectDef.qDef.qExpression.qv",
-								defaultValue: " ",expression:"always",component: "expression",
+								ref: "qListObjectDef.qDef.qSortCriterias.0.qExpression.qv",
+								defaultValue: " ",
+								expression:"always",
 								show: function(data) {
-									if(data.qListObjectDef.qDef.qSortCriterias[0].qExpression){
-										data.qListObjectDef.qDef.qExpression = data.qListObjectDef.qDef.qExpression ? data.qListObjectDef.qDef.qExpression : {qv: ''};
-										data.qListObjectDef.qDef.qExpression.qv = data.qListObjectDef.qDef.qSortCriterias[0].qExpression.qv;
-									}
+									//if(data.qListObjectDef.qDef.qSortCriterias[0].qExpression){
+									//	data.qListObjectDef.qDef.qExpression = data.qListObjectDef.qDef.qExpression ? data.qListObjectDef.qDef.qExpression : {qv: ''};
+									//	data.qListObjectDef.qDef.qExpression.qv = data.qListObjectDef.qDef.qSortCriterias[0].qExpression.qv;
+									//}
 									
 									//data.qDef.qExpression = data.qDef.qExpression ? data.qDef.qExpression : {qv: ''};
 									return data.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression != 0;
 								},
 								change: function(item){
-									var expr = item.qListObjectDef.qDef.qExpression.qv.qStringExpression ? item.qListObjectDef.qDef.qExpression.qv.qStringExpression.qExpr : item.qListObjectDef.qDef.qExpression.qv;
+									/*var expr = item.qListObjectDef.qDef.qExpression.qv.qStringExpression ? item.qListObjectDef.qDef.qExpression.qv.qStringExpression.qExpr : item.qListObjectDef.qDef.qExpression.qv;
 									item.qListObjectDef.qDef.qSortCriterias[0].qExpression.qv = expr.qv;
-									item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression || 1;
+									item.qListObjectDef.qDef.qSortCriterias[0].qSortByExpression = item.qListObjectDef.qDef.qSortByExpression || 1;*/
 								}
-							}*/
+							}
 						}
 					},
 					padandheader: padandheader,
@@ -2172,7 +2173,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.3 Developed by Matti Punkeri / Oivalo Oy"
+							label: "Version 2.0.4 Developed by Matti Punkeri / Oivalo Oy - www.oivalo.fi"
 							}
 						}
 					}

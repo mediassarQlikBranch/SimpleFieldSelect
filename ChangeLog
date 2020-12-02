@@ -1,3 +1,5 @@
+2.0.4
+ - Removed jquery.ui library (seems that it is not needed anymore). Improves cloud functionality
 2.0.3
  -  Disable toggle mode -option. This is actually fix for case when Qlik has "Always one selected value" - set, now this old issue is finally fixed! You have to set extension to work with out Toggle mode.
 2.0.2
