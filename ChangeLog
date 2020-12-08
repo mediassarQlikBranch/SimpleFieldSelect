@@ -1,5 +1,7 @@
+2.0.6
+ - Fix for overlay handling
 2.0.5
- - Alternative overlay implementation which will fill whole object. 
+ - Alternative overlay implementation which will fill whole object.
 2.0.4
  - Removed jquery.ui library (seems that it is not needed anymore). Improves cloud functionality
 2.0.3
