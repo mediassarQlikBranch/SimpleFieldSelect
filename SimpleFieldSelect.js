@@ -6,6 +6,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
 	var keepaliverTimer;
+	var overlayhasbeendrawn = 0;
 
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app,sfssettings){
@@ -696,11 +697,17 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 			if (pr.helptext){
 				containerDivHeight_reduce += 19; //approximantion px amount of help text size
 			}
+			if (overlayhasbeendrawn){
+				articleElement.find('.sfsoverlay').remove();
+				overlayhasbeendrawn = 0;
+			}
 			if(pr.enableoverlay==1){
+				overlayhasbeendrawn = 1;
 				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
 				obgcolor = obgcolor ? obgcolor : '#ababab';
 				html += '<div class="sfsoverlay" style="background-color:'+obgcolor+';'+checkUserCSSstyle2(pr.overlaybgcss)+'"><div class="sfsoverlaycont" style="'+checkUserCSSstyle2(pr.overlaytxtcss)+'">'+pr.overlaytext+'</div></div>';
 			} else if(pr.enableoverlay==2){
+				overlayhasbeendrawn = 1;
 				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
 				obgcolor = obgcolor ? obgcolor : '#ababab';
 				articleElement.find('.sfsoverlay').remove();
