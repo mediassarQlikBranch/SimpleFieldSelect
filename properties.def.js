@@ -1805,7 +1805,7 @@ define( [], function () {
 							overlay: {
 								ref: "props.enableoverlay",
 								type:"integer",
-								label:"Show overlay (1 to enable)",
+								label:"Show overlay (1 to enable, 2 for new version)",
 								defaultValue: 0,
 								expression: 'optional'
 							},
@@ -2173,7 +2173,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.4 Developed by Matti Punkeri / Oivalo Oy - www.oivalo.fi"
+							label: "Version 2.0.5 Developed by Matti Punkeri / Oivalo Oy - www.oivalo.fi"
 							}
 						}
 					}

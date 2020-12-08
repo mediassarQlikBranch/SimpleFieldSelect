@@ -1,4 +1,4 @@
-define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
+define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	var debug = false;
@@ -700,6 +700,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
 				obgcolor = obgcolor ? obgcolor : '#ababab';
 				html += '<div class="sfsoverlay" style="background-color:'+obgcolor+';'+checkUserCSSstyle2(pr.overlaybgcss)+'"><div class="sfsoverlaycont" style="'+checkUserCSSstyle2(pr.overlaytxtcss)+'">'+pr.overlaytext+'</div></div>';
+			} else if(pr.enableoverlay==2){
+				var obgcolor = checkUserCSSstyle2(pr.overlaybgcolor);
+				obgcolor = obgcolor ? obgcolor : '#ababab';
+				articleElement.find('.sfsoverlay').remove();
+				articleElement.append('<div class="sfsoverlay" style="background-color:'+obgcolor+';'+checkUserCSSstyle2(pr.overlaybgcss)+'"><div class="sfsoverlaycont" style="'+checkUserCSSstyle2(pr.overlaytxtcss)+'">'+pr.overlaytext+'</div></div>');
 			}
 			//extra label
 			if(pr.inlinelabeltext){
