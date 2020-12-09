@@ -10,6 +10,8 @@ This extension is tested on Qlik Cloud. For Qlik Cloud installation, please use 
 ## To install
 Download a ZIP file from the dist directory or clone the branch. Install the zip as any Qlik Sense extension.
 
+**Some of the zip files in dist/ directory have been corrupted so that Qlik cloud setup won't be able to install them. Fixed at least in 2.0.6 zip file. (7-Zip must be used to create package, not Windows zip)**
+
 ## Latest features
 - Disable toggle - Finally there is now fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
 - Sections to dropdown and select2 visualizations
