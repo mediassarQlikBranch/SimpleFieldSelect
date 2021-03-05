@@ -19,12 +19,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 	  if (countselected==0 && selectDefaults){
 		var defaulttoselect = $element.find( '.defaultelement' );
 		var otherdefaultelememnts = $element.find('.otherdefelem');
-
-		//check if element is found
-		/*if (defaulttoselect.length<1 && otherdefaultelememnts.length<1) {
-			if(debug) console.log('Default value was not found' +layout.qInfo.qId);
-			return;
-		}*/
 		var otherDefaultElementsSelectionStyle = true; //depends on if the main default value is selected
 		var valuesToSelect = [];
 		sfsdefaultselstatus[layout.qInfo.qId] = 1;
@@ -207,10 +201,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 		if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
 			if($("#qv-toolbar-container,.qv-toolbar-container").length>0) {//pre 2019 feb
 				gcss += ' #qv-toolbar-container,.qv-toolbar-container {display:none!important;}';
-				//$("#qv-toolbar-container").css('display','none');
 			} else {
 				gcss += ' .qs-toolbar-container {display:none!important;}';
-				//$(".qs-toolbar-container").css('display','none');
 			}
 			gcss += '.qv-panel {height:100%;}';
 		}
@@ -490,6 +482,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 		controller: ['$scope', '$element', function ($scope, $element) {
 			if (debug) console.log('controller init');
 			var scpr = $scope.layout.props;
+			if (!scpr){ //error "handling" in some cases, cloud...
+				return false;
+			}
 			//globalAllSelectionsCleared = 0; //reset
 			if (scpr.enableGlobals && scpr.clearAllSelOnFirstLoad){
 				if (debug) console.log('clear all');
@@ -764,12 +759,18 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 				html += '<div class="sfsdiv" style="height:calc(100% - '+containerDivHeight_reduce+'px); min-height:50%;">';
 			}
 			//change for mobile
-			if ($('.smallDevice').length >0){ //$(window).width()<600
+			//if ($('.smallDevice').length >0){ //$(window).width()<600
+			if (document.querySelector('.smallDevice') !== null){
 				setSmallDeviceStuff($element,pr);
 			}
-			if(pr.removeFullScrnBtn){
+			if(pr.removeFullScrnBtn || pr.removeMoreBtn){
 				var objectwrapper = articleElement.parent().parent();
-				objectwrapper.find('a.lui-icon--expand').remove();
+				if(pr.removeFullScrnBtn) {
+					objectwrapper.find('a.lui-icon--expand').remove();
+				}
+				if(pr.removeMoreBtn){
+					objectwrapper.find('a.lui-icon--more').remove();
+				}
 			}
 			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
@@ -819,14 +820,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 			if (pr.enableGlobals){
 				if(debug) console.log('enabled globals ' + layout.qInfo.qId);
 				var sfsglobalCSSid = "SFSglobalCSS"+layout.qInfo.qId;
-				if ($("#"+sfsglobalCSSid).length>0){
+				//if ($("#"+sfsglobalCSSid).length>0){
+				if (document.getElementById(sfsglobalCSSid)){
 				} else {
 					articleElement.append($( '<div id="'+sfsglobalCSSid+'" style="display:none;" class="sfsglobalcss"></div>' ));
 				}
 				if( $(".sfsglobalcss").length>1 ){
 					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove others.');
 				}
-				$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
+				//$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
+				document.getElementById(sfsglobalCSSid).innerHTML = '<style>' + createglobalCSS(pr) + '</style>';
 				if(pr.global_bghtml){
 					var basestyle = 'position: absolute;top: 0px;right: 0px;left: 0px;bottom: 0px;';
 					if ($("#sfsgridbg").length>0){
@@ -1688,6 +1691,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 						articleElement.on('mousedown touchstart',function() {
 	        				isMouseDown = true;
 	        				if (debug) console.log('mouse down');
+	        				//$(this).addClass('selected').addClass('stateS').removeClass('stateA');
+						});
+						listtargets.on('mousedown touchstart',function() {
+							isMouseDown = true;
+							if (!$(this).hasClass('selected')){
+								$(this).addClass('selected').addClass('stateS').removeClass('stateA');
+							}
 						});
 						articleElement.on('mouseup mouseleave touchend',function() { //m up or leave element
 							isMouseDown = false;
@@ -1870,8 +1880,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 					});
 
 				} //if
-				//sea
-				//as default:
 				checkDefaultValueSelection($element,countselected,layout,self,app,sfssettings);
 			}
 			//select2 init

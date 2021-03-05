@@ -1,3 +1,8 @@
+2.0.7
+ - Minor fix for cloud
+ - Fix for dragging selection - The first element with dragging was not selected - now it will!
+ - Select2 library update
+ - Option to remove "More options" or "..." menu from the object
 2.0.6
  - Fix for overlay handling
 2.0.5

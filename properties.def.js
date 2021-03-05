@@ -1360,6 +1360,12 @@ define( [], function () {
 							  label: "Remove full screen button",
 							  defaultValue: true
 							},
+							removeMoreBtn: {
+							  ref: "props.removeMoreBtn",
+							  type: "boolean",
+							  label: "Remove more options menu",
+							  defaultValue: false
+							},
 							mobileContainerHeight: {
 							  ref: "props.mobileCustomHeightCSS",
 							  type: "string",
@@ -2173,7 +2179,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.5 Developed by Matti Punkeri / Oivalo Oy - www.oivalo.fi"
+							label: "Version 2.0.7 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}
