@@ -704,6 +704,17 @@ define( [], function () {
 					  	return !data.props.hideGuiToolbar;
 					  }
 					},
+					hideToolbarCenterStory: {
+					  ref: "props.hideToolbarCenterStory",
+					  component: "switch",
+					  type: "boolean",
+					  label: "Hide only Storytelling -button",
+					  defaultValue: false,
+					  options: [{value: true,label: "Hide"}, {value: false,label: "Show"}],
+					  show: function ( data ) {
+					  	return !data.props.hideGuiToolbar && !data.props.hideToolbarCenter;
+					  }
+					},
 					hideToolbarCenterPerm: {
 					  ref: "props.hideToolbarCenterPerm",
 					  type: "boolean",
@@ -1574,7 +1585,15 @@ define( [], function () {
 								},
 								expression:"optional"
 							},
-							
+							varRemovebrackets: {
+								ref: "props.varRemovebrackets",
+								type: "boolean",
+								label: "Remove brackets and quote marks from output?",
+								defaultValue: false,
+								show: function ( data ) {
+									return  !data.props.variableIsDate && data.props.visualizationType!='input' && data.props.variableOptionsForValues; //select2 single select exlude
+							  }
+							},
 							varMultiselectAllow: {
 								ref: "props.varMultiselectAllow",
 								type: "boolean",
@@ -2179,7 +2198,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.7 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.0.8 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}

@@ -1,4 +1,4 @@
-define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
+define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	var debug = false;
@@ -54,6 +54,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 			if(debug){ console.log('select many'); console.log(valuesToSelect);}
 			selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 		}
+	  } else if (countselected){ //if something is selected, mark defaults as selected
+	  	sfsdefaultselstatus[layout.qInfo.qId] = 1;
 	  }
 	}
 	function checkUserCSSstyle2(css, checkquote){
@@ -223,6 +225,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 				gcss += ' .qs-toolbar__center {display:none!important;}';	
 			}
 			
+		} else if(pr.hideToolbarCenterStory){
+			$("[tid=tab-nav-story].tab-menu-button").remove();
 		}
 		if(pr.global_selectBGcolor){
 			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
@@ -1061,6 +1065,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 							if(typeof splittedkeys[i] !== 'undefined'){
 								label = splittedkeys[i];
 							}
+							if (pr.varRemovebrackets){
+								opt = opt.replace(/"|\]|\[/g,'');
+							}
 							datalist += '<option label="'+label+'">'+opt+'</option>';
 						});
 						datalist += '</datalist> ';
@@ -1259,8 +1266,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","
 						} else if (varvalue == opt) {
 							qState = 'S'; 
 						} //build qlik style object for printing
-						optionsforselect.push( [{qState:qState, qText:opt, qElemNumber:varindex}] );
 						sfssettings.variableOptionsForValuesArray.push(opt); //when setting variable, take value from here.
+						if (pr.varRemovebrackets){ //remove marks from "output"
+							opt = opt.replace(/"|\]|\[/g,'');
+						}
+						optionsforselect.push( [{qState:qState, qText:opt, qElemNumber:varindex}] );
+
+						
 						varindex += 1;
 					});
 					if (debug){ console.log(pr.variableOptionsForValues); }

@@ -14,6 +14,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 In some cases browser cache will use old version of settings and requires recently removed javascript file. That file has been added to latest version but is not required anymore and will be later removed.
 
 ## Latest features
+- Gloabl option to hide only the Story telling -button.
 - Finally fix for dragging selection "start issue" - Now the first element also gets selected
 - Disable toggle - Finally there is now fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
 - Sections to dropdown and select2 visualizations

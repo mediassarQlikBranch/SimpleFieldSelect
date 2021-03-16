@@ -1,3 +1,7 @@
+2.0.8
+ - Option to remove variable barckets and double quotas from shown variable. This is needed when variable control is used to select values
+ - If "Select defaults once" and there is some selection before defaults are selected and then selections are removed, defaults are considered to be already selected once. So no re-selection happens when initial selection has been cleared.
+ - Due to lack of data update of Storytelling there is now a new option to hide just the Storytelling button from the toolbar
 2.0.7
  - Minor fix for cloud
  - Fix for dragging selection - The first element with dragging was not selected - now it will!
