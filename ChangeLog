@@ -1,3 +1,5 @@
+2.0.9
+ - Fix for search with checkboxes and others
 2.0.8
  - Option to remove variable barckets and double quotas from shown variable. This is needed when variable control is used to select values
  - If "Select defaults once" and there is some selection before defaults are selected and then selections are removed, defaults are considered to be already selected once. So no re-selection happens when initial selection has been cleared.

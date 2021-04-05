@@ -1307,7 +1307,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (!pr.selectOnlyOne && pr.selectAlsoThese && pr.selectAlsoThese != '' && !pr.dimensionIsVariable &&
 						visType!='dropdown' && visType!='btn' && visType!='radio'){
 					otherDefaultValues = pr.selectAlsoThese.split(";");
-					//console.log(otherDefaultValues);
 				}
 				//forced values
 				var forcedValues = [];
@@ -1961,7 +1960,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				function strfilter (str) { return str.trim(); }
 				var filters = [], filtercount = 0;
-				
+				var targets = $element.find('.data');
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					filters = [];
@@ -1992,9 +1991,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						return false;
 					}
 
-					var targets = $element.find('.data');
+					
 					if (searchSelectionMethod==2){
 						targets.each(function(){
+							found=0;
 							var parent = $(this).parent();
 							var targettext = parent.text().toLowerCase();
 							for (var i = 0; i < filtercount; i++) {
@@ -2011,6 +2011,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						});
 					} else if (searchSelectionMethod==3){
 						targets.each(function(){
+							found=0;
 							var parent = $(this).parent().parent();
 							var targettext = parent.text().toLowerCase();
 							for (var i = 0; i < filtercount; i++) {
