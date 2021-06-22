@@ -1359,12 +1359,6 @@ define( [], function () {
 								defaultValue: 1.0,
 								show: function ( data ) { return data.props.responsivefontsize;	}
 							},
-							mobileRemoveZoom: {
-							  ref: "props.mobileRemoveZoom",
-							  type: "boolean",
-							  label: "Disable mobile zoom effect? (less clicking)",
-							  defaultValue: true
-							},
 							removeFullScrnBtn: {
 							  ref: "props.removeFullScrnBtn",
 							  type: "boolean",
@@ -1376,12 +1370,6 @@ define( [], function () {
 							  type: "boolean",
 							  label: "Remove more options menu",
 							  defaultValue: false
-							},
-							mobileContainerHeight: {
-							  ref: "props.mobileCustomHeightCSS",
-							  type: "string",
-							  label: "Custom height css parameter for mobile (65px or 50%)",
-							  defaultValue: ''
 							},
 							hlistRoundedcorners: {
 							  ref: "props.hlistRoundedcorners",
@@ -1529,6 +1517,33 @@ define( [], function () {
 								expression:"optional",
 								defaultValue: "1",
 								min: "1"
+							}
+						}
+					},
+					mobile: {
+						type: "items",
+						label: "Mobile view settings",
+						items: {
+							mobileContainerDefaultHeight: {
+							  ref: "props.mobileContainerDefaultHeight",
+							  type: "boolean",
+							  label: "Use default height (to workaround old feature)",
+							  defaultValue: false
+							},
+							mobileContainerHeight: {
+							  ref: "props.mobileCustomHeightCSS",
+							  type: "string",
+							  label: "Custom height css parameter for mobile view (65px or 50%)",
+							  defaultValue: '',
+							  show: function (data){
+							  	return !data.props.mobileContainerDefaultHeight;
+							  }
+							},
+							mobileRemoveZoom: {
+							  ref: "props.mobileRemoveZoom",
+							  type: "boolean",
+							  label: "Disable mobile zoom effect? (less clicking)",
+							  defaultValue: true
 							}
 						}
 					},
@@ -2198,7 +2213,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.10 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.0.11 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}

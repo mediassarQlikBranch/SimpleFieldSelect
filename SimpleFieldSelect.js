@@ -415,18 +415,24 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	}
 	function setSmallDeviceStuff($element,pr){
 		var parent = $element.closest('.qv-gridcell');
-		
 		if(pr.enableGlobals && pr.gremoveMobileZoom){ //from all
 			$(".transparent-overlay").remove();
 		} else
 		if(pr.mobileRemoveZoom){
 			parent.find('.transparent-overlay').remove(); //remove mobile zoom haveto
 		}
+		if (!pr.removeYscroll){
+			parent.find('.qv-object-content-container').addClass('enableyscroll');//css('overflow-y','auto');
+		}
 		//set height, default is too high
-		if(pr.mobileCustomHeightCSS && pr.mobileCustomHeightCSS != ''){
-			parent.css('height',pr.mobileCustomHeightCSS);
+		if (pr.mobileContainerDefaultHeight){
+			parent.css('height','');
 		} else {
-			parent.css('height','65px');
+			if(pr.mobileCustomHeightCSS && pr.mobileCustomHeightCSS != ''){
+				parent.css('height',pr.mobileCustomHeightCSS);
+			} else {
+				parent.css('height','65px'); //old feature
+			}
 		}
 
 	}

@@ -18,6 +18,13 @@
 	text-overflow:ellipsis;
 	overflow-x: hidden;
 }
+/*#grid-wrap.sheet-list .qv-object-SimpleFieldSelect .qv-object-content-container {
+	overflow-y: auto!important;
+	overflow-x: hidden!important;
+}*/
+#grid-wrap.sheet-list .qv-object-SimpleFieldSelect .qv-object-content-container.enableyscroll {
+	overflow-y: auto!important;
+}
 .qv-object-SimpleFieldSelect input :checked{
 	font-weight:bold;
 }

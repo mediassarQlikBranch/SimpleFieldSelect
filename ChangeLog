@@ -1,3 +1,6 @@
+2.0.11
+ - Mobile settings to own section in properties
+ - Fix for mobile scroll. Was not shown by default. Can be disabled with scroll disable option.
 2.0.10
  - Minor changes
  - Select2 fixes as suggested by vbakke
