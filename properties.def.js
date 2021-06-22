@@ -1910,7 +1910,7 @@ define( [], function () {
 							exportenableMultisearchWith: {
 								ref: "props.exportenableMultisearchWith",
 								type: "string",
-								label: "Separator character for multiword search (copy-paste list of elements to search)",
+								label: "Separator character for multiword, copy-paste search (optional, basic separators are included)",
 								defaultValue: '',
 								expression: 'optional'
 							},
@@ -2198,7 +2198,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.9 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.0.10 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}
