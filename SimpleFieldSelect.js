@@ -1713,7 +1713,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						listtargets.on('mousedown touchstart',function() {
 							isMouseDown = true;
 							if (!$(this).hasClass('selected')){
-								$(this).addClass('selected').addClass('stateS').removeClass('stateA');
+								$(this).addClass('selectedmousemove').addClass('stateS').removeClass('stateA');
 							}
 						});
 						articleElement.on('mouseup mouseleave touchend',function() { //m up or leave element
@@ -1722,7 +1722,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							if (newselectionsDone == false){
 								return;
 							}
-							var targets = $element.find(".selected");
+							var targets = $element.find(".selected,.selectedmousemove");
 							if (targets.length<1){
 								return;
 							}
@@ -1745,16 +1745,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 								if (!$(this).hasClass('selected')){
 									if(debug) console.log('adding selectclass');
 									newselectionsDone = true;
-									$(this).addClass('selected').addClass('stateS').removeClass('stateA');
+									$(this).addClass('selectedmousemove').addClass('stateS').removeClass('stateA');
 								}
 							}
 						});
 					}
 					//normal click
-					listtargets.on( 'qv-activate', function (ev) { //mouseenter
+					listtargets.on('qv-activate', function (ev) { //mouseenter
 						var clicktarget = $(this);
 						var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
-						if (debug) console.log('qv active on list change');
+						if (debug) console.log('qv active on list change '+targetValueID);
 
 						if (!$(this).hasClass('selected')){
 							if (debug) console.log('is not selected');
