@@ -1,3 +1,6 @@
+2.0.13
+ - Context menu location change
+ - Extra attribute for HTML standard input
 2.0.12
  - Fix for select only one -functionality.
 2.0.11

@@ -1093,7 +1093,7 @@ define( [], function () {
 						type: "boolean",
 						label: "Show value next to slider?",
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && data.props.dimensionIsVariable && data.props.visualizationType=='input' && data.props.visInputFieldType=='range';
+							return data.props && data.props.dimensionIsVariable && data.props.visualizationType=='input' && data.props.visInputFieldType=='range';
 						}
 					},
                     visInputPlaceholdertxt: {
@@ -1107,11 +1107,22 @@ define( [], function () {
 								|| (data.props && data.props.visualizationType=='select2');
 						}
 					},
+					visInputExtraAttr: {
+						type: "string",
+						label: "Extra attribute for HTML input, example: size=\"4\" (see HTML input specifications)",
+						ref: "props.visInputExtraAttr",
+						defaultValue: '',
+						expression:"optional",
+						show: function ( data ) {
+							return (data.props && data.props.dimensionIsVariable && (data.props.visualizationType=='input') )
+								|| (data.props && data.props.visualizationType=='select2');
+						}
+					},
 					htmlinputoptions:{
 						type: "items",
 						label: "Input options",
 						show: function ( data ) {
-							return data.qListObjectDef && data.props && (data.props.visualizationType=='input' && !(data.props.visInputFieldType=='text' || data.props.visInputFieldType=='color' || data.props.visInputFieldType=='password' ) || data.props.variableIsDate);
+							return data.props && (data.props.visualizationType=='input' && !(data.props.visInputFieldType=='text' || data.props.visInputFieldType=='color' || data.props.visInputFieldType=='password' ) || data.props.variableIsDate);
 						},
 						items:{
 							aboutnumbers:{
@@ -2213,7 +2224,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.12 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.0.13 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}

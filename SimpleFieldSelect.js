@@ -991,6 +991,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if(pr.visInputNumberMax != ''){
 						inattributes += ' max="'+pr.visInputNumberMax+'"';
 					}
+					if(pr.visInputExtraAttr && pr.visInputExtraAttr != ''){
+						inattributes += ' '+pr.visInputExtraAttr+'';
+					}
 					if (pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
@@ -1589,7 +1592,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						event.preventDefault();
 						hidermenu(event); //if already
 						sfsrmenu.finish().toggle(100).
-							css({top: (event.pageY+20) + "px", left: event.pageX + "px"});
+							css({top: (event.pageY+45) + "px", left: (event.pageX-30) + "px"});
 						
 						sfsrmenu = $("."+contextmenuID);
 						if (debug) console.log(sfsrmenu.find('li'));
