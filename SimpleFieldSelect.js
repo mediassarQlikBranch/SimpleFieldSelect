@@ -1093,6 +1093,9 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							inattributes += ' step="'+pr.visInputNumberStep+'"';
 						}
 					}
+					if(pr.visInputExtraAttr && pr.visInputExtraAttr != ''){
+						inattributes += ' '+pr.visInputExtraAttr+'';
+					}
 					//build html
 					html += '<div class="sfsc '+objectCSSid+'">';
 					if (pr.preElemHtml){
