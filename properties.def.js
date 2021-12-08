@@ -2224,7 +2224,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.13 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.0.14 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							}
 						}
 					}

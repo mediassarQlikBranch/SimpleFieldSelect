@@ -1,7 +1,7 @@
 define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
 	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
-	var debug = false;
+	var debug = 0;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
@@ -462,12 +462,22 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			},
 			exportData : false
 		},
+		updateData: function(layout){
+			if (debug) console.log('updateData method '+layout.qInfo.qId);
+			layout.props.dataWasUpdated = 1;
+			return qlik.Promise.resolve();
+		},
 		resize: function($element,layout){
-			if (debug) console.log('resize method');
+			if (debug) console.log('resize method '+layout.qInfo.qId);
 			var pr = layout.props;
 			if (pr.visualizationType=='actions'){
 				if (debug) console.log('resize paint');
 				this.paint( $element,layout);
+				return;
+			} else if(layout.props.dataWasUpdated && layout.props.dataWasUpdated==1){
+				if (debug) console.log('resize paint due data updated');
+				this.paint( $element,layout);
+				return;
 			}
 			
 			if(pr.enableGlobals){
@@ -536,7 +546,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			var visType = pr.visualizationType;
 			var sfssettings = {};
 			var searchDictionary;
-
+			layout.props.dataWasUpdated = 0;
 			//exit if needed, no dimension, not txtonly, variable empty
 			if (pr.dimensionIsVariable){
 				if((!pr.variableName || pr.variableName=='')){

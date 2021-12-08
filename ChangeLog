@@ -1,3 +1,5 @@
+2.0.14
+ - Fix for other SFS object update when some selections are done in full screen
 2.0.13
  - Context menu location change
  - Extra attribute for HTML standard input
