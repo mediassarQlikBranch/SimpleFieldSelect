@@ -1210,7 +1210,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				html += '<div class="'+objectCSSid+' sfe txtonly '+elementExtraClass+displayFlexBoxClass+'"';
 				if (titletext){
-					html += ' title="'+titletext+'"'; //escape quotas!!
+					html += ' title="'+titletext+'"';
 				}
 				elementStyleCSS = sfsCSSsanitize(elementStyleCSS);
 				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+checkUserCSSstyle2(pr.textareaonlyCSS,1)+'"' +elementExtraAttribute+'>';
@@ -1235,7 +1235,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					html += '<div class="sfsc '+objectCSSid+'"';
 				}
 				if (titletext){
-					html += ' title="'+titletext+'"'; //escape quotas!!
+					html += ' title="'+titletext+'"';
 				}
 				html += '>';
 				var countselected = 0;
@@ -1841,7 +1841,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				//dropdown change
 				if (visTypedropdownOrSelect2){
 					var dropdownelem = $element.find( '.dropdownsel' );
-					dropdownelem.attr('title', countselected + ' selected'  );
+					dropdownelem.attr('title', titletext+' '+ countselected + ' selected'  );
 					dropdownelem.on('change',function(){
 						if (debug) console.log('select change action');
 						if (!layout.props.selectmultiselect){ //not multi
