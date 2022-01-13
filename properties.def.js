@@ -1,55 +1,13 @@
 //Properties definitions
 define( [], function () {
 	'use strict';
+	//to enable text field output sanitization (disabled for example Javascript input), set useSanitize value to 1
+	var useSanitize = 0;
+
 	var debug = false;
-	//calc variable name IF this is variable selection - should be removed and changed
-	function findVariableName(listobject,props){
-		props.variableName = listobject.qDef.qFieldDefs[0];
-		if (typeof props.variableName == 'object'){
-			if(debug) console.log('set from expr');
-			if ((listobject.qDef.qFieldDefs[0].qStringExpression.qExpr)){
-				props.variableName = listobject.qDef.qFieldDefs[0].qStringExpression.qExpr;
-			} else {
-				props.variableName ='';
-			}
-		}
-		if (debug) console.log('Var type:'+ typeof props.variableName);
-		if (typeof props.variableName == 'string' && props.variableName){
-			props.variableName = props.variableName.replace("=",'');
-		} else {
-			props.variableName = '';
-		}
-		if(debug){ console.log(listobject); console.log(props); console.log(listobject.qDef.qFieldDefs[0]);}
-		if (props.hideFromSelectionRealField && props.hideFromSelectionRealField != ''){
-			props.variableName = props.hideFromSelectionRealField;
-		}
-		/*if (props.variableName == '' || !props.variableName){
-			props.variableName = listobject.qDef.qFieldDefs[0];
-			if(debug){ console.log(typeof props.variableName); }
-			if (typeof props.variableName !== 'undefined' && typeof props.variableName !== 'object'){
-				props.variableName = props.variableName.replace("=",'');
-			} else {
-				props.variableName = '';
-			}
-		}*/
-		props.variableName = props.variableName.trim();
-		listobject.qDef.qFieldDefs[0] = props.variableName; //set back
-	}
-	function findVariableValue(data){
-		data.variableValue = data.variableValue || {};
-		if (data.props.variableName && typeof data.props.variableName !== 'object'){
-			data.variableValue.qStringExpression = '="' + data.props.variableName+'"';
-		} else {
-			data.variableValue.qStringExpression = '';
-		}
-		if(debug){ console.log('variable name is '+data.props.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); console.log(data);}
-	}
-	var paddingoptions = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},
-									{value: "4",label: "4px"},{value: "6",label: "6px"},{value: "8",label: "8px"},
-									{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "16",label: "16px"}];
-	var paddingoptions2 = [{value: "-",label: "default"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "5",label: "5px"},{value: "6",label: "6px"},
-									{value: "8",label: "8px"},	{value: "10",label: "10px"},{value: "14",label: "14px"},{value: "15",label: "15px"},{value: "18",label: "18px"},
-									{value: "20",label: "20px"},{value: "22",label: "22px"},{value: "26",label: "26px"},{value: "30",label: "30px"},
+	var paddingoptions2 = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "5",label: "5px"},{value: "6",label: "6px"},
+									{value: "8",label: "8px"},{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "14",label: "14px"},{value: "15",label: "15px"},{value: "16",label: "16px"},
+									{value: "18",label: "18px"},{value: "20",label: "20px"},{value: "22",label: "22px"},{value: "26",label: "26px"},{value: "30",label: "30px"},
 									{value: "36",label: "36px"},{value: "42",label: "42px"},{value: "50",label: "50px"}];
 	var sortoptions = [	{value: 1,label: "Ascending"},	{value: 0,label: "No"},	{value: -1,label: "Descending"}];
 	var padandheader = {
@@ -65,7 +23,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Padding for the content",
 						ref: "props.contentpadding",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					leftpadding: {
@@ -73,7 +31,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Left padding, default margin",
 						ref: "props.leftpadding",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					bottompadding: {
@@ -81,7 +39,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Bottom padding, default margin",
 						ref: "props.bottompadding",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					rightpadding: {
@@ -89,7 +47,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Right padding, default margin",
 						ref: "props.rightpadding",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					toppadding: {
@@ -97,7 +55,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Top padding, default margin",
 						ref: "props.toppadding",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					custompadding:{
@@ -112,9 +70,6 @@ define( [], function () {
 					  type: "boolean",
 					  label: "Show default header?",
 					  defaultValue: true
-					  /*change: function(data){
-					  	$("#sfs"+data.qInfo.qId).parent().parent().parent().prev().toggle();
-					  }*/
 					},
 					headerheightsize: {
 						type: "string",
@@ -159,20 +114,14 @@ define( [], function () {
 					},
 					elementpadding: {
 						type:"number",
-						//type: "string",
-						//component: "dropdown",
 						label: "Padding for the element (px, inside)",
 						ref: "props.elementpadding",
-						//options: paddingoptions,
 						defaultValue: 0
 					},
 					elementmargin: {
 						type:"number",
-						//type: "string",
-						//component: "dropdown",
 						label: "Margin for the element (px, outside)",
 						ref: "props.elementmargin",
-						//options: paddingoptions,
 						defaultValue: 0
 					}
 				}
@@ -901,7 +850,7 @@ define( [], function () {
 						component: "dropdown",
 						label: "Left padding, object content",
 						ref: "props.leftpadding_global",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					},
 					rightpadding_global: {
@@ -909,16 +858,59 @@ define( [], function () {
 						component: "dropdown",
 						label: "Right padding, object content",
 						ref: "props.rightpadding_global",
-						options: paddingoptions,
+						options: paddingoptions2,
 						defaultValue: "-"
 					}
 				}
 			}
 		}
 	};
+	//calc variable name IF this is variable selection - should be removed and changed
+	function findVariableName(listobject,props){
+		props.variableName = listobject.qDef.qFieldDefs[0];
+		if (typeof props.variableName == 'object'){
+			if(debug) console.log('set from expr');
+			if ((listobject.qDef.qFieldDefs[0].qStringExpression.qExpr)){
+				props.variableName = listobject.qDef.qFieldDefs[0].qStringExpression.qExpr;
+			} else {
+				props.variableName ='';
+			}
+		}
+		if (debug) console.log('Var type:'+ typeof props.variableName);
+		if (typeof props.variableName == 'string' && props.variableName){
+			props.variableName = props.variableName.replace("=",'');
+		} else {
+			props.variableName = '';
+		}
+		if(debug){ console.log(listobject); console.log(props); console.log(listobject.qDef.qFieldDefs[0]);}
+		if (props.hideFromSelectionRealField && props.hideFromSelectionRealField != ''){
+			props.variableName = props.hideFromSelectionRealField;
+		}
+		/*if (props.variableName == '' || !props.variableName){
+			props.variableName = listobject.qDef.qFieldDefs[0];
+			if(debug){ console.log(typeof props.variableName); }
+			if (typeof props.variableName !== 'undefined' && typeof props.variableName !== 'object'){
+				props.variableName = props.variableName.replace("=",'');
+			} else {
+				props.variableName = '';
+			}
+		}*/
+		props.variableName = props.variableName.trim();
+		listobject.qDef.qFieldDefs[0] = props.variableName; //set back
+	}
+	function findVariableValue(data){
+		data.variableValue = data.variableValue || {};
+		if (data.props.variableName && typeof data.props.variableName !== 'object'){
+			data.variableValue.qStringExpression = '="' + data.props.variableName+'"';
+		} else {
+			data.variableValue.qStringExpression = '';
+		}
+		if(debug){ console.log('variable name is '+data.props.variableName); console.log('variable expression: '+data.variableValue.qStringExpression); console.log(data);}
+	}
 	return {
 		type: "items",
 		component: "accordion",
+		useSanitize: useSanitize,
 		items: {
 			dimensions: {
 				type: "items",
@@ -1323,7 +1315,9 @@ define( [], function () {
 								ref: "props.fontsizeChange",
 								options: [
 									{value: "75",label: "75%"},
+									{value: "90",label: "90%"},
 									{value: "100",label: "100%"},
+									{value: "110",label: "110%"},
 									{value: "125",label: "125%"}],
 								defaultValue: "100"
 							},
@@ -2224,7 +2218,21 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.0.14 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.0 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							},
+							sanitizeOn:{
+							 component: "text",
+							 label: "Field sanitization is enabled. Texts used in this extension will be sanitized before they are written into the DOM. Using Javascript in fields is not possible.",
+							 show: function ( data ) {
+								return useSanitize;
+							 }
+							},
+							sanitizeOff:{
+							 component: "text",
+							 label: "Text field sanitization is not enabled. (Enable in properties.def.js)",
+							 show: function ( data ) {
+								return !useSanitize;
+							 }
 							}
 						}
 					}

@@ -3,10 +3,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	'use strict';
 	var debug = 0;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
-	//var sfsstatus = {};
 	var sfsdefaultselstatus = {};
 	var keepaliverTimer;
+	var useSanitize = propertiesdef.useSanitize;
+	//console.log(propertiesdef);
 
+	//var sfsstatus = {};
 	//If nothing selected but should be
 	function checkDefaultValueSelection($element,countselected,layout,self,app,sfssettings){
 	  if(debug) console.log('checkin default selection, selected: '+countselected);
@@ -58,12 +60,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 	  	sfsdefaultselstatus[layout.qInfo.qId] = 1;
 	  }
 	}
+  	
 	function checkUserCSSstyle2(css, checkquote){
 		if (css){
 			css.trim();
 			if (css != '' && css.slice(-1) != ';'){
 				css += ';';
 			}
+			if(useSanitize){
+				css = sfsCSSsanitize(css);
+			} else
 			if (checkquote){
 				css = css.replace(/"/g, "'"); //replace " to '
 			}
@@ -71,6 +77,28 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			css = '';
 		}
 		return css;
+	}
+	function sfsCSSsanitize(css){
+  		if(useSanitize && css){
+			css = css.replace(/script>/ig, "_").replace(/style>/ig, "_").replace(/\\/g, "_").replace(/[/]>/g, "_").replace(/"/g, "'").replace(/</g,' ');
+		}
+  		return css;
+  	}
+	const sani_map = {'&': '&amp;','<': '&lt;','>': '&gt;', '"': '&quot;', "'": '&#x27;', "/": '&#x2F;', "\\": '&#092;'};
+  	const sani_reg = /[&<>"'/\\]/ig;
+	function sfsSanitize(txt){
+		if(useSanitize && txt){
+  			txt = txt.replace(sani_reg, (match)=>(sani_map[match]));
+		}
+		return txt;
+	}
+	const sani_map_noq = {'&': '&amp;','<': '&lt;','>': '&gt;', "/": '&#x2F;', "\\": '&#092;'}; //,";": "&#059;"
+  	const sani_reg_noq = /[&<>/\\]/ig;
+	function sfsSanitizeNoQuote(txt){
+		if(useSanitize && txt){
+  			txt = txt.replace(sani_reg_noq, (match)=>(sani_map_noq[match]));
+		}
+		return txt;
 	}
 	function createglobalCSS(pr){
 		var gcss = '';
@@ -84,10 +112,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			selectors.forEach(function(i){
 				cObjSelectors.push('.qv-object-'+i);
 				cObjSelectors.push('.qv-object-'+i+' .qv-inner-object'); //newer qlik
-				//selectors3.push('.qv-gridcell:not(.qv-gridcell-empty):has(> .qv-object-'+i+')');
 			});
 			customObjectSelector = ' '+cObjSelectors.join(',');
-			//customParentObjectSelector = ' '+selectors3.join(',');
 		}
 		if (pr.global_bgcss){
 			gcss += ' .qv-client #qv-stage-container .qvt-sheet, .qv-client.qv-card #qv-stage-container .qvt-sheet {'+checkUserCSSstyle2(pr.global_bgcss)+'}';
@@ -216,7 +242,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					$(".qs-toolbar__left").append('<div id="sfstoolbartxt"></div>');
 				}
 			}
-			$("#sfstoolbartxt").html(pr.toolbarTxt); //'+pr.toolbarTxt+'
+			$("#sfstoolbartxt").html(sfsSanitize(pr.toolbarTxt));
 		}
 		if(pr.hideToolbarCenter && !pr.hideGuiToolbar){
 			if (pr.hideToolbarCenterPerm){
@@ -245,7 +271,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		//if ($('.smallDevice').length >0){ //in anycase transparent-overlay
 			if (pr.ghideMobileSearch){
 				gcss += ' .qv-global-search-container {display:none!important;}';
-				//gcss += ' #qs-page-container {height:100%!important;}';
 			}
 			if(pr.ghideMobileHeader){
 				gcss += ' .qs-mobile-toolbar {display:none!important;}';
@@ -280,7 +305,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		if(pr.global_customCSS){
 			gcss += ' '+pr.global_customCSS;
 		}
-		
+		gcss = sfsCSSsanitize(gcss);
 		return gcss;
 	}
 	//not in use yet
@@ -429,7 +454,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			parent.css('height','');
 		} else {
 			if(pr.mobileCustomHeightCSS && pr.mobileCustomHeightCSS != ''){
-				parent.css('height',pr.mobileCustomHeightCSS);
+				parent.css('height',sfsCSSsanitize(pr.mobileCustomHeightCSS));
 			} else {
 				parent.css('height','65px'); //old feature
 			}
@@ -630,8 +655,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				articleElement.css('background-color','transparent');
 				articleInnerElement.css('background-color','transparent');
 			} else if (pr.specialBackgroundColor){
-				articleElement.css('background-color',pr.specialBackgroundColor);
-				articleInnerElement.css('background-color',pr.specialBackgroundColor);
+				articleElement.css('background-color',sfsCSSsanitize(pr.specialBackgroundColor));
+				articleInnerElement.css('background-color',sfsCSSsanitize(pr.specialBackgroundColor));
 			} else {
 				articleElement.css('background-color','');
 				articleInnerElement.css('background-color','');
@@ -641,10 +666,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				gridcell.css('border-width','0');
 			} else {
 				if (pr.ownBordercolor2 != ''){
-					articleElement.css('border-color',pr.ownBordercolor2);
+					articleElement.css('border-color',sfsCSSsanitize(pr.ownBordercolor2));
 				}
 				if (pr.ownBordercolor != ''){
-					gridcell.css('border-color',pr.ownBordercolor);
+					gridcell.css('border-color',sfsCSSsanitize(pr.ownBordercolor));
 				}
 			}
 			if (pr.removeYscroll){
@@ -670,19 +695,19 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			//left padding in one qlik theme
 			if(pr.leftpadding && pr.leftpadding != '-'){
-				articleInnerElement.css('padding-left',pr.leftpadding+'px');
+				articleInnerElement.css('padding-left',sfsCSSsanitize(pr.leftpadding)+'px');
 			}
 			if(pr.rightpadding && pr.rightpadding != '-'){
-				articleInnerElement.css('padding-right',pr.rightpadding+'px');
+				articleInnerElement.css('padding-right',sfsCSSsanitize(pr.rightpadding)+'px');
 			}
 			if(pr.bottompadding && pr.bottompadding != '-'){
-				articleInnerElement.css('padding-bottom',pr.bottompadding+'px');
+				articleInnerElement.css('padding-bottom',sfsCSSsanitize(pr.bottompadding)+'px');
 			}
 			if(pr.toppadding && pr.toppadding != '-'){
-				articleInnerElement.css('padding-top',pr.toppadding+'px');
+				articleInnerElement.css('padding-top',sfsCSSsanitize(pr.toppadding)+'px');
 			}
 			if(pr.custompadding && pr.custompadding != '-'){
-				articleInnerElement.css('padding',pr.custompadding);
+				articleInnerElement.css('padding',sfsCSSsanitize(pr.custompadding));
 			}
 			if (visType=='select2'){
 				if (pr.select2hoverBGcolor){
@@ -702,7 +727,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				extraStyle += '.'+objectCSSid + ' .sfe:hover {'+checkUserCSSstyle2(pr.customHoverCSS)+'}';
 			}
 			if (extraStyle){
-				html += '<style>'+extraStyle+'</style>';
+				html += '<style>'+sfsCSSsanitize(extraStyle)+'</style>';
 			}
 
 			//padding
@@ -736,7 +761,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.inlinelabelcss){
 					html += ' style="'+checkUserCSSstyle2(pr.inlinelabelcss,1)+'"'
 				}
-				html += ' title="'+pr.inlinelabeltext+'">'+pr.inlinelabeltext+'</div> ';
+				var txt = sfsSanitize(pr.inlinelabeltext);
+				html += ' title="'+txt+'">'+txt+'</div> ';
 				html += '</label>';
 				
 			}
@@ -801,8 +827,8 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					$('.qv-selections-pager').append('<div style="display:none;" class="sfshideselstyles"></div>');
 				}
 				//hide global
-				if (pr.hideFieldsFromSelectionBar && pr.hideFieldsFromSelectionBar != ''){
-					var splittedfields = pr.hideFieldsFromSelectionBar.split(";");
+				if (pr.enableGlobals && pr.hideFieldsFromSelectionBar && pr.hideFieldsFromSelectionBar != ''){
+					var splittedfields = sfsSanitize(pr.hideFieldsFromSelectionBar).split(";");
 					if (debug){ console.log('hiding fields:'); console.log(splittedfields); }
 					splittedfields.forEach(function(fieldToHide,i){
 						var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
@@ -853,10 +879,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if(pr.global_bghtml){
 					var basestyle = 'position: absolute;top: 0px;right: 0px;left: 0px;bottom: 0px;';
 					if ($("#sfsgridbg").length>0){
-						$("#sfsgridbg").html(pr.global_bghtml);
+						$("#sfsgridbg").html(sfsSanitize(pr.global_bghtml));
 						$("#sfsgridbg").attr('style',basestyle+checkUserCSSstyle2(pr.global_bghtmlcss));
 					} else {
-						$("#grid").append('<div id="sfsgridbg" style="'+basestyle+checkUserCSSstyle2(pr.global_bghtmlcss)+'">'+pr.global_bghtml+'</div>');
+						$("#grid").append('<div id="sfsgridbg" style="'+basestyle+checkUserCSSstyle2(pr.global_bghtmlcss)+'">'+sfsSanitize(pr.global_bghtml)+'</div>');
 					}
 				}
 				if (pr.hideSheetTitle){
@@ -878,7 +904,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						if ($("#sfsSheetTitleTxt").length==0){
 							$("#sheet-title").append('<div id="sfsSheetTitleTxt" style="margin-left:20px;"></div>');
 						}
-						$("#sfsSheetTitleTxt").html(pr.sheetTitleExtraText);
+						$("#sfsSheetTitleTxt").html(sfsSanitize(pr.sheetTitleExtraText));
 					}
 					
 				}
@@ -889,7 +915,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						if ($("#sfsSelBartxt").length==0){
 							$(".qv-selections-pager .buttons-end").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>');
 						}
-						$("#sfsSelBartxt").html(pr.selBarExtraText).prop('title',pr.selBarExtraText).prop('style',pr.selBarExtraTextcss);
+						$("#sfsSelBartxt").html(sfsSanitize(pr.selBarExtraText)).prop('title',sfsSanitize(pr.selBarExtraText)).prop('style',checkUserCSSstyle2(pr.selBarExtraTextcss));
 						if (pr.selBarExtraTextQlikStyle){
 							$("#sfsSelBartxt").addClass('selbarqlikstyle');
 						} else {
@@ -939,7 +965,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				} else {
 					containerStyles += ' height:100%;';
 				}
-				//headerelement.parent().css('padding-bottom','0px');
 			}
 			if (pr.textHAlign && pr.textHAlign != '-'){
 				containerStyles += ' text-align:'+pr.textHAlign+';';
@@ -949,11 +974,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			var elementExtraAttribute = '';
 			if (pr.customElementAttribute && pr.customElementAttribute != ''){
-				elementExtraAttribute = ' '+pr.customElementAttribute+' ';
+				elementExtraAttribute = ' '+sfsSanitizeNoQuote(pr.customElementAttribute)+' ';
 			}
 			var elementExtraClass = '';
 			if (pr.customElementClass && pr.customElementClass != ''){
-				elementExtraClass = ' '+pr.customElementClass+' ';
+				elementExtraClass = ' '+sfsSanitizeNoQuote(pr.customElementClass)+' ';
 			}
 			var fontsizechanges = '';
 			if (pr.responsivefontsize){
@@ -978,7 +1003,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			}
 			var titletext = '';
 			if (pr.hovertitletext && pr.hovertitletext != ''){
-				titletext += pr.hovertitletext.replace(/\"/g,'&quot;');
+				titletext += sfsSanitize(pr.hovertitletext).replace(/\"/g,'&quot;');
 			}
 			var displayFlexBoxClass = '';
 			if (pr.displayFlexBox){
@@ -1005,7 +1030,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						inattributes += ' '+pr.visInputExtraAttr+'';
 					}
 					if (pr.preElemHtml){
-						html += pr.preElemHtml;
+						html += sfsSanitize(pr.preElemHtml);
 					}
 					html += '<div class="sfsc '+objectCSSid+'">';
 					html += '<input '+inattributes+' title="';
@@ -1024,10 +1049,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					if (pr.color_stateO_fo && pr.color_stateO_fo != ''){
 						elementStyleCSS += ' color:'+pr.color_stateO_fo+';';
 					}
+					elementStyleCSS = sfsCSSsanitize(elementStyleCSS);
 					//no multivar support here
 					html += 'value="'+varvalue+'" style="width:6em; max-width:80%;'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+'"' +elementExtraAttribute+ '/>';
 					if (pr.postElemHtml){
-						html += pr.postElemHtml;
+						html += sfsSanitize(pr.postElemHtml);
 					}
 					if (pr.helptext){
 						html += createhelptextdiv(pr);
@@ -1069,12 +1095,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if (pr.color_stateO_fo && pr.color_stateO_fo != ''){
 					elementStyleCSS += ' color:'+pr.color_stateO_fo+';';
 				}
+				elementStyleCSS = sfsCSSsanitize(elementStyleCSS);
 				if (!pr.dimensionIsVariable){
 					html += 'HTML input option is available only for variables';
 				} else {
 					//if stepped, datalist values
-					var splitted = pr.variableOptionsForValues.split(";");
-					var splittedkeys = pr.variableOptionsForKeys.split(";");
+					var splitted = sfsSanitize(pr.variableOptionsForValues).split(";");
+					var splittedkeys = sfsSanitize(pr.variableOptionsForKeys).split(";");
 					if(splitted && pr.variableOptionsForValues != ''){
 						datalistID = 'dl'+layout.qInfo.qId;
 						datalist = ' <datalist id="'+datalistID+'">';
@@ -1115,7 +1142,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					//no multivar support here
 					if(pr.visInputFieldType=='range') html += varvalue+' ';
 					if (titletext != ''){
-						html += titletext; //escape quotas!!
+						html += (titletext);
 					}
 					html += '"';
 					if (datalist) html += ' list="'+datalistID+'"';
@@ -1124,7 +1151,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					html += ' class="sfe htmlin '+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+elementExtraClass+'" value="'+varvalue+'" style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+'"' +elementExtraAttribute+ '/>';
 					if (pr.postElemHtml){
-						html += pr.postElemHtml;
+						html += sfsSanitize(pr.postElemHtml);
 					}
 					if (datalist) html += datalist;
 					if(pr.visInputFieldType=='range'){
@@ -1179,21 +1206,22 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//only txt
 			} else if(visType=='txtonly'){
 				if (pr.preElemHtml){
-					html += pr.preElemHtml;
+					html += sfsSanitize(pr.preElemHtml);
 				}
 				html += '<div class="'+objectCSSid+' sfe txtonly '+elementExtraClass+displayFlexBoxClass+'"';
 				if (titletext){
 					html += ' title="'+titletext+'"'; //escape quotas!!
 				}
+				elementStyleCSS = sfsCSSsanitize(elementStyleCSS);
 				html += ' style="'+fontsizechanges+fontStyleTxt+elementStyleCSS+bordercolorstyle+elementpadding+elementmargin+containerStyles+checkUserCSSstyle2(pr.textareaonlyCSS,1)+'"' +elementExtraAttribute+'>';
-				if (pr.textareaonlytext) html += pr.textareaonlytext;
-				if (pr.textareaonlytext2) html += pr.textareaonlytext2;
+				if (pr.textareaonlytext) html += sfsSanitize(pr.textareaonlytext);
+				if (pr.textareaonlytext2) html += sfsSanitize(pr.textareaonlytext2);
 				if (pr.helptext){
 						html += createhelptextdiv(pr);
 					}
 				html += '</div>';
 				if (pr.postElemHtml){
-					html += pr.postElemHtml;
+					html += sfsSanitize(pr.postElemHtml);
 				}
 				$element.html( html );
 			//not date or html input:
@@ -1269,7 +1297,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 
 					//create lists for variable values
-					var splitted = pr.variableOptionsForValues.split(";");
+					var splitted = sfsSanitize(pr.variableOptionsForValues).split(";");
 					var varindex = 0; //index is used to access variable
 					
 					sfssettings.variableOptionsForValuesArray = [];
@@ -1301,7 +1329,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					//if separate Keys variable is defined:
 					var varKeyindex = 0;
 					if (pr.variableOptionsForKeys != ''){
-						splitted = pr.variableOptionsForKeys.split(";");
+						splitted = sfsSanitize(pr.variableOptionsForKeys).split(";");
 						splitted.forEach(function(opt){
 							sfssettings.variableOptionsForKeysArray.push(opt); //when setting variable, take value from here.
 							varKeyindex += 1;
@@ -1333,7 +1361,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				//forced values
 				var forcedValues = [];
 				if (pr.ForceSelections && pr.ForceSelections != ''){
-					forcedValues = pr.ForceSelections.split(";");
+					forcedValues = sfsSanitize(pr.ForceSelections).split(";");
 				}
 				//hide
 				var hideItems = [];
@@ -1475,7 +1503,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding+elementmargin;
 					if (elementstyle){
-						elementstyle = ' style="' + elementstyle + '" ';
+						elementstyle = ' style="' + sfsSanitize(elementstyle) + '" ';
 					}
 					
 					if (!visTypedropdownOrSelect2 && pr.preElemHtml){
@@ -1529,7 +1557,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					
 					if (!visTypedropdownOrSelect2 && pr.postElemHtml){
-						html += pr.postElemHtml;
+						html += sfsSanitize(pr.postElemHtml);
 					}
 				});
 				
@@ -1542,7 +1570,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					html += '</select>';
 					if (pr.postElemHtml){
-						html += pr.postElemHtml;
+						html += sfsSanitize(pr.postElemHtml);
 					}
 				}else if (visType=='checkbox' || visType=='btn' || visType=='radio'){
 					html += '</div>';
@@ -1855,7 +1883,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						  if ($(this).is(':checked')){
 							//if only one, clear others.
 							if (layout.props.selectOnlyOne){
-								$element.find( 'input:checked' ).each(function(){
+								$element.find('input:checked').each(function(){
 									var value = parseInt( $(this).attr( "dval" ), 10 );
 									if (value != targetValueID){
 									  $(this).prop('checked',false).removeClass('selected');
@@ -1934,7 +1962,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				selectElement.select2({
 					'dropdownParent': $("#"+dropdownparent),
 					'allowClear': layout.props.select2allowClear,
-					'placeholder': layout.props.visInputPlaceholdertxt,
+					'placeholder': sfsSanitize(layout.props.visInputPlaceholdertxt),
 					'minimumResultsForSearch': minimumSearchResults,
 					'templateResult': function (data, container) {
 					    if (data.element) {
@@ -2219,7 +2247,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			function createhelptextdiv(pr){
 				var a = '<div class="sfs_helptxt"';
 				if (pr.helptextcss) a += ' style="'+checkUserCSSstyle2(pr.helptextcss,1)+'"';
-				a += '>'+ pr.helptext + '</div>';
+				a += '>'+ sfsSanitize(pr.helptext) + '</div>';
 				return a;
 			}
 			

@@ -14,11 +14,13 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 In some cases browser cache will use old version of settings and requires recently removed javascript file. That file has been added to latest version but is not required anymore and will be later removed.
 
 ## Latest features
+- Option to enable text field sanitization which will "disable" for example Javascript and other HTML control characters from output. This is done on server side by modifying source code and it will then affect to all SFS instances on that server. The idea is to have an option to prevent Qlik developers from injecting Javascript or HTML code
+   - To enable: Edit the extension source code inside the zip file. On the 4. line of properties.def.js set value to 1: _var useSanitize = 1;_ Default value is 0. So every time SFS extension is updated, the option must be re-enabled.
 - Gloabl option to hide only the Story telling -button.
 - Finally fix for dragging selection "start issue" - Now the first element also gets selected
 - Disable toggle - Finally there is now fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.
 - Sections to dropdown and select2 visualizations
-- Global options to control some visual settings of all SFS objects on a sheet, colors, paddings.
+- Global options to control some visual settings of **all** SFS objects on a sheet, colors, paddings.
 - Global option to remove zoom/maximize efect from mobile view. This makes selecting and interacting with graphs and tables so much faster in mobile.
 - Search only visualization - will show search box only, won't draw elements. This is usefull for fields with high number of elements and when there is a need to select great amount of them. For example by copy-pasting from Excel etc. Works also with delimited string. Limitation: Won't count duplicates in multiword case correctly while searching.
 - Global option for Sheet background extra HTML element - experimental feature to have custom HTML on document background. See ChangeLog for a demo.
@@ -32,22 +34,6 @@ In some cases browser cache will use old version of settings and requires recent
 - Fix for search icon. Since latest(s) Qlik Sense versions Full screen icon was overlapping search icon. This is first quick fix for this issue.
 - Default colors of Select2 visualization changed to Qlik colors
 - Set font and background colors or custom CSS when mouse hovers on an element.
-- Improved variable handling from version 1.9.9 - more stable and easier to use
-- Flexbox layout - same width to all elements
-- Custom width and height of element
-- Global option for native Qlik list object coloring (filter pane) and current selection panel.
-- **Qlik Sense February 2019 default colors. If you need the old ones, uncommnent last lines from extensions SimpleFieldStyle.css.**
-- Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.
-- Resize feature on mouseover
-- Copy text to clipboard with context menu (right click menu). It will copy selected or available values to clipboard.
-- Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can use for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on. Only one browser tab with this option on is needed to keep Qlik alive. 
-- Gloabl option to hide new "Data, Analysis, Story" for Qlik Sense 2019 February release 
-- Option to clear selections of the field on sheet leave / enter. This feature with the clear all option was going to be a customer paid option for this extension but that project failed. :( But here is now this great functionality for free to everyone!
-- Add text object to menu bar
-- Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
-  - Enable Global modifications for only one SimpleFieldSelect object per sheet.
-- Note! Change to export mode handling in 1.8.6, see release notes
-
 
 
 ## Features
@@ -72,13 +58,20 @@ In some cases browser cache will use old version of settings and requires recent
 - several color settings like background color for the object itself
 - Hide all headers from a sheet + color options for every header
 - Qlik Sense styled switch and checkbox
-- Dropdown can be now used as multiselect. Naturally doesn't work with variables
 - Select2 plugin has been integrated to the extension. It allows to use a searchable dropdown menu, either normal version or multiselect version.
 - custom HTML pre/post every element
 - Option to clear selection on sheet enter or leave.
 - Responsive and fixed font size options
 - Menu icon styled right click menu trigger - if export mode is used, right click menu won't work
 - Option to select many values into one variable
+- Flexbox layout - same width to all elements
+- Custom width and height of element
+- Property to set a fixed font size like 10px. Native filters tend to use font-size 12px.
+- Resize feature on mouseover
+- Copy text to clipboard with context menu (right click menu). It will copy selected or available values to clipboard.
+- Option to clear selections of the field on sheet leave / enter. This feature with the clear all option was going to be a customer paid option for this extension but that project failed. :( But here is now this great functionality for free to everyone!
+- Add text object to menu bar
+- Note! Change to export mode handling in 1.8.6, see change log
 
 
 ## Global sheet level settings
@@ -102,10 +95,13 @@ All following global settings are sheet specific. You can use for example master
   - Keep Qlik alive -timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can set time for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on and others don't. Only one browser tab with this option on is needed to keep Qlik alive.
   - Remove "Data, Analysis, Story"
   - Change selection colors for filter pane and selection bar
-
+  - Global option for native Qlik list object coloring (filter pane) and current selection panel.
+  - Global option to set keep alive timer. If your Qlik forces you to login after having lunch or unsaved script gets lost during the phone call, here is the keep aliver. :) You can use for example like if (OSuser()="your username", 5, 0) and you will have this keep alive timer on. Only one browser tab with this option on is needed to keep Qlik alive. 
+  - Gloabl option to hide new "Data, Analysis, Story" for Qlik Sense 2019 February release 
+  - Global option to **clear all** selections when arriving to sheet and when leaving a sheet. Finally a good implementation to clear selection on sheet arrival. Works well in combination with default value selection. This was a customer requested feature.
 
 This extension is supposed to be very light weight. It has no big libraries attached to it. In this way your Qlik Sense application is able to stay as fast as possible.
-** Note: To allow extent modification possibilities in this extension some text fields allow Qlik developer to write Javascript, HTML and CSS and this might cause issues if user written code is broken or does unwanted things. **
+** Note: To allow extent modification possibilities in this extension some text fields allow Qlik developer to write Javascript, HTML and CSS and this might cause issues if user written code is broken or does unwanted things. There is now an option which will remove special marks so that Javascript inserted into text fields is not executed.**
 
 ### Changelog
 [ChangeLog](ChangeLog)

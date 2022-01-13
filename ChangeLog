@@ -1,3 +1,8 @@
+2.1.0
+ - Option to enable text field sanitization which will remove for example Javascript and other HTML characters. This is done by modifying source code. So every time SFS is updated, the option must be re-enabled. 
+   - To enable: Edit the extension source code inside the zip file: On the 4. line of properties.def.js set value to 1 in "var useSanitize = 1;" Default value is 0.
+   - The parameter is located in source code so that the developer with Qlik UI cannot change the setting
+ - Add more padding options to select (sorry, should be text instead of dropdown)
 2.0.14
  - Fix for other SFS object update when some selections are done in full screen
 2.0.13
