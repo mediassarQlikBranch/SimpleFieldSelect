@@ -1,3 +1,6 @@
+2.1.2
+ - Minor change in getApp call
+ - Field sanitization with value 2 will sanitize only <script
 2.1.1
  - Fix for hover title in drop down select
 2.1.0

@@ -15,7 +15,7 @@ In some cases browser cache will use old version of settings and requires recent
 
 ## Latest features
 - Option to enable text field sanitization which will "disable" for example Javascript and other HTML control characters from output. This is done on server side by modifying source code and it will then affect to all SFS instances on that server. The idea is to have an option to prevent Qlik developers from injecting Javascript or HTML code
-   - To enable: Edit the extension source code inside the zip file. On the 4. line of properties.def.js set value to 1: _var useSanitize = 1;_ Default value is 0. So every time SFS extension is updated, the option must be re-enabled.
+   - To enable: Edit the extension source code inside the zip file. On the 4. line of properties.def.js set value to 1: _var useSanitize = 1;_ Default value is 0. So every time SFS extension is updated, the option must be re-enabled. Value 2 will sanitize only javascript tags.
 - Gloabl option to hide only the Story telling -button.
 - Finally fix for dragging selection "start issue" - Now the first element also gets selected
 - Disable toggle - Finally there is now fix or workaround for "Always one selected value" -problem. If field has this setting on, disabling "Toggle mode" in the extension helps. Disable toggle mode can be of course used for other purposes too.

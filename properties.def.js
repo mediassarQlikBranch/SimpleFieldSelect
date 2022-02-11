@@ -1,7 +1,7 @@
 //Properties definitions
 define( [], function () {
 	'use strict';
-	//to enable text field output sanitization (disabled for example Javascript input), set useSanitize value to 1
+	//to enable text field output sanitization (disabled for example Javascript input), set useSanitize value to 1. Set value to 2, if only script> tags should be removed
 	var useSanitize = 0;
 
 	var debug = false;
@@ -2218,7 +2218,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.0 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.2 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",

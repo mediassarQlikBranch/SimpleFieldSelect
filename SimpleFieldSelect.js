@@ -79,24 +79,30 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		return css;
 	}
 	function sfsCSSsanitize(css){
-  		if(useSanitize && css){
+  		if(useSanitize==1 && css){
 			css = css.replace(/script>/ig, "_").replace(/style>/ig, "_").replace(/\\/g, "_").replace(/[/]>/g, "_").replace(/"/g, "'").replace(/</g,' ');
+		}else if(useSanitize==2 && css){
+			css = css.replace(/script>/ig, "_");
 		}
   		return css;
   	}
 	const sani_map = {'&': '&amp;','<': '&lt;','>': '&gt;', '"': '&quot;', "'": '&#x27;', "/": '&#x2F;', "\\": '&#092;'};
   	const sani_reg = /[&<>"'/\\]/ig;
 	function sfsSanitize(txt){
-		if(useSanitize && txt){
+		if(useSanitize==1 && txt){
   			txt = txt.replace(sani_reg, (match)=>(sani_map[match]));
+		}else if(useSanitize==2 && txt){
+			txt = txt.replace(/script>/ig, "_");
 		}
 		return txt;
 	}
 	const sani_map_noq = {'&': '&amp;','<': '&lt;','>': '&gt;', "/": '&#x2F;', "\\": '&#092;'}; //,";": "&#059;"
   	const sani_reg_noq = /[&<>/\\]/ig;
 	function sfsSanitizeNoQuote(txt){
-		if(useSanitize && txt){
+		if(useSanitize==1 && txt){
   			txt = txt.replace(sani_reg_noq, (match)=>(sani_map_noq[match]));
+		}else if(useSanitize==2 && txt){
+			txt = txt.replace(/script>/ig, "_");
 		}
 		return txt;
 	}
@@ -533,7 +539,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			//globalAllSelectionsCleared = 0; //reset
 			if (scpr.enableGlobals && scpr.clearAllSelOnFirstLoad){
 				if (debug) console.log('clear all');
-				var app = qlik.currApp();
+				var app = qlik.currApp(this);
 				app.clearAll();
 			} else if (scpr.clearFieldSelOnFirstLoad){
 				if(debug) console.log('clear selections');
@@ -543,7 +549,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (scpr.enableGlobals && scpr.clearAllSelOnLeave){
 				$scope.$on('$destroy', function (ev) {
 					if (debug) console.log('clear all');
-					var app = qlik.currApp();
+					var app = qlik.currApp(this);
 					app.clearAll();
 				});
 			} else if (scpr.clearFieldSelOnLeave){
@@ -566,7 +572,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		paint: function ( $element,layout ) {
 			if (debug){ console.log('start painting '+layout.qInfo.qId); console.log($element);}
 			var self = this, html = "";
-			var app = qlik.currApp();
+			var app = qlik.currApp(self);
 			var pr = layout.props;
 			var visType = pr.visualizationType;
 			var sfssettings = {};
@@ -2257,7 +2263,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				}
 				keepaliverTimer = setInterval(function(){
 					if (debug) console.log('Keepalive');
-					var app = qlik.currApp();
+					var app = qlik.currApp(self);
 					app.addAlternateState("sfskeepalive");
 					app.removeAlternateState("sfskeepalive");
 				},delay*1000*60);
