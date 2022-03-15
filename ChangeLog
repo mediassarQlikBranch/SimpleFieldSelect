@@ -1,3 +1,6 @@
+2.1.3
+ - Fixes for Cloud / SaaS Qlik for field hiding, remove full screen and many others - especially important remove Insight Advisor and Story telling -functions are working again. :)
+ - Cloud / SaaS version of Qlik has multiple changes in its HTML and some modifications SFS can do might still miss these changes. Qlik's HTML coding style has been changed to some how confusing manner. Some elements have id selectors, some have classes or just attributes and many don't have any, inline CSS seems to be there more than before. This version of SFS will return many features of SFS back in use with Cloud.
 2.1.2
  - Minor change in getApp call
  - Field sanitization with value 2 will sanitize only <script

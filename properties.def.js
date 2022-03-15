@@ -597,7 +597,7 @@ define( [], function () {
 					  }
 					},
 					hideInsightsButton: {
-					  ref: "props.hideInsightsButton", component: "switch", type: "boolean", label: "Hide Insights button", defaultValue: false,
+					  ref: "props.hideInsightsButton", component: "switch", type: "boolean", label: "Hide Insights button and search", defaultValue: false,
 					  options: [{value: true,label: "Hide"}, {value: false,label: "Default"}],show: function ( data ) {	return !data.props.hideSelectionBar; }
 					},
 					hideSelectionsTool: {
@@ -2218,7 +2218,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.2 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.3 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",

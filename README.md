@@ -14,6 +14,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 In some cases browser cache will use old version of settings and requires recently removed javascript file. That file has been added to latest version but is not required anymore and will be later removed.
 
 ## Latest features
+- **NOTE to Cloud users** There are major changes in Qlik's Cloud environments HTML structures (for example sheet header manipulations). Many features are fixed in 2.1.3 version.
 - Option to enable text field sanitization which will "disable" for example Javascript and other HTML control characters from output. This is done on server side by modifying source code and it will then affect to all SFS instances on that server. The idea is to have an option to prevent Qlik developers from injecting Javascript or HTML code
    - To enable: Edit the extension source code inside the zip file. On the 4. line of properties.def.js set value to 1: _var useSanitize = 1;_ Default value is 0. So every time SFS extension is updated, the option must be re-enabled. Value 2 will sanitize only javascript tags.
 - Gloabl option to hide only the Story telling -button.

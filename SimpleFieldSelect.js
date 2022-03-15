@@ -223,7 +223,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			gcss += " .qv-object .left-meta-headers,.qv-object .top-meta {display:none!important;}";
 		}
 		if(pr.hideInsightsButton){
-			gcss += " .qv-insight-toggle-button {display:none!important;}";
+			gcss += ' .qv-insight-toggle-button,#qs-toolbar-container div[data-testid="insights-search-bar-container"],button[data-testid="sub-toolbar-explore-button"] {display:none!important;}';
 			//$(".qv-insight-toggle-button").css('display','none'); //make sure
 		}
 		if(pr.hideSelectionsTool){
@@ -242,7 +242,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 		}
 		if (pr.toolbarTxt && !pr.hideGuiToolbar){
 			if ($("#sfstoolbartxt").length==0){
-				if ($(".qui-buttonset-left").length>0){ //pre 2019 feb
+				if ($(".qui-buttonset-left").length>0){ //pre 2019 feb TODO fix cloud
 					$(".qui-buttonset-left").append('<div id="sfstoolbartxt"></div>');
 				} else {
 					$(".qs-toolbar__left").append('<div id="sfstoolbartxt"></div>');
@@ -254,15 +254,16 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if (pr.hideToolbarCenterPerm){
 				$(".qs-toolbar__center").remove();
 			} else {
-				gcss += ' .qs-toolbar__center {display:none!important;}';	
+				gcss += ' .qs-toolbar__center,#qs-toolbar-container ul li:nth-child(2) {display:none!important;}';	
 			}
 			
 		} else if(pr.hideToolbarCenterStory){
-			$("[tid=tab-nav-story].tab-menu-button").remove();
+			$("[tid=tab-nav-story].tab-menu-button,#tab-nav-story").remove();
 		}
 		if(pr.global_selectBGcolor){
 			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { background-color: '+pr.global_selectBGcolor+';}';
-			gcss += ' .qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}'
+			gcss += ' .qv-state-count-bar .state.selected {background:'+pr.global_selectBGcolor+';}';
+			gcss += '.current-selections-item > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) {background:'+pr.global_selectBGcolor+'!important;}';
 		}
 		if(pr.global_selectBordercolor){
 			gcss += ' .qv-listbox .serverLocked, .qv-listbox .serverSelected, .qv-listbox li.selected,.qv-rebrand2018 .qv-listbox .serverLocked, .qv-rebrand2018 .qv-listbox .serverSelected, .qv-rebrand2018 .qv-listbox li.selected { border-bottom: 1px solid '+pr.global_selectBordercolor+';}';
@@ -796,7 +797,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 					html += '</div></div>';
 					if(pr.removeFullScrnBtn || pr.showHeader){
-
 						html += '<div class="sfssearchIcon"><span class="lui-icon lui-icon--search"></span></div>';
 					} else {
 						html += '<div class="sfssearchIcon sfssearchIconWfullscrn"><span class="lui-icon lui-icon--search"></span></div>';
@@ -818,10 +818,10 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 			if(pr.removeFullScrnBtn || pr.removeMoreBtn){
 				var objectwrapper = articleElement.parent().parent();
 				if(pr.removeFullScrnBtn) {
-					objectwrapper.find('a.lui-icon--expand').remove();
+					objectwrapper.find('.lui-icon--expand').remove();
 				}
 				if(pr.removeMoreBtn){
-					objectwrapper.find('a.lui-icon--more').remove();
+					objectwrapper.find('.lui-icon--more').remove();
 				}
 			}
 			//hiding, global or local..
@@ -830,7 +830,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				if ($(".sfshideselstyles").length>0){
 					
 				} else {
-					$('.qv-selections-pager').append('<div style="display:none;" class="sfshideselstyles"></div>');
+					$('.qvt-selections,.qs-header').append('<div style="display:none;" class="sfshideselstyles"></div>'); //qv-selections-pager
 				}
 				//hide global
 				if (pr.enableGlobals && pr.hideFieldsFromSelectionBar && pr.hideFieldsFromSelectionBar != ''){
@@ -842,7 +842,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 							if ($('#hid'+fieldToHideSelector).length>0){
 							//already hidden
 							} else {
-								$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
+								$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.current-selections-item[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
 							}
 						}
 					});
@@ -863,7 +863,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						if ($('#hid'+fieldToHideSelector).length>0){
 							//already hidden
 						} else {
-							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.qv-selections-pager li[data-csid="'+ fieldToHide2 +'"] {display:none;}</style>');
+							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.qv-selections-pager li[data-csid="'+ fieldToHide2 +'"],.current-selections-item[data-csid="'+ fieldToHide2 +'"] {display:none;}</style>');
 						}
 					}
 				}
@@ -915,11 +915,12 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					
 				}
 				if (pr.hideSelectionBar){
-					$(".qvt-selections").hide();
+					$(".qvt-selections,.qs-header").hide();
 				} else {
 					if(pr.selBarExtraText && pr.selBarExtraText != ''){
 						if ($("#sfsSelBartxt").length==0){
-							$(".qv-selections-pager .buttons-end").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>');
+
+							$(".qv-selections-pager .buttons-end,.qvt-selections").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>'); //
 						}
 						$("#sfsSelBartxt").html(sfsSanitize(pr.selBarExtraText)).prop('title',sfsSanitize(pr.selBarExtraText)).prop('style',checkUserCSSstyle2(pr.selBarExtraTextcss));
 						if (pr.selBarExtraTextQlikStyle){
