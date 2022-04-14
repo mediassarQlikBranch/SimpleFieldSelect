@@ -774,7 +774,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				
 			}
 			if(pr.enablesearch){
-				if(!(pr.dimensionIsVariable && pr.variableIsDate) && (visType=='hlist' || visType=='vlist' || visType=='checkbox' ||visType=='radio' || visType=='luiswitch' || visType=='luicheckbox' || visType=='luiradio')){
+				if(!((pr.dimensionIsVariable && pr.variableIsDate) ||  (visType=='dropdown' || visType=='select2' || visType=='txtonly' || visType=='searchonly') )) {
 					var searchId = 'se'+layout.qInfo.qId;
 					if(pr.removeFullScrnBtn || pr.showHeader){
 						html += '<div class="sfssearchdiv"';
@@ -1388,7 +1388,6 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					});
 				}
 				if (visType == 'searchonly'){
-					//if (visType=='searchonly'){ //draw here so that stats exists
 					var searchId = 'se'+layout.qInfo.qId;
 					html += '<div class="sfssearchonlydiv">';
 					html += '<div class="lui-search" style="height:100%;">';

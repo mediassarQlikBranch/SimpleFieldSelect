@@ -1905,7 +1905,8 @@ define( [], function () {
 						label: "Search settings",
 						show: function ( data ) {
 							return 	((data.props.dimensionIsVariable && data.props.variableOptionsForValues && !data.props.variableIsDate) ||
-							(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' || data.props.visualizationType=='searchonly')
+								!(data.props.visualizationType=='dropdown' || data.props.visualizationType=='select2' || data.props.visualizationType=='txtonly')
+							//(data.props.visualizationType=='hlist' || data.props.visualizationType=='vlist' || data.props.visualizationType=='checkbox' || data.props.visualizationType=='radio' || data.props.visualizationType=='luicheckbox' || data.props.visualizationType=='luiswitch' || data.props.visualizationType=='searchonly')
 							);
 					  	},
 						items: {
@@ -2218,7 +2219,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.3 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.4 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",
