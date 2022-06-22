@@ -1945,13 +1945,22 @@ define( [], function () {
 									return data.props.visualizationType=='searchonly';
 								}
 							},
-							searcHideClear :{
+							searcHideClear:{
 							  ref: "props.searcHideClear",
 							  type: "boolean",
 							  label: "Hide clear button",
 							  defaultValue: false,
 							  show: function ( data ) {
 								return data.props.visualizationType=='searchonly' || data.props.enablesearch;
+							  }
+							},
+							searchRight:{
+							  ref: "props.searchRight",
+							  type: "boolean",
+							  label: "Move search icon to right",
+							  defaultValue: false,
+							  show: function ( data ) {
+								return data.props.visualizationType!='searchonly' && data.props.enablesearch;
 							  }
 							}
 						}
@@ -2219,7 +2228,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.4 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.5 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",

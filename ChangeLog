@@ -1,3 +1,7 @@
+2.1.5
+ - Fix hiding of Fullscreen button and More options menu in Qlik May 2022 release
+ - To make search function more accessible, the icon is moved to left. There is also now setting to move it to right.
+ - Clicking of the search icon in the search field will hide search
 2.1.4
  - Qlik radio button -visualization - fix for search settings, search menu was hidden
 2.1.3

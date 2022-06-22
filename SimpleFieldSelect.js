@@ -796,10 +796,13 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						html += '<span id="cl'+searchId+'" class="lui-icon lui-icon--remove sfssearchinput_clear" title="clear search"></span>';
 					}
 					html += '</div></div>';
-					if(pr.removeFullScrnBtn || pr.showHeader){
+					if(!pr.searchRight){
 						html += '<div class="sfssearchIcon"><span class="lui-icon lui-icon--search"></span></div>';
+					} else
+					if((pr.removeFullScrnBtn || pr.showHeader)){
+						html += '<div class="sfssearchIcon sfssearchIconRight"><span class="lui-icon lui-icon--search"></span></div>';
 					} else {
-						html += '<div class="sfssearchIcon sfssearchIconWfullscrn"><span class="lui-icon lui-icon--search"></span></div>';
+						html += '<div class="sfssearchIcon sfssearchIconWfullscrnRight"><span class="lui-icon lui-icon--search"></span></div>';
 					}
 				}
 			}
@@ -816,7 +819,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 				setSmallDeviceStuff($element,pr);
 			}
 			if(pr.removeFullScrnBtn || pr.removeMoreBtn){
-				var objectwrapper = articleElement.parent().parent();
+				var objectwrapper = articleElement.parent().parent().parent();
 				if(pr.removeFullScrnBtn) {
 					objectwrapper.find('.lui-icon--expand').remove();
 				}
@@ -2149,7 +2152,7 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					}
 				});
 				//clear search
-				$element.find('#cl'+searchId).click(function(){
+				$element.find('#cl'+searchId+',.sfssearchicon2').click(function(){
 					if(searchSelectionMethod == 4){
 						searchField.val('');
 						toSelectWithSearchOnly = [];
