@@ -1,12 +1,11 @@
-define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min"], //,"./jquery-ui.min"
-	function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
+define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min","./jquery-ui.min"],
+function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,jqueryui) {
 	'use strict';
 	var debug = 0;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
 	var sfsdefaultselstatus = {};
 	var keepaliverTimer;
 	var useSanitize = propertiesdef.useSanitize;
-	//console.log(propertiesdef);
 
 	//var sfsstatus = {};
 	//If nothing selected but should be
@@ -1028,8 +1027,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					$( "<style id=sfsdatepicker>" ).html( cssDatepick ).appendTo( "head" ); //add css.
 				}
 				if (pr.variableName){
+					var datepickerPluginExists = 1;
+					if (typeof $element.datepicker === 'undefined'){ //no jqueryUI
+						datepickerPluginExists = 0;
+					}
 					if (debug){ console.log('varvalue ' + pr.variableName); console.log(app.variable.getContent(pr.variableName)); }
 					var inattributes = 'type=text';
+					if (datepickerPluginExists==0){
+						inattributes = 'type=date';
+					}
 					if(pr.visInputNumberMin != ''){
 						inattributes += ' min="'+pr.visInputNumberMin+'"';
 					}
@@ -1071,10 +1077,11 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 					html += '</div>';
 					if(paddingDivAdded) html += '</div>';
 
-					$element.html( html );
+					$element.html(html);
 					//set javascript
-					var datepickElement = $element.find( '.pickdate' );
-					datepickElement.datepicker({
+					var datepickElement = $element.find('.pickdate');
+					if (datepickerPluginExists){
+						datepickElement.datepicker({
 						dateFormat: pr.dateformat,
 						changeMonth: true,
 						changeYear: true,
@@ -1083,14 +1090,15 @@ define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css",
 						minDate: pr.visInputNumberMin,
 						firstDay:1,
 						constrainInput: true
-					});
-					 //dates limited? will be depricated
-					if (pr.maxLimitvariable && pr.maxLimitvariable && pr.maxLimitvariable != '-'){
-						if (debug){ console.log('Limiting days to '); console.log(pr.maxLimitvariable); }
-						var parsedDate = $.datepicker.parseDate(pr.dateformat, pr.maxLimitvariable);
-						datepickElement.datepicker( "option", "maxDate", parsedDate );
+						});
+						 //dates limited? will be depricated
+						if (pr.maxLimitvariable && pr.maxLimitvariable && pr.maxLimitvariable != '-'){
+							if (debug){ console.log('Limiting days to '); console.log(pr.maxLimitvariable); }
+							var parsedDate = $.datepicker.parseDate(pr.dateformat, pr.maxLimitvariable);
+							datepickElement.datepicker( "option", "maxDate", parsedDate );
+						}
 					}
-					$element.find( '.pickdate' ).on( 'change', function () {
+					datepickElement.on( 'change', function () {
 						var newval = $(this).val();
 						if(debug) console.log('NEW '+newval + ' to '+pr.variableName);
 						qlik.currApp(self).variable.setStringValue(pr.variableName, newval);
