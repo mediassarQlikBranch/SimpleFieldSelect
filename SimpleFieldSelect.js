@@ -1,4 +1,4 @@
-define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","text!./datepicker.css","./properties.def","text!./select2/select2.css","./select2/select2.min","./jquery-ui.min"],
+define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","./properties.def","css!./select2/select2.css","./select2/select2.min","./jquery-ui.min"],
 function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,jqueryui) {
 	'use strict';
 	var debug = 0;
