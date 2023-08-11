@@ -1376,6 +1376,12 @@ define( [], function () {
 							  label: "Remove more options menu",
 							  defaultValue: false
 							},
+							removeWholeNavBtn: {
+							  ref: "props.removeWholeNavBtn",
+							  type: "boolean",
+							  label: "Remove the hoover menu completely",
+							  defaultValue: false
+							},
 							hlistRoundedcorners: {
 							  ref: "props.hlistRoundedcorners",
 							  type: "boolean",
@@ -2228,7 +2234,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.7 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.8 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",

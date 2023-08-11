@@ -817,14 +817,19 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,jqueryui) 
 			if (document.querySelector('.smallDevice') !== null){
 				setSmallDeviceStuff($element,pr);
 			}
-			if(pr.removeFullScrnBtn || pr.removeMoreBtn){
+			if(pr.removeFullScrnBtn || pr.removeMoreBtn || pr.removeWholeNavBtn){
 				var objectwrapper = articleElement.parent().parent().parent();
-				if(pr.removeFullScrnBtn) {
-					objectwrapper.find('.lui-icon--expand').remove();
+				if(pr.removeWholeNavBtn){
+					objectwrapper.find('.qv-object-nav').remove();
+				} else {
+					if(pr.removeFullScrnBtn) {
+						objectwrapper.find('.lui-icon--expand').remove();
+					}
+					if(pr.removeMoreBtn){
+						objectwrapper.find('.lui-icon--more').remove();
+					}
 				}
-				if(pr.removeMoreBtn){
-					objectwrapper.find('.lui-icon--more').remove();
-				}
+
 			}
 			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
