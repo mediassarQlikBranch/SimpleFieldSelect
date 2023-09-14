@@ -12,7 +12,7 @@ if(checkquote){css=css.replace(/"/g,"'");}}else{css='';}
 return css;}
 function sfsCSSsanitize(css){if(useSanitize==1&&css){css=css.replace(/script>/ig,"_").replace(/style>/ig,"_").replace(/\\/g,"_").replace(/[/]>/g,"_").replace(/"/g,"'").replace(/</g,' ');}else if(useSanitize==2&&css){css=css.replace(/script>/ig,"_");}else if(useSanitize==3&&css){css=DOMPurifysanitize(css);}
 return css;}
-const sani_map={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;',"/":'&#x2F;',"\\":'&#092;'};const sani_reg=/[&<>"'/\\]/ig;function sfsSanitize(txt){if(useSanitize==1&&txt){txt=txt.replace(sani_reg,(match)=>(sani_map[match]));}else if(useSanitize==2&&txt){txt=txt.replace(/script>/ig,"_");}else if(useSanitize==3&&txt){console.log('a');console.log(txt);txt=DOMPurifysanitize(txt);console.log(txt);}
+const sani_map={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;',"/":'&#x2F;',"\\":'&#092;'};const sani_reg=/[&<>"'/\\]/ig;function sfsSanitize(txt){if(useSanitize==1&&txt){txt=txt.replace(sani_reg,(match)=>(sani_map[match]));}else if(useSanitize==2&&txt){txt=txt.replace(/script>/ig,"_");}else if(useSanitize==3&&txt){txt=DOMPurifysanitize(txt);}
 return txt;}
 const sani_map_noq={'&':'&amp;','<':'&lt;','>':'&gt;',"/":'&#x2F;',"\\":'&#092;'};const sani_reg_noq=/[&<>/\\]/ig;function sfsSanitizeNoQuote(txt){if(useSanitize==1&&txt){txt=txt.replace(sani_reg_noq,(match)=>(sani_map_noq[match]));}else if(useSanitize==2&&txt){txt=txt.replace(/script>/ig,"_");}else if(useSanitize==3&&txt){txt=DOMPurifysanitize(txt);}
 return txt;}
