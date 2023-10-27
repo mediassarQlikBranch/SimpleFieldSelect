@@ -2,7 +2,7 @@
 define( [], function () {
 	'use strict';
 	//to enable text field output sanitization (disabled for example Javascript input), set useSanitize value to 1. Set value to 2, if only script> tags should be removed, Set value to 3, if you want to use DOMPurify library (modified) to clean the values
-	var useSanitize = 0;
+	var useSanitize = 3;
 	var debug = false;
 	var paddingoptions2 = [{value: "-",label: "default"},{value: "0",label: "0px"},{value: "2",label: "2px"},{value: "4",label: "4px"},{value: "5",label: "5px"},{value: "6",label: "6px"},
 									{value: "8",label: "8px"},{value: "10",label: "10px"},{value: "12",label: "12px"},{value: "14",label: "14px"},{value: "15",label: "15px"},{value: "16",label: "16px"},
@@ -1697,7 +1697,7 @@ define( [], function () {
 							  label: "Select only one?",
 							  defaultValue: false,
 							  show: function ( data ) {
-									return  !(data.props.dimensionIsVariable) && data.props.visualizationType!='dropdown' && data.props.visualizationType!='select2';
+									return  !(data.props.dimensionIsVariable);
 							  }
 							},
 							selectAlsoDefaults: {

@@ -1,3 +1,5 @@
+2.1.10
+ - Select2 and dropdown will have also "Select only one" option.
 2.1.9
  - Possibility to use Purify library (modified) to clean user inputs. (Alter properties.def.js file to enable)
 2.1.8
