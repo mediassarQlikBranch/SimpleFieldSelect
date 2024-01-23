@@ -2293,6 +2293,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 				var a = '<div class="sfs_helptxt"';
 				if (pr.helptextcss) a += ' style="'+checkUserCSSstyle2(pr.helptextcss,1)+'"';
 				a += '>'+ sfsSanitize(pr.helptext) + '</div>';
+				if(useSanitize==3){
+					a = sfsSanitize(a);
+				}
 				return a;
 			}
 			
