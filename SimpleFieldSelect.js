@@ -66,9 +66,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 				css += ';';
 			}
 			if(useSanitize){
-				console.log(css);
+				//console.log(css);
 				css = sfsCSSsanitize(css);
-				console.log(css);
+				//console.log(css);
 				
 			} else
 			if (checkquote){
@@ -1553,22 +1553,22 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 					}
 					//list
 					if (visType=='hlist' || visType=='vlist'){
-						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"'+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
+						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '" '+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
 						html += '</li>';
 					//checkbox
 					} else if (visType=='checkbox'){
 						html += '<label'+elementstyle+' class="sfe">'
-						html += '<input type="checkbox" class=" data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
+						html += '<input type="checkbox" class=" data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '" ' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					//button
 					} else if (visType=='btn'){
 						html += '<button'+elementstyle+''
-						html += ' class="sfe sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '"' + dis + ' ' +elementExtraAttribute+ '>' + row[0].qText; //
+						html += ' class="sfe sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '" ' + dis + ' ' +elementExtraAttribute+ '>' + row[0].qText; //
 						html += '</button> ';
 					//radio
 					} else if (visType=='radio'){
 						html += '<label'+elementstyle+' class="sfe">'
-						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/>' + row[0].qText; //
+						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+ '" dval="' + row[0].qElemNumber + '" ' + dis + checkedstatus +' ' +elementExtraAttribute+ '/>' + row[0].qText; //
 						html += '</label>';
 					} else if (visTypedropdownOrSelect2){
 						if (optionsPrintGroupHeaderBeforeValue && optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]){
@@ -1649,13 +1649,13 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 						$("."+contextmenuID).remove();
 					}
 					var contextmenuHtml = '<div class="qv-object-SimpleFieldSelect sfsrmenu '+contextmenuID+'"><ul>';
-					if(pr.rightclikcmenu_selall) contextmenuHtml += '<li act="all">Select all</li>';
-					if(pr.rightclikcmenu_clear) contextmenuHtml += '<li act="clear">Clear selections</li>';
-					if(pr.rightclikcmenu_reverse) contextmenuHtml += '<li act="reverse">Reverse selection</li>';
-					if(pr.rightclikcmenu_possible) contextmenuHtml += '<li act="possible">Select possible</li>';
-					if(pr.rightclikcmenu_random) contextmenuHtml += '<li act="random">Select randomnly</li>';
-					if(pr.rightclikcmenu_defaults) contextmenuHtml += '<li act="defaults">Select defaults</li>';
-					if(pr.rightclikcmenu_copy)  contextmenuHtml += '<li act="copy">Copy values to clipboard</li>';
+					if(pr.rightclikcmenu_selall) contextmenuHtml += '<li dval="all">Select all</li>';
+					if(pr.rightclikcmenu_clear) contextmenuHtml += '<li dval="clear">Clear selections</li>';
+					if(pr.rightclikcmenu_reverse) contextmenuHtml += '<li dval="reverse">Reverse selection</li>';
+					if(pr.rightclikcmenu_possible) contextmenuHtml += '<li dval="possible">Select possible</li>';
+					if(pr.rightclikcmenu_random) contextmenuHtml += '<li dval="random">Select randomnly</li>';
+					if(pr.rightclikcmenu_defaults) contextmenuHtml += '<li dval="defaults">Select defaults</li>';
+					if(pr.rightclikcmenu_copy)  contextmenuHtml += '<li dval="copy">Copy values to clipboard</li>';
 					//getselurl
 					
 					contextmenuHtml += '</ul></div>';
@@ -1683,7 +1683,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 						sfsrmenu = $("."+contextmenuID);
 						if (debug) console.log(sfsrmenu.find('li'));
 						sfsrmenu.find('li').click(function(){
-							var action = $(this).attr('act');
+							var action = $(this).attr('dval');
 							if (debug) console.log('action:' +action);
 							sfsrmenu.hide(100);
 							sfsrmenu.find('li').off('click');
