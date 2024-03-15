@@ -1585,7 +1585,7 @@ define( [], function () {
 							},
 							aboutVarOpt:{
 								component: "text",
-								label: "Options for values: separate by ; To use a section title use ## in the beginning. Section titles are shown in dropdowns. You can set style of section.",
+								label: "Options for values: separate by ; To use a section title use ## in the beginning. Define label for value with ~ mark between. Example: 1;2;3;4~four;5~five;##numbers Section titles are shown in dropdowns and lists. You can set style of section. If you want to use different display value, label on the selector, after variable value separate with ~ mark",
 								show: function ( data ) {
 									return  !data.props.variableIsDate ;
 								}
@@ -1602,7 +1602,7 @@ define( [], function () {
 							},
 							variableOptGroupStyle: {
 								ref: "props.variableOptGroupStyle",
-								label: "Style for section title",
+								label: "CSS Style for section title",
 								type: "string",
 								defaultValue: "",
 								show: function ( data ) {
@@ -2233,7 +2233,7 @@ define( [], function () {
 						items: {
 							aboutt:{
 							component: "text",
-							label: "Version 2.1.12 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
+							label: "Version 2.1.13 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
 							},
 							sanitizeOn:{
 							 component: "text",

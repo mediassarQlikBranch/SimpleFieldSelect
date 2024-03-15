@@ -1,3 +1,5 @@
+2.1.13
+ - For variable input value list, there is a possibility to have different display value (label) than the stored value with ~ mark after the value. Example: 1;2;3;4~four;5~five;##numbers
 2.1.12
  - Purify library fix (no selections in some visuals)
 2.1.11

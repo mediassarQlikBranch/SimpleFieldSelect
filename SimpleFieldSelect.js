@@ -1344,12 +1344,19 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 					var varindex = 0; //index is used to access variable
 					
 					sfssettings.variableOptionsForValuesArray = [];
+					//sfssettings.variableOptionsForLabels = [];
 					sfssettings.variableOptionsForKeysArray = [];
 					splitted.forEach(function(opt){
 						var qState = 'O';
 						if (opt.substring(0,2)=='##'){ //is group info
 							optionsPrintGroupHeaderBeforeValue[varindex] = opt.substring(2);
 							return;
+						}
+						var label = opt;
+						var lblsepindex = label.indexOf('~');
+						if(lblsepindex !== -1){//label defined
+							label = label.substring(lblsepindex+1);
+							opt = opt.substring(0,lblsepindex);
 						}
 						//if values match with current, mark selected
 						if (pr.varMultiselectAllow){
@@ -1360,12 +1367,13 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 							qState = 'S'; 
 						} //build qlik style object for printing
 						sfssettings.variableOptionsForValuesArray.push(opt); //when setting variable, take value from here.
+						//sfssettings.variableOptionsForLabels.push(opt);
+						
 						if (pr.varRemovebrackets){ //remove marks from "output"
+							label = label.replace(/"|\]|\[/g,'');
 							opt = opt.replace(/"|\]|\[/g,'');
 						}
-						optionsforselect.push( [{qState:qState, qText:opt, qElemNumber:varindex}] );
-
-						
+						optionsforselect.push( [{qState:qState, qText:label, qElemNumber:varindex}] );
 						varindex += 1;
 					});
 					if (debug){ console.log(pr.variableOptionsForValues); }
@@ -1382,7 +1390,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 							sfssettings.variableOptionsForKeysArray = []; //reset array
 						}
 					}
-					if (visTypedropdownOrSelect2){
+					if (visTypedropdownOrSelect2 || visType=='hlist' || visType=='vlist'){
 						selectOptGroupStyle = checkUserCSSstyle2(pr.variableOptGroupStyle);
 					}
 				//if not variable:
@@ -1553,6 +1561,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,
 					}
 					//list
 					if (visType=='hlist' || visType=='vlist'){
+						if (optionsPrintGroupHeaderBeforeValue && optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]){
+							html += ' <div style="'+selectOptGroupStyle+'">'+optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]+'</div> ';
+						}
 						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '" '+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
 						html += '</li>';
 					//checkbox
