@@ -1,5 +1,5 @@
 define( ["qlik", "jquery", "css!./SimpleFieldStyle.css","css!./datepicker.css","./properties.def","css!./select2/select2.css","./select2/select2.min","./jquery-ui.min","./purify_mod"],
-function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css,select2js,jqueryui,purifym) {
+function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 	'use strict';
 	var debug = 0;
 	var initialParameters = {'qWidth':1, 'qHeight':10000};
