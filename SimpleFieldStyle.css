@@ -1,5 +1,7 @@
 /* CSS */
-
+.qv-object-SimpleFieldSelect .qv-inner-object {
+	background-color: #fff;
+}
 .qv-object-SimpleFieldSelect .dropdownsel {
 	width:100%;
 }
