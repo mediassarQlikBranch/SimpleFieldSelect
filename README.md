@@ -14,6 +14,7 @@ Download a ZIP file from the dist directory or clone the branch. Install the zip
 In some cases browser cache will use old version of settings and requires recently removed javascript file. That file has been added to latest version but is not required anymore and will be later removed.
 
 ## Latest features
+- Performance improvements to Extension's code.
 - Datepicker for newer Qlik releases has been restored by adding the library which used to be part of Qlik
 - Change in search functionality. See [ChangeLog](ChangeLog)
 - **NOTE to Cloud users** There are major changes in Qlik's Cloud environments HTML structures (for example sheet header manipulations). Many features are fixed in 2.1.3 version.

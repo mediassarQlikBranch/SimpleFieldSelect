@@ -522,15 +522,20 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			
 			if(pr.enableGlobals){
 				//when exiting edit mode.
-				if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
-					$("#qv-toolbar-container,.qv-toolbar-container").hide();
+
+				//if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+				if(pr.hideGuiToolbar && !(document.getElementsByClassName('qv-mode-edit').length)){
+				
+					document.querySelectorAll("#qv-toolbar-container, .qv-toolbar-container").forEach(function(element) {
+    					element.style.display = "none";
+					});
 				}
 				//reset keepaliver
 				if(pr.keepaliver && pr.keepaliver>0){
 					setKeepaliver(self,pr.keepaliver);
 				}
 			}
-			if ($('.smallDevice').length >0){ //if changed with inspector
+			if (document.querySelectorAll('.smallDevice').length > 0) { //if changed with inspector
 				setSmallDeviceStuff($element,pr);
 			}
 			return false;
@@ -584,6 +589,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			var app = qlik.currApp(self);
 			var pr = layout.props;
 			var visType = pr.visualizationType;
+			var elementJS = $element[0];
 			var sfssettings = {};
 			var searchDictionary;
 			layout.props.dataWasUpdated = 0;
@@ -843,7 +849,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			//hiding, global or local..
 			if (pr.hideFieldsFromSelectionBar || pr.hideFromSelectionsBar){
 				//add hide area if needed
-				if ($(".sfshideselstyles").length>0){
+				//if ($(".sfshideselstyles").length>0){
+				if(document.getElementsByClassName('sfshideselstyles').length>0){
 					
 				} else {
 					$('.qvt-selections,.qs-header').append('<div style="display:none;" class="sfshideselstyles"></div>'); //qv-selections-pager
@@ -893,7 +900,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				} else {
 					articleElement.append($( '<div id="'+sfsglobalCSSid+'" style="display:none;" class="sfsglobalcss"></div>' ));
 				}
-				if( $(".sfsglobalcss").length>1 ){
+				//if( $(".sfsglobalcss").length>1 ){
+				if(document.getElementsByClassName('sfsglobalcss').length > 1){
 					console.log('SimpleFieldSelect: This sheet has two or more global modifications enabled. Remove others.');
 				}
 				//$("#"+sfsglobalCSSid).html('<style>' + createglobalCSS(pr) + '</style>');
@@ -928,7 +936,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						$("#sheet-title").css('font-size',pr.sheetTitleFontSize +'px');
 					}
 					if(pr.sheetTitleExtraText && pr.sheetTitleExtraText != ''){
-						if ($("#sfsSheetTitleTxt").length==0){
+						//if ($("#sfsSheetTitleTxt").length==0){
+						if (document.getElementById('#sfsSheetTitleTxt')){
+						} else {
 							$("#sheet-title").append('<div id="sfsSheetTitleTxt" style="margin-left:20px;"></div>');
 						}
 						$("#sfsSheetTitleTxt").html(sfsSanitize(pr.sheetTitleExtraText));
@@ -939,8 +949,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					$(".qvt-selections,.qs-header").hide();
 				} else {
 					if(pr.selBarExtraText && pr.selBarExtraText != ''){
-						if ($("#sfsSelBartxt").length==0){
-
+						//if ($("#sfsSelBartxt").length==0){
+						if (document.getElementById('#sfsSelBartxt')){
+						} else {
 							$(".qv-selections-pager .buttons-end,.qvt-selections").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>'); //
 						}
 						$("#sfsSelBartxt").html(sfsSanitize(pr.selBarExtraText)).prop('title',sfsSanitize(pr.selBarExtraText)).prop('style',checkUserCSSstyle2(pr.selBarExtraTextcss));
@@ -1651,13 +1662,26 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					var contextmenuID = 'sfsrmenu'+layout.qInfo.qId;
 					if (debug) console.log('create context menu '+contextmenuID)
 					$element.off("contextmenu"); //remove previous menuaction if exists, may not work
-					if ($("."+contextmenuID).length>0){
+					/*if ($("."+contextmenuID).length>0){
 						if (debug) console.log('context menu exists');
 						//if properties change, menu should be rewritten.
 						sfsrmenu = $("body").find('.'+contextmenuID);
 						$(document).off("mousedown", hidermenu);
 						sfsrmenu.find('li').off('click');
 						$("."+contextmenuID).remove();
+					}*/
+					const contextMenu = document.querySelectorAll('.' + contextmenuID);
+
+					if (contextMenu.length > 0) {
+					    if (debug) console.log('context menu exists');
+					    const sfsrmenu = document.body.querySelector('.' + contextmenuID);
+					    document.removeEventListener('mousedown', hidermenu); // Remove the 'mousedown' event listener
+					    sfsrmenu.querySelectorAll('li').forEach(function (li) {
+					        li.replaceWith(li.cloneNode(true)); // Remove event listeners by cloning nodes
+					    });
+					    contextMenu.forEach(function (menu) {
+					        menu.parentNode.removeChild(menu);
+					    });
 					}
 					var contextmenuHtml = '<div class="qv-object-SimpleFieldSelect sfsrmenu '+contextmenuID+'"><ul>';
 					if(pr.rightclikcmenu_selall) contextmenuHtml += '<li dval="all">Select all</li>';
@@ -1852,39 +1876,59 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					}
 					//normal click
 					listtargets.on('qv-activate', function (ev) { //mouseenter
-						var clicktarget = $(this);
-						var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
+						//console.log($element); 
+						//var clicktarget = $(this);
+						//console.log(clicktarget);
+						var clicktargetJS = ev.target; //clicktarget[0]; //
+						
+						
+						//var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
+						var targetValueID = parseInt(clicktargetJS.getAttribute('dval'),10);
 						if (debug) console.log('qv active on list change '+targetValueID);
 
-						if (!$(this).hasClass('selected')){
+						//if (!clicktarget.hasClass('selected')){
+						if(!clicktargetJS.classList.contains('selected')){
 							if (debug) console.log('is not selected');
 							if (pr.selectOnlyOne && !pr.dimensionIsVariable){
 							  if (debug) console.log('removing selections');
-							  $element.find( '.selected' ).each(function(){
+							  /*$element.find( '.selected' ).each(function(){
 								var value = parseInt( $(this).attr( "dval" ), 10 );
 								if (value != targetValueID){
 								  $(this).removeClass('selected');
 								  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 								}
+							  });*/
+							  elementJS.querySelectorAll('.selected').forEach(function(el) {
+							    var value = parseInt(el.getAttribute("dval"), 10);
+							    if (value !== targetValueID) {
+							        el.classList.remove('selected');
+							        selectValueInQlik(self, value, layout, app, true, $element, sfssettings);
+							    }
 							  });
 							}
-							this.classList.toggle("selected");
+							//this.classList.toggle("selected");
+							clicktargetJS.classList.toggle("selected");
 							selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 						//deselect, because selected already
 						} else {
 							if (pr.dimensionIsVariable && pr.variableEmptyAlreadySelected){ //for variable "clean"
-								clicktarget.removeClass('selected');
+								//clicktarget.removeClass('selected');
+								clicktargetJS.classList.remove('selected');
 								selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 							} else {
 								if (pr.dimensionIsVariable && !pr.varMultiselectAllow){
 									if (debug) console.log('no selection change');
 								} else {
 									if (debug) console.log('de selecting');
-									clicktarget.removeClass('selected');
+									//clicktarget.removeClass('selected');
+									clicktargetJS.classList.remove('selected');
 									selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 									var selectedCount = 0;
-									$element.find( '.selected' ).each(function(){
+									/*$element.find( '.selected' ).each(function(){
 									  selectedCount += 1;
+									});*/
+									elementJS.querySelectorAll('.selected').forEach(function(el) {
+										selectedCount += 1;
 									});
 									checkDefaultValueSelection($element,selectedCount,layout,self,app,sfssettings);
 								}
@@ -1896,7 +1940,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				} else
 				//dropdown change
 				if (visTypedropdownOrSelect2){
-					var dropdownelem = $element.find( '.dropdownsel' );
+					/*var dropdownelem = $element.find( '.dropdownsel' );
 					dropdownelem.attr('title', titletext+' '+ countselected + ' selected'  );
 					dropdownelem.on('change',function(){
 						if (debug) console.log('select change action');
@@ -1925,7 +1969,43 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							});
 							selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 						}
-					});
+					});*/
+					var dropdownelem = elementJS.querySelector('.dropdownsel');
+					dropdownelem.setAttribute('title', titletext + ' ' + countselected + ' selected');
+					//dropdownelem.addEventListener('change', function () {
+					$(dropdownelem).on('change',function(){
+				    if (debug) console.log('select change action');
+				    if (!layout.props.selectmultiselect) { // Not multi-select
+				        var clicktarget = this.options[this.selectedIndex]; // Get the selected option
+				        var targetValueID = parseInt(clicktarget.value, 10);
+				        elementJS.querySelectorAll('.selected').forEach(function (elem) { // Clear others
+				            var value = parseInt(elem.value, 10);
+				            if (value !== targetValueID) {
+				                selectValueInQlik(self, value, layout, app, true, $element, sfssettings);
+				                elem.classList.remove('selected');
+				            }
+				        });
+				        clicktarget.classList.add('selected');
+				        clicktarget.selected = true;
+				        selectValueInQlik(self, targetValueID, layout, app, true, $element, sfssettings);
+
+				    } else { // Multi-select
+				        var valuesToSelect = [];
+				        var selectedOptions = Array.from(this.selectedOptions); // Get all selected options
+				        elementJS.querySelectorAll('.selected').forEach(function (elem) {
+				            elem.classList.remove('selected');
+				        });
+				        selectedOptions.forEach(function (option) {
+				            var val = parseInt(option.value, 10);
+				            if (!isNaN(val)) {
+				                valuesToSelect.push(val);
+				                option.classList.add('selected'); // Add 'selected' class
+				            }
+				        });
+				        selectValuesInQlik(self, valuesToSelect, layout, app, false, $element, sfssettings);
+				    }
+				});
+
 				} else
 				//attach click event to checkbox
 				if (visType=='checkbox' || visType=='luiswitch' || visType=='luicheckbox'){
@@ -2066,7 +2146,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				}
 				function strfilter (str) { return str.trim(); }
 				var filters = [], filtercount = 0;
-				var targets = $element.find('.data');
+				//var targets = $element.find('.data');
+				var targets = elementJS.querySelectorAll(".data");
 				searchField.on('keyup',function(){
 					var filter = $(this).val().toLowerCase();
 					filters = [];
@@ -2099,7 +2180,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 
 					
 					if (searchSelectionMethod==2){
-						targets.each(function(){
+						/*targets.each(function(){
 							found=0;
 							var parent = $(this).parent();
 							var targettext = parent.text().toLowerCase();
@@ -2114,9 +2195,27 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							if(found==0){
 								parent.addClass('searchHide').removeClass('searchSel');
 							}
+						});*/
+						targets.forEach(function(target) {
+						    found = 0;
+						    const parent = target.parentNode; // Get the parent element
+						    const targetText = parent.textContent.toLowerCase(); // Get text content and convert to lowercase
+
+						    for (let i = 0; i < filtercount; i++) {
+						        if (targetText.indexOf(filters[i]) > -1) {
+						            parent.classList.remove('searchHide');
+						            parent.classList.add('searchSel');
+						            found = 1;
+						        }
+						    }
+
+						    if (found === 0) {
+						        parent.classList.add('searchHide');
+						        parent.classList.remove('searchSel');
+						    }
 						});
 					} else if (searchSelectionMethod==3){
-						targets.each(function(){
+						/*targets.each(function(){
 							found=0;
 							var parent = $(this).parent().parent();
 							var targettext = parent.text().toLowerCase();
@@ -2131,6 +2230,24 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							if(found==0){
 								parent.addClass('searchHide').removeClass('searchSel');
 							}
+						});*/
+						targets.forEach(function(target) {
+						    found = 0;
+						    const parent = target.parentNode.parentNode; // Get the parent element
+						    const targetText = parent.textContent.toLowerCase(); // Get text content and convert to lowercase
+
+						    for (let i = 0; i < filtercount; i++) {
+						        if (targetText.indexOf(filters[i]) > -1) {
+						            parent.classList.remove('searchHide');
+						            parent.classList.add('searchSel');
+						            found = 1;
+						        }
+						    }
+
+						    if (found === 0) {
+						        parent.classList.add('searchHide');
+						        parent.classList.remove('searchSel');
+						    }
 						});
 					} else if (searchSelectionMethod==4){
 						if (filtercount < 100){ //do preminilary search here
@@ -2142,9 +2259,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							searchSelCount.css('width',selectedperc+'%');
 							searchAltCount.css('width',notselectedperc+'%');
 						}
-						/**/
 					} else {
-						targets.each(function(){
+						/*targets.each(function(){
 							found = 0;
 							var thisel = $(this);
 							var targettext = thisel.html().toLowerCase();
@@ -2159,6 +2275,24 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							if(found==0){
 								thisel.addClass('searchHide').removeClass('searchSel');
 							}
+						});*/
+						targets.forEach(function(target) {
+						    found = 0;
+						    const targetText = target.innerHTML.toLowerCase(); // Get inner HTML content and convert to lowercase
+
+						    for (let i = 0; i < filtercount; i++) {
+						        if (targetText.indexOf(filters[i]) > -1) {
+						            target.classList.remove('searchHide');
+						            target.classList.add('searchSel');
+						            found = 1;
+						            break; // Exit loop early if match is found
+						        }
+						    }
+
+						    if (found === 0) {
+						        target.classList.add('searchHide');
+						        target.classList.remove('searchSel');
+						    }
 						});
 					}
 				});
@@ -2178,7 +2312,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							searchField.removeClass('sfssearching');
 						} else {
 						
-							if (searchSelectionMethod==2 || searchSelectionMethod==3){
+							/*if (searchSelectionMethod==2 || searchSelectionMethod==3){
 								var targets = $element.find(".searchSel input");
 							} else {
 								var targets = $element.find(".searchSel");
@@ -2188,6 +2322,19 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 								if (!isNaN(val)){
 									valuesToSelect.push( val );
 								}
+							});*/
+							var targets;
+							if (searchSelectionMethod === 2 || searchSelectionMethod === 3) {
+							    targets = elementJS.querySelectorAll(".searchSel input");
+							} else {
+							    targets = elementJS.querySelectorAll(".searchSel");
+							}
+
+							targets.forEach(function(target) {
+							    var val = parseInt(target.getAttribute("dval"), 10);
+							    if (!isNaN(val)) {
+							        valuesToSelect.push(val);
+							    }
 							});
 						}
 						selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);

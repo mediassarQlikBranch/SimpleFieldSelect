@@ -1,3 +1,5 @@
+2.2.0
+ - Performance improvements
 2.1.15
  - Default background color of the object to white in newer Qlik version (atleast from May 2024)
 2.1.14
