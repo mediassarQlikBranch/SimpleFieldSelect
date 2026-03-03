@@ -949,8 +949,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					$(".qvt-selections,.qs-header").hide();
 				} else {
 					if(pr.selBarExtraText && pr.selBarExtraText != ''){
-						//if ($("#sfsSelBartxt").length==0){
-						if (document.getElementById('#sfsSelBartxt')){
+						if (document.getElementById('sfsSelBartxt')){
 						} else {
 							$(".qv-selections-pager .buttons-end,.qvt-selections").append('<div id="sfsSelBartxt" class="item qv-object-SimpleFieldSelect qv-subtoolbar-button borderbox bright"></div>'); //
 						}
