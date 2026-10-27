@@ -1,6 +1,7 @@
 //Properties definitions
-define( [], function () {
+define( ['require'], function ( require ) {
 	'use strict';
+	var logoUrl = require.toUrl('./RlogoSFS.png'); //works on all Qlik platforms, extension path differs
 	//to enable text field output sanitization (disabled for example Javascript input), set useSanitize value to 1. Set value to 2, if only script> tags should be removed, Set value to 3, if you want to use DOMPurify library (modified) to clean the values
 	var useSanitize = 0;
 	var debug = false;
@@ -2231,6 +2232,11 @@ define( [], function () {
 						label: "About",
 						type: "items",
 						items: {
+							logo:{
+								component: { //custom component, if not supported by Qlik version only the logo is missing
+									template: '<div style="text-align:center;padding:8px 0;"><img src="'+logoUrl+'" alt="Simple Field Select" style="width:96px;height:96px;" /></div>'
+								}
+							},
 							aboutt:{
 							component: "text",
 							label: "Version 2.3.0 Developed by Matti Punkeri / Oivalo Oy - https://www.oivalo.fi"
