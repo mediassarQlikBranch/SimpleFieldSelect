@@ -46,8 +46,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 		}
 		if (!layout.props.selectOnlyOne && otherdefaultelememnts.length>0){
 			if(debug) console.log('selecting other defaults, method: '+otherDefaultElementsSelectionStyle);
-			otherdefaultelememnts.each(function(elem){
-				valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+			otherdefaultelememnts.each(function(){
+				valuesToSelect.push( parseInt(this.getAttribute( "dval" ),10) );
 			});
 		}
 		if (valuesToSelect.length>0){
@@ -240,7 +240,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 		if(pr.hideSmartSearchButton){
 			gcss += ' .qv-subtoolbar-button[tid="toggleGlobalSearchButton"] {display:none!important;}';
 		}
-		if(pr.hideGuiToolbar && $(".qv-mode-edit").length == 0){
+		if(pr.hideGuiToolbar && !document.querySelector(".qv-mode-edit")){
 			if($("#qv-toolbar-container,.qv-toolbar-container").length>0) {//pre 2019 feb
 				gcss += ' #qv-toolbar-container,.qv-toolbar-container {display:none!important;}';
 			} else {
@@ -355,8 +355,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			var clearingSelection = 0;
 			if ( layout.props.varMultiselectAllow){
 				var varvaluelist = [], varvalueSelectedIndexes = [];
-				 $element.find('.selected').each(function(sel){
-					var ind = parseInt($(this).attr("dval"));
+				 $element[0].querySelectorAll('.selected').forEach(function(el){
+					var ind = parseInt(el.getAttribute("dval"));
 					if (ind>=0){
 						varvaluelist.push( sfssettings.variableOptionsForValuesArray[ind] );
 						varvalueSelectedIndexes.push(ind);
@@ -476,6 +476,17 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 		}
 
 	}
+	function setKeepaliver(self,delay){
+		if (keepaliverTimer){
+			clearInterval(keepaliverTimer);
+		}
+		keepaliverTimer = setInterval(function(){
+			if (debug) console.log('Keepalive');
+			var app = qlik.currApp(self);
+			app.addAlternateState("sfskeepalive");
+			app.removeAlternateState("sfskeepalive");
+		},delay*1000*60);
+	}
 	return {
 		initialProperties: {
 			qListObjectDef: {
@@ -532,7 +543,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				}
 				//reset keepaliver
 				if(pr.keepaliver && pr.keepaliver>0){
-					setKeepaliver(self,pr.keepaliver);
+					setKeepaliver(this,pr.keepaliver);
 				}
 			}
 			if (document.querySelectorAll('.smallDevice').length > 0) { //if changed with inspector
@@ -579,6 +590,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			}
 			$scope.$on('$destroy', function (ev) {
 				var contextmenuID = 'sfsrmenu';//+$scope.layout.qInfo.qId;
+				$(document).off('mousedown.sfscm'+$scope.layout.qInfo.qId); //context menu hider
 				$("."+contextmenuID+",.sfssel2c,#sfsselect2").remove(); //removes if exists
 			});
 			
@@ -602,7 +614,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			} else if ((pr.rightclikcmenu_getselectionurl || pr.rightclikcmenu_getselurltoclipboard) && pr.rightclikcmenu_getselectionurlAsButton){
 				pr.rightclikcmenu_getselectionurlAsButtonTxt = pr.rightclikcmenu_getselectionurlAsButtonTxt ? pr.rightclikcmenu_getselectionurlAsButtonTxt : 'Get current selections as an URL';
 				$element.html('<button type="button" class="sfs_getselectionurl lui-button">'+pr.rightclikcmenu_getselectionurlAsButtonTxt+'</button>');
-				$(".sfs_getselectionurl").click(function(){
+				$element.find(".sfs_getselectionurl").click(function(){
 					getSelectedUrl('dialog');
 				});
 				return qlik.Promise.resolve();
@@ -627,12 +639,16 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					});
 					if (debug) console.log('fetching more rows ' + lastrow);
 					if(allrowscount > lastrow +1){
-						var requestPage = [{
-							qTop: lastrow + 1, qLeft: 0,
-							qWidth: initialParameters['qWidth'],
-							qHeight: Math.min( initialParameters['qHeight'], allrowscount - lastrow )
-						}];
-						this.backendApi.getData( requestPage ).then( function ( dataPages ) {
+						//request all missing pages at once and paint only when all have arrived
+						var pageRequests = [];
+						for (var pageTop = lastrow + 1; pageTop < allrowscount; pageTop += initialParameters['qHeight']){
+							pageRequests.push( this.backendApi.getData( [{
+								qTop: pageTop, qLeft: 0,
+								qWidth: initialParameters['qWidth'],
+								qHeight: Math.min( initialParameters['qHeight'], allrowscount - pageTop )
+							}] ) );
+						}
+						Promise.all( pageRequests ).then( function () {
 							self.paint( $element,layout );
 						} );
 						$element.html('wait for data');
@@ -672,6 +688,14 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			var articleInnerElement = headerelement.parent();
 			var articleElement = articleInnerElement.parent();
 			var gridcell = articleElement.closest('.qv-gridcell');
+			//remove handlers and select2 instance of the previous paint
+			$element.off('.sfs');
+			articleElement.off('.sfs');
+			gridcell.off('.sfs');
+			var prevSelect2 = $element.find('select.dropdownsel');
+			if (prevSelect2.data('select2')){
+				prevSelect2.select2('destroy');
+			}
 			if (pr.transparentBackground){
 				articleElement.css('background-color','transparent');
 				articleInnerElement.css('background-color','transparent');
@@ -862,7 +886,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					splittedfields.forEach(function(fieldToHide,i){
 						var fieldToHideSelector = fieldToHide.replace(/ /g,'_').replace(/=/g,'');
 						if (fieldToHideSelector){
-							if ($('#hid'+fieldToHideSelector).length>0){
+							if (document.getElementById('hid'+fieldToHideSelector)){
 							//already hidden
 							} else {
 								$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.current-selections-item[data-csid="'+ fieldToHide +'"] {display:none;}</style>');
@@ -883,7 +907,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					}
 					var fieldToHideSelector = layout.qInfo.qId;
 					if (fieldToHideSelector){
-						if ($('#hid'+fieldToHideSelector).length>0){
+						if (document.getElementById('hid'+fieldToHideSelector)){
 							//already hidden
 						} else {
 							$('.sfshideselstyles').append('<style id="hid'+fieldToHideSelector+'">.qv-selections-pager li[data-csid="'+ fieldToHide +'"],.qv-selections-pager li[data-csid="'+ fieldToHide2 +'"],.current-selections-item[data-csid="'+ fieldToHide2 +'"] {display:none;}</style>');
@@ -937,7 +961,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					}
 					if(pr.sheetTitleExtraText && pr.sheetTitleExtraText != ''){
 						//if ($("#sfsSheetTitleTxt").length==0){
-						if (document.getElementById('#sfsSheetTitleTxt')){
+						if (document.getElementById('sfsSheetTitleTxt')){
 						} else {
 							$("#sheet-title").append('<div id="sfsSheetTitleTxt" style="margin-left:20px;"></div>');
 						}
@@ -1050,7 +1074,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			
 			//if date select to variable
 			if (pr.variableIsDate && pr.dimensionIsVariable){
-				if ($("#sfsdatepicker").length>0){
+				if (document.getElementById("sfsdatepicker")){
 					//ok
 				} else {
 					$( "<style id=sfsdatepicker>" ).html( cssDatepick ).appendTo( "head" ); //add css.
@@ -1414,23 +1438,74 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					html += '</option>';
 				}
 				//fetch other default values
-				var otherDefaultValues = [];
+				var otherDefaultValues = new Set();
 				if (!pr.selectOnlyOne && pr.selectAlsoThese && pr.selectAlsoThese != '' && !pr.dimensionIsVariable &&
 						visType!='dropdown' && visType!='btn' && visType!='radio'){
-					otherDefaultValues = pr.selectAlsoThese.split(";");
+					otherDefaultValues = new Set(pr.selectAlsoThese.split(";"));
 				}
 				//forced values
-				var forcedValues = [];
+				var forcedValues = new Set();
 				if (pr.ForceSelections && pr.ForceSelections != ''){
-					forcedValues = sfsSanitize(pr.ForceSelections).split(";");
+					forcedValues = new Set(sfsSanitize(pr.ForceSelections).split(";"));
 				}
 				//hide
-				var hideItems = [];
+				var hideItems = new Set();
 				if(pr.hideItems && pr.hideItems != ''){
 
-					hideItems = pr.hideItems.split(";");
+					hideItems = new Set(pr.hideItems.split(";"));
 					if (debug) {console.log('hide:'); console.log(hideItems);}
 				}
+				//same for every row, compute once
+				var luiClass = createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType);
+				var postElemHtmlSanitized = pr.postElemHtml ? sfsSanitize(pr.postElemHtml) : '';
+				//element style depends only on qState, build once per state
+				var stateStyles = {};
+				function getStateStyle(qState){
+					if (stateStyles[qState]){
+						return stateStyles[qState];
+					}
+					var colorclasses = '', elementstyle = '';
+					//color selections
+					if (qState === 'S'){
+						//set special color if set
+						if (pr.color_stateS_bg && pr.color_stateS_bg != ''){
+							colorclasses += ' disableBGimage';
+							elementstyle += ' background-color:'+pr.color_stateS_bg+';';
+						}
+						//font color
+						if (pr.color_stateS_fo && pr.color_stateS_fo != ''){
+							elementstyle += ' color:'+pr.color_stateS_fo+';';
+						}
+					} else if (qState === 'O'){
+						if (pr.color_stateO_bg && pr.color_stateO_bg != ''){
+							elementstyle += ' background-color:'+pr.color_stateO_bg+';';
+						}
+						if (pr.color_stateO_fo && pr.color_stateO_fo != ''){
+							elementstyle += ' color:'+pr.color_stateO_fo+';';
+						}
+					} else if (qState === 'X'){
+						if (pr.color_stateX_bg && pr.color_stateX_bg != ''){
+							elementstyle += 'background-color:'+pr.color_stateX_bg+';';
+						}
+						if (pr.color_stateX_fo && pr.color_stateX_fo != ''){
+							elementstyle += ' color:'+pr.color_stateX_fo+';';
+						}
+					} else if (qState === 'A'){
+						if (pr.color_stateA_bg && pr.color_stateA_bg != ''){
+							elementstyle += ' background-color:'+pr.color_stateA_bg+';';
+						}
+						if (pr.color_stateA_fo && pr.color_stateA_fo != ''){
+							elementstyle += ' color:'+pr.color_stateA_fo+';';
+						}
+					}
+					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding+elementmargin;
+					if (elementstyle){
+						elementstyle = ' style="' + sfsSanitize(elementstyle) + '" ';
+					}
+					stateStyles[qState] = {colorclasses: colorclasses, elementstyle: elementstyle};
+					return stateStyles[qState];
+				}
+				var selectOnlyOneReduceTo = null; //selectOnlyOne: value to reduce selections to after the loop
 				//special case, calc selected
 				var calcSelected = 0, calcTotalRows = optionsforselect.length;
 				if (pr.showOnlySelectedItems && pr.showOnlySelectedItemsShowPossible || visType == 'searchonly'){
@@ -1479,8 +1554,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 							}
 						}
 					}
-					if (hideItems.length>0){ //if items to hide
-						if (hideItems.indexOf(row[0].qText) > -1 ){
+					if (hideItems.size>0){ //if items to hide
+						if (hideItems.has(row[0].qText)){
 							if (debug) console.log('hide: '+row[0].qText);
 							return;
 						}
@@ -1500,13 +1575,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					if (pr.selectOnlyOne && !pr.dimensionIsVariable && countselected > 1){
 						if (debug) console.log('Select only one enabled, reducing selections.');
 						checkedstatus = ''; selectedClass = ''; dropselection = '';
-						if (visTypedropdownOrSelect2){
-						  //self.backendApi.selectValues( 0, [ row[0].qElemNumber ], false );
-						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element,sfssettings);
-						} else {
-						  //self.backendApi.selectValues( 0, [ row[0].qElemNumber ], false );
-						  selectValueInQlik(self,row[0].qElemNumber,layout,app,false,$element,sfssettings);
-						}
+						//non-toggle select replaces the selection, so only the last call mattered. Do it once after the loop.
+						selectOnlyOneReduceTo = row[0].qElemNumber;
 						countselected -= 1; //reduce one because deselected
 					}
 
@@ -1515,57 +1585,17 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						defaultelementclass = " defaultelement";
 					}
 					//mark forced
-					if (forcedValues){
-						if(forcedValues.indexOf(row[0].qText) > -1){
-							defaultelementclass += " forcedelem";
-						}
+					if(forcedValues.has(row[0].qText)){
+						defaultelementclass += " forcedelem";
 					}
 					//mark other default values
-					if (otherDefaultValues){
-						if (otherDefaultValues.indexOf(row[0].qText) > -1){
-							otherdefaultelementclass = " otherdefelem";
-						}
+					if (otherDefaultValues.has(row[0].qText)){
+						otherdefaultelementclass = " otherdefelem";
 					}
-					
-					var colorclasses = '', elementstyle = '';
-					//color selections
-					if (row[0].qState === 'S'){
-						//set special color if set
-						if (pr.color_stateS_bg && pr.color_stateS_bg != ''){
-							colorclasses += ' disableBGimage';
-							elementstyle += ' background-color:'+pr.color_stateS_bg+';';
-						}
-						//font color
-						if (pr.color_stateS_fo && pr.color_stateS_fo != ''){
-							elementstyle += ' color:'+pr.color_stateS_fo+';';
-						}
-					} else if (row[0].qState === 'O'){
-						if (pr.color_stateO_bg && pr.color_stateO_bg != ''){
-							elementstyle += ' background-color:'+pr.color_stateO_bg+';';
-						}
-						if (pr.color_stateO_fo && pr.color_stateO_fo != ''){
-							elementstyle += ' color:'+pr.color_stateO_fo+';';
-						}
-					} else if (row[0].qState === 'X'){
-						if (pr.color_stateX_bg && pr.color_stateX_bg != ''){
-							elementstyle += 'background-color:'+pr.color_stateX_bg+';';
-						}
-						if (pr.color_stateX_fo && pr.color_stateX_fo != ''){
-							elementstyle += ' color:'+pr.color_stateX_fo+';';
-						}
-					} else if (row[0].qState === 'A'){
-						if (pr.color_stateA_bg && pr.color_stateA_bg != ''){
-							elementstyle += ' background-color:'+pr.color_stateA_bg+';';
-						}
-						if (pr.color_stateA_fo && pr.color_stateA_fo != ''){
-							elementstyle += ' color:'+pr.color_stateA_fo+';';
-						}
-					}
-					elementstyle += bordercolorstyle+elementStyleCSS+elementpadding+elementmargin;
-					if (elementstyle){
-						elementstyle = ' style="' + sfsSanitize(elementstyle) + '" ';
-					}
-					
+
+					var stateStyle = getStateStyle(row[0].qState);
+					var colorclasses = stateStyle.colorclasses, elementstyle = stateStyle.elementstyle;
+
 					if (!visTypedropdownOrSelect2 && pr.preElemHtml){
 						html += pr.preElemHtml;
 					}
@@ -1574,17 +1604,17 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						if (optionsPrintGroupHeaderBeforeValue && optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]){
 							html += ' <div style="'+selectOptGroupStyle+'">'+optionsPrintGroupHeaderBeforeValue[ row[0].qElemNumber ]+'</div> ';
 						}
-						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '" '+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
+						html += '<li class="sfe data '+selectedClass+defaultelementclass+otherdefaultelementclass+colorclasses+' state' + row[0].qState + ''+elementExtraClass+luiClass+'" dval="' + row[0].qElemNumber + '" '+elementstyle+' ' +elementExtraAttribute+ '>' + row[0].qText;
 						html += '</li>';
 					//checkbox
 					} else if (visType=='checkbox'){
 						html += '<label'+elementstyle+' class="sfe">'
-						html += '<input type="checkbox" class=" data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '" ' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
+						html += '<input type="checkbox" class=" data state' + row[0].qState +defaultelementclass+otherdefaultelementclass+selectedClass+elementExtraClass+colorclasses+luiClass+ '" dval="' + row[0].qElemNumber + '" ' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ' + row[0].qText; //
 						html += '</label>';
 					//button
 					} else if (visType=='btn'){
 						html += '<button'+elementstyle+''
-						html += ' class="sfe sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+'" dval="' + row[0].qElemNumber + '" ' + dis + ' ' +elementExtraAttribute+ '>' + row[0].qText; //
+						html += ' class="sfe sfsbtn state' + row[0].qState +defaultelementclass+selectedClass+colorclasses+elementExtraClass+otherdefaultelementclass+ luiClass+'" dval="' + row[0].qElemNumber + '" ' + dis + ' ' +elementExtraAttribute+ '>' + row[0].qText; //
 						html += '</button> ';
 					//radio
 					} else if (visType=='radio'){
@@ -1603,27 +1633,30 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						html += '</option>';
 					} else if (visType=='luiswitch'){
 						html += '<div '+elementstyle+' class="sfe lui-switch" title="'+row[0].qText+'"> <label class="lui-switch__label">';
-						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<input type="checkbox" class="data lui-switch__checkbox state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+luiClass+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<span class="lui-switch__wrap"><span class="lui-switch__inner"></span><span class="lui-switch__switch"></span></span></label>';
 						html += '<div class="lui-switch_txt" style="">'+row[0].qText+'</div>';
 						html += '</div>';
 					} else if (visType=='luicheckbox'){
 						html += '<label '+elementstyle+' class="sfe lui-checkbox" title="'+row[0].qText+'">';
-						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<input type="checkbox" class="data lui-checkbox__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+luiClass+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<div class="lui-checkbox__check-wrap"> <span class="lui-checkbox__check"></span> <span '+elementstyle+' class="lui-checkbox__check-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
 					} else if (visType=='luiradio'){
 						html += '<label '+elementstyle+' class="sfe lui-radiobutton" title="'+row[0].qText+'">';
-						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="data lui-radiobutton__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+createLUIclass(pr.addLUIclasses,visType,pr.visInputFieldType)+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
+						html += '<input type="radio" name="sfs'+layout.qInfo.qId+'" class="data lui-radiobutton__input state' + row[0].qState +defaultelementclass+elementExtraClass+otherdefaultelementclass+selectedClass+colorclasses+luiClass+ '" dval="' + row[0].qElemNumber + '"' + dis + checkedstatus +' ' +elementExtraAttribute+ '/> ';
 						html += '<div class="lui-radiobutton__radio-wrap"> <span class="lui-radiobutton__radio"></span> <span '+elementstyle+' class="lui-radiobutton__radio-text">' + row[0].qText+'</span> </div>';
 						html += '</label>';
 					}
 					
-					if (!visTypedropdownOrSelect2 && pr.postElemHtml){
-						html += sfsSanitize(pr.postElemHtml);
+					if (!visTypedropdownOrSelect2 && postElemHtmlSanitized){
+						html += postElemHtmlSanitized;
 					}
 				});
-				
+				if (selectOnlyOneReduceTo !== null){
+					selectValueInQlik(self,selectOnlyOneReduceTo,layout,app,false,$element,sfssettings);
+				}
+
 				} //vistype != 'searconly'
 				if (visType=='hlist' || visType=='vlist'){
 					html += '</ul>';
@@ -1632,8 +1665,8 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						html += '';
 					}
 					html += '</select>';
-					if (pr.postElemHtml){
-						html += sfsSanitize(pr.postElemHtml);
+					if (postElemHtmlSanitized){
+						html += postElemHtmlSanitized;
 					}
 				}else if (visType=='checkbox' || visType=='btn' || visType=='radio'){
 					html += '</div>';
@@ -1669,19 +1702,9 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						sfsrmenu.find('li').off('click');
 						$("."+contextmenuID).remove();
 					}*/
-					const contextMenu = document.querySelectorAll('.' + contextmenuID);
-
-					if (contextMenu.length > 0) {
-					    if (debug) console.log('context menu exists');
-					    const sfsrmenu = document.body.querySelector('.' + contextmenuID);
-					    document.removeEventListener('mousedown', hidermenu); // Remove the 'mousedown' event listener
-					    sfsrmenu.querySelectorAll('li').forEach(function (li) {
-					        li.replaceWith(li.cloneNode(true)); // Remove event listeners by cloning nodes
-					    });
-					    contextMenu.forEach(function (menu) {
-					        menu.parentNode.removeChild(menu);
-					    });
-					}
+					var contextmenuHideEvent = 'mousedown.sfscm'+layout.qInfo.qId;
+					$(document).off(contextmenuHideEvent); //hider of the previous paint
+					$('.' + contextmenuID).remove(); //jQuery remove also cleans the item click handlers
 					var contextmenuHtml = '<div class="qv-object-SimpleFieldSelect sfsrmenu '+contextmenuID+'"><ul>';
 					if(pr.rightclikcmenu_selall) contextmenuHtml += '<li dval="all">Select all</li>';
 					if(pr.rightclikcmenu_clear) contextmenuHtml += '<li dval="clear">Clear selections</li>';
@@ -1716,7 +1739,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 						
 						sfsrmenu = $("."+contextmenuID);
 						if (debug) console.log(sfsrmenu.find('li'));
-						sfsrmenu.find('li').click(function(){
+						sfsrmenu.find('li').off('click').click(function(){ //off: menu may be opened many times without clicking an item
 							var action = $(this).attr('dval');
 							if (debug) console.log('action:' +action);
 							sfsrmenu.hide(100);
@@ -1728,32 +1751,34 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 								getSelectedUrl('clipboard');
 							} else if (action=='copy'){ //copy to clip
 								//var selectorClass='data'; //choose all
-								var dataelements = $element.find('.selected');
+								var dataelements = elementJS.querySelectorAll('.selected');
 								var rowseparator = "\n";
 								if (dataelements.length>0){ //some selected
 
 								} else {
-									dataelements = $element.find('.data'); //all
+									dataelements = elementJS.querySelectorAll('.data'); //all
 								}
 								if (dataelements.length==1){
 									rowseparator = '';
 								}
 								var tocopy = '';
 								if (visType=='checkbox'){
-									dataelements.each(function(){
-										tocopy += $(this).parent().text() + rowseparator;
+									dataelements.forEach(function(el){
+										tocopy += el.parentNode.textContent + rowseparator;
 									});
 								} else if (visType=='luicheckbox'){
-									dataelements.each(function(){
-										tocopy += $(this).parent().find('.lui-checkbox__check-text').text() + rowseparator;
+									dataelements.forEach(function(el){
+										var txtel = el.parentNode.querySelector('.lui-checkbox__check-text');
+										tocopy += (txtel ? txtel.textContent : '') + rowseparator;
 									});
 								} else if (visType=='luiswitch'){
-									dataelements.each(function(){
-										tocopy += $(this).parent().parent().find('.lui-switch_txt').text() + rowseparator;
+									dataelements.forEach(function(el){
+										var txtel = el.parentNode.parentNode.querySelector('.lui-switch_txt');
+										tocopy += (txtel ? txtel.textContent : '') + rowseparator;
 									});
 								} else {
-									dataelements.each(function(){
-										tocopy += $(this).text() + rowseparator;
+									dataelements.forEach(function(el){
+										tocopy += el.textContent + rowseparator;
 									});
 								}
 								var txta = document.createElement("textarea");
@@ -1764,40 +1789,41 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 								document.body.removeChild(txta);
 							} else {
 							
+								var dataelems = elementJS.querySelectorAll('.data');
 								if (action=='all'){
-									$element.find('.data').each(function(){
-										valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+									dataelems.forEach(function(el){
+										valuesToSelect.push( parseInt(el.getAttribute( "dval" ),10) );
 									});
-									
-								} else 
+
+								} else
 								if (action=='clear'){
 									if (debug) console.log('clear selections');
-								} else 
+								} else
 								if (action=='reverse'){
-									$element.find('.data').each(function(){
-										if (!$(this).hasClass('selected')){
-											valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+									dataelems.forEach(function(el){
+										if (!el.classList.contains('selected')){
+											valuesToSelect.push( parseInt(el.getAttribute( "dval" ),10) );
 										}
 									});
-								} else 
+								} else
 								if (action=='possible'){
-									$element.find('.data').each(function(){
-										if ($(this).hasClass('stateO')){
-											valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+									dataelems.forEach(function(el){
+										if (el.classList.contains('stateO')){
+											valuesToSelect.push( parseInt(el.getAttribute( "dval" ),10) );
 										}
 									});
-								} else 
+								} else
 								if (action=='random'){
-									$element.find('.data').each(function(){
+									dataelems.forEach(function(el){
 										if (Math.random()>=0.5){
-											valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+											valuesToSelect.push( parseInt(el.getAttribute( "dval" ),10) );
 										}
 									});
-								} else 
+								} else
 								if (action=='defaults'){
-									$element.find('.data').each(function(){
-										if ($(this).hasClass('defaultelement') || $(this).hasClass('otherdefelem')) {
-											valuesToSelect.push( parseInt($(this).attr( "dval" ),10) );
+									dataelems.forEach(function(el){
+										if (el.classList.contains('defaultelement') || el.classList.contains('otherdefelem')) {
+											valuesToSelect.push( parseInt(el.getAttribute( "dval" ),10) );
 										}
 									});
 								} else {
@@ -1808,15 +1834,16 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 								return;
 							}
 						});
-						$(document).on("mousedown", document, hidermenu);
+						$(document).off(contextmenuHideEvent).on(contextmenuHideEvent, hidermenu);
 					}
 					function hidermenu(e){ //hide menu
-						if (!$(e.target).parents("."+contextmenuID).length > 0) {
+						var targetParent = e.target.parentElement;
+						if (!(targetParent && targetParent.closest("."+contextmenuID))) {
 							//e.preventDefault();
 							if (debug) console.log('menuhide '+contextmenuID);
 							$(".sfsrmenu").hide(100);//.find('li').off('click'); //hide all
 						}
-						$(document).off('mousedown',hidermenu);
+						$(document).off(contextmenuHideEvent);
 					}
 				}
 				
@@ -1826,54 +1853,57 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					var listtargets = $element.find( '.sfsc li' );
 					if (!pr.dimensionIsVariable){
 						var isMouseDown = false, newselectionsDone = false;
-						articleElement.off('mousedown touchstart').off('mouseup mouseleave touchend');
+						//previous paint's handlers were removed with .off('.sfs') at the start of paint
 						//for mousedown select track mousedown
-						articleElement.on('mousedown touchstart',function() {
+						articleElement.on('mousedown.sfs touchstart.sfs',function() {
 	        				isMouseDown = true;
 	        				if (debug) console.log('mouse down');
 	        				//$(this).addClass('selected').addClass('stateS').removeClass('stateA');
 						});
-						listtargets.on('mousedown touchstart',function() {
+						//delegated: one handler instead of one per list item
+						$element.on('mousedown.sfs touchstart.sfs', '.sfsc li', function() {
 							isMouseDown = true;
-							if (!$(this).hasClass('selected')){
-								$(this).addClass('selectedmousemove').addClass('stateS').removeClass('stateA');
+							if (!this.classList.contains('selected')){
+								this.classList.add('selectedmousemove', 'stateS');
+								this.classList.remove('stateA');
 							}
 						});
-						articleElement.on('mouseup mouseleave touchend',function() { //m up or leave element
+						articleElement.on('mouseup.sfs mouseleave.sfs touchend.sfs',function() { //m up or leave element
 							isMouseDown = false;
 							if (debug) console.log('mouse up ');
 							if (newselectionsDone == false){
 								return;
 							}
-							var targets = $element.find(".selected,.selectedmousemove");
+							var targets = elementJS.querySelectorAll(".selected,.selectedmousemove");
 							if (targets.length<1){
 								return;
 							}
 							var valuesToSelect = [];
-							targets.each(function(){
-								var val = parseInt($(this).attr( "dval" ),10);
+							targets.forEach(function(el){
+								var val = parseInt(el.getAttribute( "dval" ),10);
 								if (!isNaN(val)){
 									valuesToSelect.push( val );
 								}
 							});
 							newselectionsDone = false;
-							if (valuesToSelect != []){
+							if (valuesToSelect.length > 0){
 								selectValuesInQlik(self, valuesToSelect ,layout,app,false,$element,sfssettings);
 							}
 						});
 						
 						//todo, fix mobile
-						listtargets.on( 'mouseenter touchmove', function () {
+						$element.on( 'mouseenter.sfs touchmove.sfs', '.sfsc li', function () {
 							if(isMouseDown){
-								if (!$(this).hasClass('selected')){
+								if (!this.classList.contains('selected')){
 									if(debug) console.log('adding selectclass');
 									newselectionsDone = true;
-									$(this).addClass('selectedmousemove').addClass('stateS').removeClass('stateA');
+									this.classList.add('selectedmousemove', 'stateS');
+									this.classList.remove('stateA');
 								}
 							}
 						});
 					}
-					//normal click
+					//normal click. qv-activate is a Qlik special event, kept bound directly (items are recreated every paint)
 					listtargets.on('qv-activate', function (ev) { //mouseenter
 						//console.log($element); 
 						//var clicktarget = $(this);
@@ -2008,38 +2038,37 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				} else
 				//attach click event to checkbox
 				if (visType=='checkbox' || visType=='luiswitch' || visType=='luicheckbox'){
-				  $element.find( 'input' ).on( 'click', function () {
+				  $element.on( 'click.sfs', 'input[dval]', function () { //delegated
 				  //self.backendApi.clearSelections();
 					  if (debug) console.log('checkbox clicked action');
-					  var clicktarget = $(this);
-					  if ( $(this).attr( "dval" ) ) {
-						  var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
+					  var clicktarget = this;
+					  if ( clicktarget.getAttribute( "dval" ) ) {
+						  var targetValueID = parseInt(clicktarget.getAttribute( "dval" ),10);
 						  //when checking
-						  if ($(this).is(':checked')){
+						  if (clicktarget.checked){
 							//if only one, clear others.
 							if (layout.props.selectOnlyOne){
-								$element.find('input:checked').each(function(){
-									var value = parseInt( $(this).attr( "dval" ), 10 );
+								elementJS.querySelectorAll('input:checked').forEach(function(el){
+									var value = parseInt( el.getAttribute( "dval" ), 10 );
 									if (value != targetValueID){
-									  $(this).prop('checked',false).removeClass('selected');
+									  el.checked = false;
+									  el.classList.remove('selected');
 									  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 									}
 								});
 							}
-							clicktarget.addClass('selected'); //to var contorl
+							clicktarget.classList.add('selected'); //to var contorl
 							selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 						  //remove check from box
 						  } else {
 							  //deselect
 							  if (debug) console.log('deselect');
-							  clicktarget.prop('checked',false).removeClass('selected');
-							  if (debug) console.log(clicktarget.attr("dval"));
+							  clicktarget.checked = false;
+							  clicktarget.classList.remove('selected');
+							  if (debug) console.log(clicktarget.getAttribute("dval"));
 							  selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 
-							  var selectedCount = 0;
-							  $element.find( 'input:checked' ).each(function(){
-								  selectedCount += 1;
-							  });
+							  var selectedCount = elementJS.querySelectorAll( 'input:checked' ).length;
 							  //default selection if needed
 							  checkDefaultValueSelection($element,selectedCount,layout,self,app,sfssettings);
 						  }
@@ -2048,30 +2077,30 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 				} else
 				//Button action
 				if (visType=='btn'){
-					$element.find( 'button' ).on( 'click', function () {
+					$element.on( 'click.sfs', 'button', function () { //delegated
 						if (debug) console.log('Button clicked action');
-						var clicktarget = $(this);
-						if ( $(this).attr( "dval" ) ) {
-							var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
-							var value = parseInt( clicktarget.attr( "dval" ), 10 );
-							clicktarget.addClass('selected'); //to var contorl
+						var clicktarget = this;
+						if ( clicktarget.getAttribute( "dval" ) ) {
+							var value = parseInt( clicktarget.getAttribute( "dval" ), 10 );
+							clicktarget.classList.add('selected'); //to var contorl
 							selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 						}
 					} );
 				//radio action
 				} else if (visType=='radio' || visType=='luiradio'){
-					$element.find( 'input' ).on('click',function(){
+					$element.on('click.sfs', 'input[dval]', function(){ //delegated. [dval]: ignore the search input
 						if (debug) console.log('radio change action');
-						var clicktarget = $(this);
-						var targetValueID = parseInt(clicktarget.attr( "dval" ),10);
-						$element.find( '.selected' ).each(function(){
-								var value = parseInt( $(this).attr( "dval" ), 10 );
+						var clicktarget = this;
+						var targetValueID = parseInt(clicktarget.getAttribute( "dval" ),10);
+						elementJS.querySelectorAll( '.selected' ).forEach(function(el){
+								var value = parseInt( el.getAttribute( "dval" ), 10 );
 								if (value != targetValueID){
-								  $(this).removeClass('selected');
+								  el.classList.remove('selected');
 								  selectValueInQlik(self,value,layout,app,true,$element,sfssettings);
 								}
 						});
-						clicktarget.addClass('selected').prop('selected',true);
+						clicktarget.classList.add('selected');
+						clicktarget.selected = true;
 						selectValueInQlik(self,targetValueID,layout,app,true,$element,sfssettings);
 					});
 
@@ -2081,7 +2110,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 			//select2 init
 			if (visType=='select2'){
 				if(debug) console.log('init select2')
-				if (!$("#sfsselect2").length>0){
+				if (!document.getElementById("sfsselect2")){
 					$( "<style id=sfsselect2>" ).html( select2css ).appendTo( "head" ); //add css.
 				}
 				var dropdownparent = "sfssel2c"+layout.qInfo.qId;
@@ -2369,17 +2398,17 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					searchField.focus();
 				});
 				if (pr.showXscroll){ //if x scroll, move search icon
-					articleInnerElement.find('.qv-object-content-container').scroll(function(){
+					articleInnerElement.find('.qv-object-content-container').off('scroll.sfs').on('scroll.sfs', function(){
 						var scrollleft = $(this).scrollLeft();
 						searchIcon.css('right',-scrollleft);
 					});
 				}
 			}
 			//resize
-			if((pr.mouseenterWidthMult || pr.mouseenterHeightMult) && (pr.mouseenterWidthMult > 1 || pr.mouseenterHeightMult > 1) && $(".qv-mode-edit").length==0){
+			if((pr.mouseenterWidthMult || pr.mouseenterHeightMult) && (pr.mouseenterWidthMult > 1 || pr.mouseenterHeightMult > 1) && !document.querySelector(".qv-mode-edit")){
 				if (debug) console.log('resize');
 				var layoutcontainerdiv = articleElement.closest('.qv-gridcell');
-				layoutcontainerdiv.mouseenter(function(){
+				layoutcontainerdiv.on('mouseenter.sfs', function(){ //gridcell .sfs handlers are removed at the start of paint
 					var origW = layoutcontainerdiv.attr('origW');
 					if (!origW){
 						layoutcontainerdiv.attr('origW', layoutcontainerdiv.width());
@@ -2393,7 +2422,7 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					pr.mouseenterHeightMult = pr.mouseenterHeightMult < 1 ? 1 : pr.mouseenterHeightMult;
 					layoutcontainerdiv.css('width', origW*pr.mouseenterWidthMult).css('height', origH*pr.mouseenterHeightMult).css('z-index',101);
 				});
-				layoutcontainerdiv.mouseleave(function(){
+				layoutcontainerdiv.on('mouseleave.sfs', function(){
 					/*var origH = layoutcontainerdiv.attr('origH');
 					var origW = layoutcontainerdiv.attr('origW');
 					var origZ = layoutcontainerdiv.attr('origZ');
@@ -2454,18 +2483,6 @@ function ( qlik, $, cssContent, cssDatepick, propertiesdef,select2css) {
 					a = sfsSanitize(a);
 				}
 				return a;
-			}
-			
-			function setKeepaliver(self,delay){
-				if (keepaliverTimer){
-					clearInterval(keepaliverTimer);
-				}
-				keepaliverTimer = setInterval(function(){
-					if (debug) console.log('Keepalive');
-					var app = qlik.currApp(self);
-					app.addAlternateState("sfskeepalive");
-					app.removeAlternateState("sfskeepalive");
-				},delay*1000*60);
 			}
 			return qlik.Promise.resolve();
 		}
